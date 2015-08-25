@@ -32,6 +32,9 @@
     <span class="smallNote">String to append to package ID.</span>
   </td>
 </tr>
+</l:settingsGroup>
+
+<l:settingsGroup title="Octopus Publishing">
 <tr>
   <th><label for="${keys.octoPackPublishPackageToHttp}">Publish packages to HTTP</label>:</th>
   <td>
