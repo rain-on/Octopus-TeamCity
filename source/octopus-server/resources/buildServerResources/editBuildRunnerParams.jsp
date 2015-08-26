@@ -46,7 +46,7 @@
 <tr>
   <th><label for="${keys.octoPackPublishApiKey}">Publish API key</label>:</th>
   <td>
-    <props:textProperty name="${keys.octoPackPublishApiKey}" className="longField"/>
+    <props:passwordProperty name="${keys.octoPackPublishApiKey}" className="longField"/>
     <span class="error" id="error_${keys.octoPackPublishApiKey}"></span>
     <span class="smallNote">Octopus Deploy API key.</span>
   </td>
