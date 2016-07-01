@@ -1,8 +1,14 @@
-﻿# Copy this file and rename it to test-local.ps1, then make changes to use your own settings
+﻿
+$ErrorActionPreference = "Stop";
 
-#
-# You'll need to download a Java 6 JDK version and install it (don't use 7 or 8 or newer). The patch version isn't important 
-$JdkHome = "C:\Program Files\Java\jdk1.6.0_45"
+if (-NOT ([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole] "Administrator"))
+{    
+    throw "This script needs to be run As Admin"
+}
+
+# If you followed the instructions in Read.me then this script should just work.
+# If you need to run the script against a different version of the JDK then change the path below:  
+$JdkHome = "C:\Program Files\Java\jdk1.6.0_38"
 
 #
 # TeamCity directories. First is where you installed TeamCity to. Second is the TeamCity data directory.
