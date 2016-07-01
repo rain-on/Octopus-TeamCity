@@ -12,11 +12,11 @@ Installation and usage instructions are available in [the Octopus Deploy documen
 
 To build the plugin from code:
 
- 1. Install a Java JDK - I used version 6u38 from Oracle. 
- 2. Install Ant from Apache. I used 1.8.4. 
+ 1. Install a [Java JDK 6 u38, 64 bit](http://www.oracle.com/technetwork/java/javase/downloads/java-archive-downloads-javase6-419409.html#jdk-6u38-oth-JPR) (don't use 7 or 8 or newer) from Oracle.
+ 2. Install [Ant](http://archive.apache.org/dist/ant/binaries/apache-ant-1.8.4-bin.zip) from Apache.
  3. Add the JDK `bin` folder and ant `bin` to your path
  4. Navigate to the source directory, and run `ant`. 
 
 The TeamCity plugin will be packaged and added to a `/source/dist` folder. 
 
-To edit the code, you'll probably want to install IntelliJ community edition. JetBrains provide [instructions for configuring IntelliJ](http://confluence.jetbrains.com/display/TCD7/Bundled+Development+Package) for TeamCity plugin development. 
+To edit the code, you'll probably want to install IntelliJ community edition. JetBrains provide [instructions for configuring IntelliJ](http://confluence.jetbrains.com/display/TCD7/Bundled+Development+Package) for TeamCity plugin development.  
