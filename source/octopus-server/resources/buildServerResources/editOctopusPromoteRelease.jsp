@@ -86,6 +86,26 @@
     <span class="smallNote">Comma separated list of environments to deploy to. Leave empty to create a release without deploying it.</span>
   </td>
 </tr>
+
+<tr class="advancedSetting">
+    <th><label for="${keys.tenantsKey}">Promote tenants:</label></th>
+    <td>
+        <props:textProperty name="${keys.tenantsKey}" className="longField"/>
+        <span class="error" id="error_${keys.tenantsKey}"></span>
+        <span class="smallNote">Comma separated list of tenants to promote for. Wildcard '*' will deploy to all tenants currently able to deploy to the above provided environment.
+        <br /> Note that when supplying tenant filters then only one environment may be provided above.</span>
+    </td>
+</tr>
+<tr class="advancedSetting">
+    <th><label for="${keys.tenantTagsKey}">Promote tenant tags:</label></th>
+    <td>
+        <props:textProperty name="${keys.tenantTagsKey}" className="longField"/>
+        <span class="error" id="error_${keys.tenantTagsKey}"></span>
+        <span class="smallNote">Comma separated list of tenant tags to deploy to.
+        <br /> Note that when supplying tag filters then only one environment may be provided above.</span>
+    </td>
+</tr>
+
 <tr>
   <th>Show deployment progress:</th>
   <td>

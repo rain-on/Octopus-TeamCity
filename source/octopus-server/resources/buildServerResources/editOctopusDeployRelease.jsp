@@ -46,38 +46,56 @@
 </l:settingsGroup>
 
 <l:settingsGroup title="Deployment">
-<tr>
-  <th>Project:<l:star/></th>
-  <td>
-    <props:textProperty name="${keys.projectNameKey}" className="longField"/>
-    <span class="error" id="error_${keys.projectNameKey}"></span>
-    <span class="smallNote">Enter the name of the Octopus project to deploy</span>
-  </td>
-</tr>
-<tr>
-  <th>Release number:<l:star/></th>
-  <td>
-    <props:textProperty name="${keys.releaseNumberKey}" className="longField"/>
-    <span class="error" id="error_${keys.releaseNumberKey}"></span>
-    <span class="smallNote">The number of the release to deploy, e.g., <code>latest</code>, <code>%octo.releaseNumber%</code> or <code>%build.number%</code>.</span>
-  </td>
-</tr>
-<tr>
-  <th>Deploy to:<l:star/></th>
-  <td>
-    <props:textProperty name="${keys.deployToKey}" className="longField"/>
-    <span class="error" id="error_${keys.deployToKey}"></span>
-    <span class="smallNote">Comma separated list of environments to deploy to. Leave empty to create a release without deploying it.</span>
-  </td>
-</tr>
-<tr>
-  <th>Show deployment progress:</th>
-  <td>
-    <props:checkboxProperty name="${keys.waitForDeployments}" />
-    <span class="error" id="error_${keys.waitForDeployments}"></span>
-    <span class="smallNote">If checked, the build process will only succeed if the deployment is successful.</span>
-  </td>
-</tr>
+    <tr>
+      <th>Project:<l:star/></th>
+      <td>
+        <props:textProperty name="${keys.projectNameKey}" className="longField"/>
+        <span class="error" id="error_${keys.projectNameKey}"></span>
+        <span class="smallNote">Enter the name of the Octopus project to deploy</span>
+      </td>
+    </tr>
+    <tr>
+      <th>Release number:<l:star/></th>
+      <td>
+        <props:textProperty name="${keys.releaseNumberKey}" className="longField"/>
+        <span class="error" id="error_${keys.releaseNumberKey}"></span>
+        <span class="smallNote">The number of the release to deploy, e.g., <code>latest</code>, <code>%octo.releaseNumber%</code> or <code>%build.number%</code>.</span>
+      </td>
+    </tr>
+    <tr>
+      <th>Deploy to:<l:star/></th>
+      <td>
+        <props:textProperty name="${keys.deployToKey}" className="longField"/>
+        <span class="error" id="error_${keys.deployToKey}"></span>
+        <span class="smallNote">Comma separated list of environments to deploy to. Leave empty to create a release without deploying it.</span>
+      </td>
+    </tr>
+    <tr class="advancedSetting">
+        <th><label for="${keys.tenantsKey}">Deploy for tenant:</label></th>
+        <td>
+            <props:textProperty name="${keys.tenantsKey}" className="longField"/>
+            <span class="error" id="error_${keys.tenantsKey}"></span>
+            <span class="smallNote">Comma separated list of tenants to deploy to. Wildcard '*' will deploy to all tenants currently able to deploy to the above provided environment.
+            <br /> Note that when supplying tenant filters then only one environment may be provided above.</span>
+        </td>
+    </tr>
+    <tr class="advancedSetting">
+        <th><label for="${keys.tenantTagsKey}">Deploy for tenant tags:</label></th>
+        <td>
+            <props:textProperty name="${keys.tenantTagsKey}" className="longField"/>
+            <span class="error" id="error_${keys.tenantTagsKey}"></span>
+            <span class="smallNote">Comma separated list of tenant tags to deploy to.
+            <br /> Note that when supplying tag filters then only one environment may be provided above.</span>
+        </td>
+    </tr>
+    <tr>
+        <th>Show deployment progress:</th>
+        <td>
+            <props:checkboxProperty name="${keys.waitForDeployments}" />
+            <span class="error" id="error_${keys.waitForDeployments}"></span>
+            <span class="smallNote">If checked, the build process will only succeed if the deployment is successful.</span>
+        </td>
+    </tr>
 </l:settingsGroup>
 
 

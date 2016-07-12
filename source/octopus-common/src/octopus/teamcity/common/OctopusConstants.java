@@ -72,10 +72,9 @@ public class OctopusConstants {
     public String getOctoPackAppendToPackageId() {
         return "octopus_octopack_append_to_package_id";
     }
-
-    public String getDeployToKey() {
-        return "octopus_deployto";
-    }
+    public String getDeployToKey() { return "octopus_deployto"; }
+    public String getTenantsKey() { return "octoups_tenants"; }
+    public String getTenantTagsKey() { return "octoups_tenanttags"; }
     public String getPackagePathsKey() {
         return "octopus_packagepaths";
     }
