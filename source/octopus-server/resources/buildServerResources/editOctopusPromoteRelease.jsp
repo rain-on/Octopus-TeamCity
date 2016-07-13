@@ -88,21 +88,24 @@
 </tr>
 
 <tr class="advancedSetting">
-    <th><label for="${keys.tenantsKey}">Promote tenants:</label></th>
+    <th><label for="${keys.tenantsKey}">Tenant(s):</label></th>
     <td>
         <props:textProperty name="${keys.tenantsKey}" className="longField"/>
         <span class="error" id="error_${keys.tenantsKey}"></span>
-        <span class="smallNote">Comma separated list of tenants to promote for. Wildcard '*' will deploy to all tenants currently able to deploy to the above provided environment.
-        <br /> Note that when supplying tenant filters then only one environment may be provided above.</span>
+        <span class="smallNote">Comma separated list of tenants to promote for.
+        Wildcard '*' will deploy to all tenants currently able to deploy to the above provided environment.
+        An environment will need to be supplied for a tenant deployment to take place.
+        <br />Note that when supplying tenant filters then only one environment may be provided above.</span>
     </td>
 </tr>
 <tr class="advancedSetting">
-    <th><label for="${keys.tenantTagsKey}">Promote tenant tags:</label></th>
+    <th><label for="${keys.tenantTagsKey}">Tenant tag(s):</label></th>
     <td>
         <props:textProperty name="${keys.tenantTagsKey}" className="longField"/>
         <span class="error" id="error_${keys.tenantTagsKey}"></span>
-        <span class="smallNote">Comma separated list of tenant tags to deploy to.
-        <br /> Note that when supplying tag filters then only one environment may be provided above.</span>
+        <span class="smallNote">Comma separated list of <a href='http://g.octopushq.com/TenantTags' target='_blank'>tenant tags</a> that match tenants to promote for.
+        An environment will need to be supplied for a tenant deployment to take place.
+        <br />Note that when supplying tag filters then only one environment may be provided above.</span>
     </td>
 </tr>
 

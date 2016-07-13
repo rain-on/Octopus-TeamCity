@@ -78,7 +78,7 @@
 
 <l:settingsGroup title="Deployment">
 <tr>
-  <th>Deploy to:</th>
+  <th>Environment(s):</th>
   <td>
     <props:textProperty name="${keys.deployToKey}" className="longField"/>
     <span class="error" id="error_${keys.deployToKey}"></span>
@@ -86,21 +86,22 @@
   </td>
 </tr>
 <tr class="advancedSetting">
-    <th><label for="${keys.tenantsKey}">Deploy for tenant:</label></th>
+    <th><label for="${keys.tenantsKey}">Tenant(s):</label></th>
     <td>
         <props:textProperty name="${keys.tenantsKey}" className="longField"/>
         <span class="error" id="error_${keys.tenantsKey}"></span>
-        <span class="smallNote">Comma separated list of tenants to promote for. Wildcard '*' will promote all tenants currently able to deploy to the above provided environment.
-        <br /> Note that when supplying tenant filters then only one environment may be provided above.</span>
+        <span class="smallNote">Comma separated list of tenants to promote for.
+        Wildcard '*' will promote all tenants currently able to deploy to the above provided environment.
+        <br />Note that when supplying tenant filters then only one environment may be provided above.</span>
     </td>
 </tr>
 <tr class="advancedSetting">
-    <th><label for="${keys.tenantTagsKey}">Deploy for tenant tags:</label></th>
+    <th><label for="${keys.tenantTagsKey}">Tenant tag(s):</label></th>
     <td>
         <props:textProperty name="${keys.tenantTagsKey}" className="longField"/>
         <span class="error" id="error_${keys.tenantTagsKey}"></span>
-        <span class="smallNote">Comma separated list of tenant tags to promote for.
-        <br /> Note that when supplying tag filters then only one environment may be provided above.</span>
+        <span class="smallNote">Comma separated list of <a href='http://g.octopushq.com/TenantTags' target='_blank'>tenant tags</a> that match tenants to deploy for.
+        <br />Note that when supplying tag filters then only one environment may be provided above.</span>
     </td>
 </tr>
 <tr>
