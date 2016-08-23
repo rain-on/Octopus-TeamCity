@@ -20,6 +20,7 @@
     <path refid="library.teamcity_open_api_agent.classpath"/>
     <path refid="library.teamcity_open_api_common.classpath"/>
     <path refid="library.teamcity_open_api_server.classpath"/>
+    <path refid="library.teamcity_service_messages.classpath"/>
     <path refid="library.teamcity_third-party.classpath"/>
     <pathelement location="${octopus-common.output.dir}"/>
     <pathelement location="${path.variable.teamcitydistribution}/buildAgent/lib/agent.jar"/>
@@ -30,6 +31,7 @@
     <path refid="library.teamcity_open_api_agent.classpath"/>
     <path refid="library.teamcity_open_api_common.classpath"/>
     <path refid="library.teamcity_open_api_server.classpath"/>
+    <path refid="library.teamcity_service_messages.classpath"/>
     <path refid="library.teamcity_third-party.classpath"/>
     <path refid="octopus-common.runtime.production.module.classpath"/>
     <pathelement location="${path.variable.teamcitydistribution}/buildAgent/lib/agent.jar"/>
@@ -41,6 +43,7 @@
     <path refid="library.teamcity_open_api_agent.classpath"/>
     <path refid="library.teamcity_open_api_common.classpath"/>
     <path refid="library.teamcity_open_api_server.classpath"/>
+    <path refid="library.teamcity_service_messages.classpath"/>
     <path refid="library.teamcity_third-party.classpath"/>
     <pathelement location="${octopus-common.testoutput.dir}"/>
     <pathelement location="${octopus-common.output.dir}"/>
@@ -53,6 +56,7 @@
     <path refid="library.teamcity_open_api_agent.classpath"/>
     <path refid="library.teamcity_open_api_common.classpath"/>
     <path refid="library.teamcity_open_api_server.classpath"/>
+    <path refid="library.teamcity_service_messages.classpath"/>
     <path refid="library.teamcity_third-party.classpath"/>
     <path refid="octopus-common.runtime.module.classpath"/>
     <pathelement location="${path.variable.teamcitydistribution}/buildAgent/lib/agent.jar"/>
