@@ -80,10 +80,21 @@ public abstract class OctopusBuildProcess implements BuildProcess {
     private void startOcto(final OctopusCommandBuilder command) throws RunBuildException {
         String[] userVisibleCommand = command.buildMaskedCommand();
         String[] realCommand = command.buildCommand();
+        Boolean useOcto = false;
+        Boolean useExe = runningBuild.getAgentConfiguration().getSystemInfo().isWindows();
+        if(!useExe){
+            useOcto = OctopusOsUtils.HasOcto(runningBuild.getAgentConfiguration());
+        }
 
         logger = runningBuild.getBuildLogger();
         logger.activityStarted("Octopus Deploy", DefaultMessagesInfo.BLOCK_TYPE_INDENTATION);
-        logger.message("Running command:   octo.exe " + StringUtils.arrayToDelimitedString(userVisibleCommand, " "));
+        if(useExe) {
+            logger.message("Running command:   octo.exe " + StringUtils.arrayToDelimitedString(userVisibleCommand, " "));
+        } else if(useOcto) {
+            logger.message("Running command:   Octo " + StringUtils.arrayToDelimitedString(userVisibleCommand, " "));
+        } else {
+            logger.message("Running command:   dotnet Octo.dll " + StringUtils.arrayToDelimitedString(userVisibleCommand, " "));
+        }
         logger.progressMessage(getLogMessage());
 
         try {
@@ -92,7 +103,16 @@ public abstract class OctopusBuildProcess implements BuildProcess {
             String octopusVersion = getSelectedOctopusVersion();
 
             ArrayList<String> arguments = new ArrayList<String>();
-            arguments.add(new File(extractedTo, octopusVersion + "\\octo.exe").getAbsolutePath());
+            if(useExe) {
+                arguments.add(new File(extractedTo, octopusVersion + "/octo.exe").getAbsolutePath());
+            } else if(useOcto) {
+                arguments.add("Octo");
+            } else {
+                arguments.add("dotnet");
+                String dllPath = new File(extractedTo, octopusVersion + "/Core/Octo.dll").getAbsolutePath();
+                arguments.add(dllPath);
+            }
+
             arguments.addAll(Arrays.asList(realCommand));
 
             process = runtime.exec(arguments.toArray(new String[arguments.size()]), null, context.getWorkingDirectory());

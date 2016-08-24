@@ -62,6 +62,7 @@
     <include name="**/?*.ftl"/>
     <include name="**/?*.ftl"/>
     <include name="**/?*.exe"/>
+    <include name="**/?*.zip"/>
     <include name="**/?*.exe.config"/>
   </patternset>
   
