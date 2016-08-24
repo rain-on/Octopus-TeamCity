@@ -50,6 +50,8 @@ public class OctopusCreateReleaseBuildProcess extends OctopusBuildProcess {
                 final String channelName = parameters.get(constants.getChannelNameKey());
                 final String deployTo = parameters.get(constants.getDeployToKey());
                 final String projectName = parameters.get(constants.getProjectNameKey());
+                final String tenants = parameters.get(constants.getTenantsKey());
+                final String tenanttags = parameters.get(constants.getTenantTagsKey());
                 final boolean wait = Boolean.parseBoolean(parameters.get(constants.getWaitForDeployments()));
 
                 commands.add("create-release");
@@ -79,6 +81,16 @@ public class OctopusCreateReleaseBuildProcess extends OctopusBuildProcess {
 
                 if (wait && deployTo != null && !deployTo.isEmpty()) {
                     commands.add("--progress");
+                }
+
+                for(String tenant : splitCommaSeparatedValues(tenants)) {
+                    commands.add("--tenant");
+                    commands.add(tenant);
+                }
+
+                for(String tenanttag : splitCommaSeparatedValues(tenanttags)) {
+                    commands.add("--tenanttag");
+                    commands.add(tenanttag);
                 }
 
                 if (commandLineArguments != null && !commandLineArguments.isEmpty()) {
