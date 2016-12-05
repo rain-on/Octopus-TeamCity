@@ -23,6 +23,7 @@
       <entry name="?*.ftl" />
       <entry name="?*.ftl" />
       <entry name="?*.exe" />
+      <entry name="?*.zip" />
       <entry name="?*.config" />
     </wildcardResourcePatterns>
     <annotationProcessing>

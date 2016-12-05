@@ -39,11 +39,7 @@ public class OctopusPromoteReleaseRunner implements AgentBuildRunner {
             }
 
             public boolean canRun(@NotNull BuildAgentConfiguration agentConfiguration) {
-                if (!agentConfiguration.getSystemInfo().isWindows()) {
-                    LOG.debug(getType() + " runner is supported only under Windows platform");
-                    return false;
-                }
-                return true;
+                return OctopusOsUtils.CanRunOcto(agentConfiguration);
             }
         };
     }
