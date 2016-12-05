@@ -34,7 +34,7 @@ public class EmbeddedResourceExtractor {
         ensureDirectory(destinationPath, "3.0");
         extractFile("/resources/3/0/Octo.exe", destinationPath + "/3.0/Octo.exe");
         extractFile("/resources/3/0/Octo.exe.config", destinationPath + "/3.0/Octo.exe.config");
-        extractFile("/resources/3/0/Core.zip", destinationPath + "/3.0/Core.zip");
+        extractFile("/resources/3/0/OctopusTools.portable.zip", destinationPath + "/3.0/Core.zip");
         unzip(destinationPath + "/3.0/Core.zip", destinationPath + "/3.0/Core");
 	}
 
