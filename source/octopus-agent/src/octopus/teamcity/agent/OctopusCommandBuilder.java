@@ -44,9 +44,12 @@ public abstract class OctopusCommandBuilder {
             return results;
         }
 
-        Matcher m = Pattern.compile("([^\"]\\S*|\".+?\")\\s*").matcher(text);
+        Matcher m = Pattern.compile("(-[\\w-]*=?|[^\"]\\S*|\".+?\")\\s*").matcher(text);
         while (m.find()) {
             String item = m.group(1).replace("\"", "");
+            if(item.startsWith("-") && item.endsWith("="))
+                item = item.substring(0, item.length() - 1);
+
             if (item != null && !item.isEmpty()) {
                 results.add(item);
             }
