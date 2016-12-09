@@ -48,7 +48,7 @@ public abstract class OctopusCommandBuilder {
         while (m.find()) {
             String item = m.group(1).replace("\"", "");
             if(item.startsWith("-") && item.endsWith("="))
-                item = item.substring(0, item.length - 1);
+                item = item.substring(0, item.length() - 1);
 
             if (item != null && !item.isEmpty()) {
                 results.add(item);
