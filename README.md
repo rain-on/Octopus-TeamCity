@@ -30,11 +30,11 @@ The version of the addin corresponds to the bundled [Octo.exe](https://github.co
 2. Give yourself full permissions to the Teamcity Data folder (usually `C:\ProgramData\JetBrains\TeamCity`). This folder may be hidden.
 3. Open the existing IntelliJ project.
 4. You will have a `server` run configuration already defined. However, the TeamCity server it references will need to be configured.
-  1. Click Run -> Edit Configurations.
-  2. Select the Tomcat Server configuration (called `server`).
-  3. Click the `Configure...` button next to the `Application Server: TeamCity Tomcat` option.
-  4. Set the `Tomcat Home` option to the location of your TeamCity installation (probably `C:\TeamCity`).
-  5. Click the `OK` button.
+    1. Click Run -> Edit Configurations.
+    2. Select the Tomcat Server configuration (called `server`).
+    3. Click the `Configure...` button next to the `Application Server: TeamCity Tomcat` option.
+    4. Set the `Tomcat Home` option to the location of your TeamCity installation (probably `C:\TeamCity`).
+    5. Click the `OK` button.
 5. Under the `Startup/Connection` tab, set the `Startup script` to `C:\TeamCity\bin\teamcity-server.bat run` and the `Shutdown script` to `C:\TeamCity\bin\teamcity-server.bat stop`. Do this for both the `Run` and `Debug` environments.
 6. Ensure that the `Before launch` list includes the step `Run Ant target 'deploy'`.
 7. Ignore the `Warning: No artifacts configured` message
