@@ -36,7 +36,7 @@
 
   <target name="clean"/>
 
-  <target name="deploy">
+  <target name="deploy" depends="dist">
     <copy file="dist/Octopus.TeamCity.zip" todir="${path.variable.teamcitydata}/plugins"/>
   </target>
 </project>

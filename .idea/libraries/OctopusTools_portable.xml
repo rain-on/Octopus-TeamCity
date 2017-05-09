@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="OctopusTools.portable">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/source/octopus-agent/src/resources/3/0/OctopusTools.portable.zip!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
