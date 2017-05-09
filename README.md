@@ -32,14 +32,22 @@ The version of the addin corresponds to the bundled [Octo.exe](https://github.co
 4. You will have a `server` run configuration already defined. However, the TeamCity server it references will need to be configured.
     1. Click Run -> Edit Configurations.
     2. Select the Tomcat Server configuration (called `server`).
-       ![App Server](https://raw.githubusercontent.com/OctopusDeploy/Octopus-TeamCity/build-cleanup/App%20Server.PNG)
+       ![App Server](https://raw.githubusercontent.com/OctopusDeploy/Octopus-TeamCity/master/App%20Server.PNG)
     3. Click the `Configure...` button next to the `Application Server: TeamCity Tomcat` option.
     4. Set the `Tomcat Home` option to the location of your TeamCity installation (probably `C:\TeamCity`).
     5. Click the `OK` button.
 6. Under the `Startup/Connection` tab, set the `Startup script` to `C:\TeamCity\bin\teamcity-server.bat run` and the `Shutdown script` to `C:\TeamCity\bin\teamcity-server.bat stop`. Do this for both the `Run` and `Debug` environments.
 5. Ensure that the `Before launch` list includes the step `Run Ant target 'deploy'`.
 6. Ignore the `Warning: No artifacts configured` message
-   ![Run Configuration - Statrup](https://raw.githubusercontent.com/OctopusDeploy/Octopus-TeamCity/build-cleanup/Run%20Configuration%20-%20Startup.PNG)
+   ![Run Configuration - Startup](https://raw.githubusercontent.com/OctopusDeploy/Octopus-TeamCity/master/Run%20Configuration%20-%20Startup.PNG)
 7. Click the `OK` button to save your changes.
 
 At this point the you can run TeamCity from IntelliJ. If need be you can run  TeamCity in debug mode and step through the plugin code as it is executed by TeamCity.
+
+## Troubleshooting
+
+If you get error messages about missing classes, it is most likely because the path variables are incorrect.
+
+1. Click `Ctrl-Shiht-A` and type in `Path Variables`
+2. Ensure the `TeamCityDistribution` directory is correct
+   ![Path Variables.PNG](https://raw.githubusercontent.com/OctopusDeploy/Octopus-TeamCity/master/Path%20Variables.PNG)
