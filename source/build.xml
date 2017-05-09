@@ -35,4 +35,8 @@
           description="Invoke this to build your plugin"/>
 
   <target name="clean"/>
+
+  <target name="deploy">
+    <copy file="dist/Octopus.TeamCity.zip" todir="${path.variable.teamcitydata}/plugins"/>
+  </target>
 </project>
