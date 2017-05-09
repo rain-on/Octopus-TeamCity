@@ -26,8 +26,8 @@ The version of the addin corresponds to the bundled [Octo.exe](https://github.co
 
 ## Editing and debugging in IntelliJ
 
-1. Install TeamCity locally to `C:\TeamCity`. Stop the service so it is not running.
-2. Give yourself full permissions to the Teamcity Data folder (usually `C:\ProgramData\JetBrains\TeamCity`).
+1. Install TeamCity locally to `C:\TeamCity`. Allow the service to start for the first time, and add an admin user. Then stop the service so it is not running.
+2. Give yourself full permissions to the Teamcity Data folder (usually `C:\ProgramData\JetBrains\TeamCity`). This folder may be hidden.
 3. Import the source folder as a project in IntelliJ.
 4. You will have a `server` run configuration already defined. However, the TeamCity server it references will need to be configured.
   1. Click Run -> Edit Configurations.
