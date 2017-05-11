@@ -8,14 +8,12 @@
         <artifactId>plugin</artifactId>
         <version>1.0</version>
     </parent>
-    <artifactId>agent</artifactId>
+    <artifactId>distribution</artifactId>
     <packaging>jar</packaging>
 
     <name>Octopus Deploy TeamCity Plugin - Agent</name>
 
     <build>
-        <sourceDirectory>src</sourceDirectory>
-
         <pluginManagement>
             <plugins>
                 <plugin>
@@ -73,23 +71,14 @@
             <version>1.0</version>
         </dependency>
         <dependency>
-            <groupId>org.jetbrains.teamcity</groupId>
-            <artifactId>agent-api</artifactId>
-            <version>${TeamCityVersion}</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.jetbrains.teamcity</groupId>
-            <artifactId>server-api</artifactId>
-            <version>10.0</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.jetbrains.teamcity</groupId>
+            <groupId>com.octopus.teamcity</groupId>
             <artifactId>agent</artifactId>
             <version>1.0</version>
-            <scope>system</scope>
-            <systemPath>${TeamCityDistro}/buildAgent/lib/agent.jar</systemPath>
+        </dependency>
+        <dependency>
+            <groupId>com.octopus.teamcity</groupId>
+            <artifactId>server</artifactId>
+            <version>1.0</version>
         </dependency>
     </dependencies>
 </project>

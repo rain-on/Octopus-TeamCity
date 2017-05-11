@@ -14,11 +14,13 @@
         <module>octopus-agent</module>
         <module>octopus-server</module>
         <module>octopus-common</module>
+        <module>octopus-distribution</module>
     </modules>
 
     <properties>
         <TeamCityVersion>10.0</TeamCityVersion>
         <TeamCityDistro>C:\TeamCity</TeamCityDistro>
+
     </properties>
 
     <repositories>
