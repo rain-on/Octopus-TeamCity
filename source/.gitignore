@@ -1,0 +1,5 @@
+.idea
+dist
+out
+**/*.iml
+TeamCity-2017.1.1

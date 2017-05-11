@@ -17,7 +17,6 @@
 package octopus.teamcity.agent;
 
 import java.io.*;
-import java.lang.*;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
