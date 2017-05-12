@@ -10,12 +10,24 @@
             <outputDirectory>/agent</outputDirectory>
         </file>
         <file>
-            <source>../octopus-server/target/Octopus.TeamCity.zip</source>
-            <outputDirectory>/server</outputDirectory>
-        </file>
-        <file>
             <source>../teamcity-plugin.xml</source>
             <outputDirectory>/</outputDirectory>
         </file>
     </files>
+    <dependencySets>
+        <dependencySet>
+            <includes>
+                <include>com.octopus.teamcity:common</include>
+            </includes>
+            <outputDirectory>server</outputDirectory>
+            <outputFileNameMapping>Octopus.TeamCity-${artifact.artifactId}.${artifact.extension}</outputFileNameMapping>
+        </dependencySet>
+        <dependencySet>
+            <includes>
+                <include>com.octopus.teamcity:server</include>
+            </includes>
+            <outputDirectory>server</outputDirectory>
+            <outputFileNameMapping>Octopus.TeamCity.${artifact.extension}</outputFileNameMapping>
+        </dependencySet>
+    </dependencySets>
 </assembly>

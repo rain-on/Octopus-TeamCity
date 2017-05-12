@@ -11,7 +11,7 @@
     <artifactId>distribution</artifactId>
     <packaging>jar</packaging>
 
-    <name>Octopus Deploy TeamCity Plugin - Agent</name>
+    <name>Octopus Deploy TeamCity Plugin - Distribution</name>
 
     <build>
         <pluginManagement>
