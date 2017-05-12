@@ -10,7 +10,7 @@
             <outputDirectory>/agent</outputDirectory>
         </file>
         <file>
-            <source>../teamcity-plugin.xml</source>
+            <source>target/teamcity-plugin.xml</source>
             <outputDirectory>/</outputDirectory>
         </file>
     </files>

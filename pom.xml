@@ -20,7 +20,7 @@
     <properties>
         <teamcity.version>10.0</teamcity.version>
         <teamcity.distribution>C:\TeamCity</teamcity.distribution>
-
+        <maven.build.timestamp.format>yyyyMMddHHmm</maven.build.timestamp.format>
     </properties>
 
     <repositories>
