@@ -75,7 +75,7 @@
         <dependency>
             <groupId>org.jetbrains.teamcity</groupId>
             <artifactId>server-api</artifactId>
-            <version>${TeamCityVersion}</version>
+            <version>${teamcity.version}</version>
             <scope>provided</scope>
         </dependency>
     </dependencies>
