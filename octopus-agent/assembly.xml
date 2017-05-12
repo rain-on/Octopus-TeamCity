@@ -6,7 +6,7 @@
     <files>
         <file>
             <source>target/${artifact.artifactId}-${project.version}.jar</source>
-            <outputDirectory>/</outputDirectory>
+            <outputDirectory>/lib</outputDirectory>
             <destName>Octopus.TeamCity.jar</destName>
         </file>
     </files>
@@ -15,6 +15,7 @@
             <includes>
                 <include>com.octopus.teamcity:common</include>
             </includes>
+            <outputDirectory>/lib</outputDirectory>
             <outputFileNameMapping>Octopus.TeamCity-${artifact.artifactId}.${artifact.extension}</outputFileNameMapping>
         </dependencySet>
     </dependencySets>
