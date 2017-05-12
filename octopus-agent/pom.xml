@@ -14,8 +14,6 @@
     <name>Octopus Deploy TeamCity Plugin - Agent</name>
 
     <build>
-        <sourceDirectory>src</sourceDirectory>
-
         <pluginManagement>
             <plugins>
                 <plugin>
