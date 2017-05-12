@@ -7,7 +7,7 @@ before_install:
 - sudo apt-get install -y maven
 - wget https://download.jetbrains.com/teamcity/TeamCity-2017.1.1.tar.gz
 - tar -xzf TeamCity-2017.1.1.tar.gz
-
+install: /bin/true
 script: "mvn -Dteamcity.distribution=TeamCity clean package"
 deploy:
   - provider: releases
