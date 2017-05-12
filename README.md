@@ -18,3 +18,8 @@ To build the plugin from code:
  4. Run `mvn -Dteamcity.distribution=C:\TeamCity clean package` (set the TeamCity
     directory to the location where you extracted or installed TeamCity locally)
  5. The plugin is available at `octopus-distribution/target/Octopus.TeamCity.zip`
+ 
+## CI Builds
+
+This plugin is built by [Travis CI](https://travis-ci.org/OctopusDeploy/Octopus-TeamCity).
+Current build status is [![Build Status](https://travis-ci.org/OctopusDeploy/Octopus-TeamCity.svg?branch=master)](https://travis-ci.org/OctopusDeploy/Octopus-TeamCity)
