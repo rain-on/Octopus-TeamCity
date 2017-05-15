@@ -20,7 +20,6 @@
     <properties>
         <teamcity.version>10.0</teamcity.version>
         <teamcity.distribution>C:\TeamCity</teamcity.distribution>
-        <teamcity.data>C:\ProgramData\JetBrains\TeamCity</teamcity.data>
         <maven.build.timestamp.format>yyyyMMddHHmm</maven.build.timestamp.format>
     </properties>
 
