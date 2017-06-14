@@ -1,4 +1,19 @@
+*.class
+
+# Package Files #
+*.jar
+*.war
+*.ear
+source/dist
+source/out
 .idea
+*.iml
+**/*.iml
+
+# IDEA workspace file - stores personal settings only
+source/.idea/workspace.xm
+
+
 dist
 **.iml
 **/target
