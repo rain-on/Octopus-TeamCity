@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="9477c66b-2e94-4f57-993c-35cd78a4055e" name="Default" comment="Merged with master">
+    <list default="true" id="9477c66b-2e94-4f57-993c-35cd78a4055e" name="Default" comment="">
       <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/kotlinc.xml" afterPath="" />
       <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/libraries/OctopusTools_portable.xml" afterPath="" />
       <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/misc.xml" afterPath="" />
@@ -942,7 +942,7 @@
       <workItem from="1494884966075" duration="3293000" />
       <workItem from="1494966047154" duration="594000" />
       <workItem from="1495671202121" duration="1411000" />
-      <workItem from="1497475458829" duration="788000" />
+      <workItem from="1497475458829" duration="827000" />
     </task>
     <task id="LOCAL-00001" summary="Added some documentation">
       <created>1494886701926</created>
@@ -979,11 +979,18 @@
       <option name="project" value="LOCAL" />
       <updated>1497476113230</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="Merged with master">
+      <created>1497476254926</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1497476254926</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="6086000" />
+    <option name="totallyTimeSpent" value="6125000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="9512" y="-5469" width="6432" height="3532" extended-state="6" />
