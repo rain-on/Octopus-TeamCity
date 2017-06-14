@@ -87,7 +87,7 @@
             <artifactId>agent</artifactId>
             <version>1.0</version>
             <scope>system</scope>
-            <systemPath>${teamcity.distribution}/buildAgent/lib/agent.jar</systemPath>
+            <systemPath>${project.basedir}/libs/agent.jar</systemPath>
         </dependency>
     </dependencies>
 </project>
