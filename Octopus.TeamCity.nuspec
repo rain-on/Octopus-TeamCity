@@ -17,6 +17,6 @@ This package contains a TeamCity plugin that allows TeamCity to trigger deployme
     <licenseUrl>http://octopusdeploy.com/pricing</licenseUrl>
   </metadata>
   <files>
-    <file src="source\dist\Octopus.TeamCity.zip" target="" />
+    <file src="octopus-distribution\target\Octopus.TeamCity.zip" target="" />
   </files>
 </package>

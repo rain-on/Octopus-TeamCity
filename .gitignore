@@ -2,10 +2,8 @@
 
 # Package Files #
 *.jar
-*.war
-*.ear
-source/dist
-source/out
+*.nupkg
+.idea
+*.iml
 
-# IDEA workspace file - stores personal settings only
-source/.idea/workspace.xml
+**/target
