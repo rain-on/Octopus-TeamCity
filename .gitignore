@@ -2,6 +2,7 @@
 
 # Package Files #
 *.jar
+*.nupkg
 .idea
 *.iml
 
