@@ -29,10 +29,10 @@ To build the plugin from code:
 4. Create a Tomcat Configuration:
     1. Click Run -> Edit Configurations.
     2. Click the plus button and select Tomcat -> Local
-       ![Run Configuration - Startup](https://raw.githubusercontent.com/OctopusDeploy/Octopus-TeamCity/maven-build/TomcatLocal.PNG)
+       ![Run Configuration - Startup](https://raw.githubusercontent.com/OctopusDeploy/Octopus-TeamCity/master/TomcatLocal.PNG)
     3. Click the `Configure...` button next to the `Application Server:` option.
     4. Set the `Tomcat Home` option to the location of your TeamCity installation (probably `C:\TeamCity`).
-        ![Run Configuration - Startup](https://raw.githubusercontent.com/OctopusDeploy/Octopus-TeamCity/maven-build/TomcatServer.PNG)
+        ![Run Configuration - Startup](https://raw.githubusercontent.com/OctopusDeploy/Octopus-TeamCity/master/TomcatServer.PNG)
     5. Click the `OK` button.
 6. Under the `Startup/Connection` tab, set the `Startup script` to `C:\TeamCity\bin\teamcity-server.bat run` and 
    the `Shutdown script` to `C:\TeamCity\bin\teamcity-server.bat stop`. Do this for both the `Run` and `Debug` 
@@ -40,7 +40,7 @@ To build the plugin from code:
 5. Ensure that the `Before launch` list includes the step `Run Maven goal 'Octopus Deploy TeamCity plugin: package'`.
 6. Run the `copy-plugin.cmd` script as an external tool after the Maven goal. This will copy the plugin to TeamCity.
 6. Ignore the `Warning: No artifacts configured` message.
-   ![Run Configuration - Startup](https://raw.githubusercontent.com/OctopusDeploy/Octopus-TeamCity/maven-build/TomcatStartup.PNG)
+   ![Run Configuration - Startup](https://raw.githubusercontent.com/OctopusDeploy/Octopus-TeamCity/master/TomcatStartup.PNG)
 7. Click the `OK` button to save your changes.
 
 At this point the you can run TeamCity from IntelliJ. If need be you can run  TeamCity in debug mode and step 
