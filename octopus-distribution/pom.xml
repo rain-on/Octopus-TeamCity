@@ -12,7 +12,34 @@
     <packaging>jar</packaging>
 
     <name>Octopus Deploy TeamCity Plugin - Distribution</name>
-
+    
+    <profiles>
+        <profile>
+            <id>build-number-default</id>
+            <activation>
+                <activeByDefault>false</activeByDefault>
+                <property>
+                    <name>!env.BUILD_NUMBER</name>
+                </property>
+            </activation>
+            <properties>
+                <build.number>SNAPSHOT-${maven.build.timestamp}</build.number>
+            </properties>
+        </profile>
+        <profile>
+            <id>build-number</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+                <property>
+                    <name>env.BUILD_NUMBER</name>
+                </property>
+            </activation>
+            <properties>
+                <build.number>${env.BUILD_NUMBER}</build.number>
+            </properties>
+        </profile>
+    </profiles>
+    
     <build>
         <pluginManagement>
             <plugins>
@@ -42,7 +69,7 @@
                 <configuration>
                     <file>teamcity-plugin.xml</file>
                     <token>@version@</token>
-                    <value>SNAPSHOT-${maven.build.timestamp}</value>
+                    <value>${build.number}</value>
                     <outputDir>octopus-distribution/target</outputDir>
                 </configuration>
             </plugin>
