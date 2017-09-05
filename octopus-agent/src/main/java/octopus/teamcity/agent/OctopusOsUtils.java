@@ -39,7 +39,8 @@ public class OctopusOsUtils {
 
     public static Boolean HasDotNet(@NotNull BuildAgentConfiguration agentConfiguration){
         String result = executeCommand("dotnet");
-        return result.contains("Microsoft");
+        // v1 of dotnet outputs Microsoft, v2 outputs Usage
+        return result.contains("Microsoft") || result.contains("Usage");
     }
 
     public static Boolean HasOcto(@NotNull BuildAgentConfiguration agentConfiguration){
