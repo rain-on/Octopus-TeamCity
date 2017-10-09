@@ -16,7 +16,9 @@
 
 package octopus.teamcity.agent;
 
+import com.intellij.openapi.diagnostic.Logger;
 import jetbrains.buildServer.agent.BuildAgentConfiguration;
+import jetbrains.buildServer.log.Loggers;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.BufferedReader;
@@ -24,16 +26,28 @@ import java.io.InputStreamReader;
 
 public class OctopusOsUtils {
 
+    private static final Logger LOGGER = Loggers.SERVER;
+
     public static Boolean CanRunOcto(@NotNull BuildAgentConfiguration agentConfiguration){
         if (agentConfiguration.getSystemInfo().isUnix()) {
             if(HasDotNet(agentConfiguration)){
+                LOGGER.info("Octopus can run on agent with Unix and DotNot");
                 return true;
             } else {
-                return HasOcto(agentConfiguration);
+                if (HasOcto(agentConfiguration)) {
+                    LOGGER.info("Octopus can run on agent with Unix and Octo.exe");
+                    return true;
+                } else {
+                    LOGGER.info("Octopus can not run on agent with Unix and without Octo.exe or DotNET");
+                    return false;
+                }
             }
         } else if (agentConfiguration.getSystemInfo().isWindows()) {
+            LOGGER.info("Octopus can run on agent with Windows");
             return true;
         }
+
+        LOGGER.info("Octopus cannot run on agent without Windows or Unix");
         return false;
     }
 
