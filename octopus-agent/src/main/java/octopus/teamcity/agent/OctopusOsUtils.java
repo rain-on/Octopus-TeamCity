@@ -26,7 +26,7 @@ import java.io.InputStreamReader;
 
 public class OctopusOsUtils {
 
-    private static final Logger LOGGER = Loggers.SERVER;
+    private static final Logger LOGGER = Loggers.AGENT;
 
     public static Boolean CanRunOcto(@NotNull BuildAgentConfiguration agentConfiguration){
         if (agentConfiguration.getSystemInfo().isUnix()) {
