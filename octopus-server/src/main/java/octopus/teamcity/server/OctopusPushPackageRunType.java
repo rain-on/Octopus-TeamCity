@@ -46,7 +46,7 @@ public class OctopusPushPackageRunType extends RunType {
 
     @Override
     public String getDisplayName() {
-        return "OctopusDeploy: Push packages";
+        return "OctopusDeploy: Create and Push Packages";
     }
 
     @Override
