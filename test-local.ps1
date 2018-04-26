@@ -21,8 +21,8 @@ Stop-Service TCBuildAgent
 
 pushd .\source
 
-& ant "-Dteamcity.distribution=$TeamCityDistribution" "-Djdk.home.1.6=$JdkHome"
-Copy-Item ".\dist\Octopus.TeamCity.zip" "$TeamCityData\plugins\Octopus.TeamCity.zip" -Force
+& mvn "-Dteamcity.distribution=$TeamCityDistribution" clean package
+Copy-Item ".\octopus-distribution\target\Octopus.TeamCity.zip" "$TeamCityData\plugins\Octopus.TeamCity.zip" -Force
 
 popd
 
