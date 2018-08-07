@@ -26,4 +26,5 @@
     <bean class="octopus.teamcity.agent.OctopusDeployReleaseRunner"/>
     <bean class="octopus.teamcity.agent.OctopusPromoteReleaseRunner"/>
     <bean class="octopus.teamcity.agent.OctopusPushPackageRunner"/>
+    <bean class="octopus.teamcity.agent.OctopusPackPackageRunner"/>
 </beans>

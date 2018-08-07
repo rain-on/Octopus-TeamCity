@@ -30,10 +30,10 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
-public class OctopusPushPackageRunType extends RunType {
+public class OctopusPackPackageRunType extends RunType {
     private final PluginDescriptor pluginDescriptor;
 
-    public OctopusPushPackageRunType(final RunTypeRegistry runTypeRegistry, final PluginDescriptor pluginDescriptor) {
+    public OctopusPackPackageRunType(final RunTypeRegistry runTypeRegistry, final PluginDescriptor pluginDescriptor) {
         this.pluginDescriptor = pluginDescriptor;
         runTypeRegistry.registerRunType(this);
     }
@@ -41,17 +41,17 @@ public class OctopusPushPackageRunType extends RunType {
     @NotNull
     @Override
     public String getType() {
-        return OctopusConstants.PUSH_PACKAGE_RUNNER_TYPE;
+        return OctopusConstants.PACK_PACKAGE_RUNNER_TYPE;
     }
 
     @Override
     public String getDisplayName() {
-        return "OctopusDeploy: Push Packages";
+        return "OctopusDeploy: Pack";
     }
 
     @Override
     public String getDescription() {
-        return "Pushes package files (.nupkg, .zip, .tar.gz, etc.) to an Octopus Deploy server";
+        return "Packages files (.nupkg, .zip, .tar.gz, etc.)";
     }
 
     @Nullable
@@ -73,9 +73,11 @@ public class OctopusPushPackageRunType extends RunType {
                 final Collection<InvalidProperty> result = new ArrayList<InvalidProperty>();
                 if (p == null) return result;
 
-                checkNotEmpty(p, c.getApiKey(), "API key must be specified", result);
-                checkNotEmpty(p, c.getServerKey(), "Server must be specified", result);
-                checkNotEmpty(p, c.getPackagePathsKey(), "Package paths must be specified", result);
+                checkNotEmpty(p, c.getPackageIdKey(), "Package ID must be specified", result);
+                checkNotEmpty(p, c.getPackageFormatKey(), "Package format must be specified", result);
+                checkNotEmpty(p, c.getPackageVersionKey(), "Package version be specified", result);
+                checkNotEmpty(p, c.getPackageSourcePathKey(), "Source path must be specified", result);
+                checkNotEmpty(p, c.getPackageOutputPathKey(), "Output path must be specified", result);
 
                 return result;
             }
@@ -85,13 +87,13 @@ public class OctopusPushPackageRunType extends RunType {
     @Nullable
     @Override
     public String getEditRunnerParamsJspFilePath() {
-        return pluginDescriptor.getPluginResourcesPath("editOctopusPushPackage.jsp");
+        return pluginDescriptor.getPluginResourcesPath("editOctopusPackPackage.jsp");
     }
 
     @Nullable
     @Override
     public String getViewRunnerParamsJspFilePath() {
-        return pluginDescriptor.getPluginResourcesPath("viewOctopusPushPackage.jsp");
+        return pluginDescriptor.getPluginResourcesPath("viewOctopusPackPackage.jsp");
     }
 
     @Nullable
