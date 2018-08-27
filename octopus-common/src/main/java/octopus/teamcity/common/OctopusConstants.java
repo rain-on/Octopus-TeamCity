@@ -75,6 +75,13 @@ public class OctopusConstants {
     public String getDeployToKey() { return "octopus_deployto"; }
     public String getTenantsKey() { return "octoups_tenants"; }
     public String getTenantTagsKey() { return "octoups_tenanttags"; }
+
+    public String getPackageIdKey() { return "octopus_packageid"; }
+    public String getPackageFormatKey() { return "octopus_packageformat"; }
+    public String getPackageVersionKey() { return "octopus_packageversion"; }
+    public String getPackageSourcePathKey() { return "octopus_packagesourcepath"; }
+    public String getPackageOutputPathKey() { return "octopus_packageoutputpath"; }
+
     public String getPackagePathsKey() {
         return "octopus_packagepaths";
     }
@@ -110,5 +117,6 @@ public class OctopusConstants {
     public static final String CREATE_RELEASE_RUNNER_TYPE = "octopus.create.release";
     public static final String DEPLOY_RELEASE_RUNNER_TYPE = "octopus.deploy.release";
     public static final String PROMOTE_RELEASE_RUNNER_TYPE = "octopus.promote.release";
+    public static final String PACK_PACKAGE_RUNNER_TYPE = "octopus.pack.package";
     public static final String PUSH_PACKAGE_RUNNER_TYPE = "octopus.push.package";
 }
