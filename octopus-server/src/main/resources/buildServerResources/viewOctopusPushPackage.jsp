@@ -29,6 +29,11 @@
 </div>
 
 <div class="parameter">
+    Space name:
+    <strong><props:displayValue name="${keys.spaceName}" emptyValue="not specified"/></strong>
+</div>
+
+<div class="parameter">
     Package paths:
     <strong><props:displayValue name="${keys.packagePathsKey}" emptyValue="not specified"/></strong>
 </div>

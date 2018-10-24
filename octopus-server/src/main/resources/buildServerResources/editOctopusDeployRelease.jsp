@@ -43,6 +43,14 @@
         <span class="smallNote">Which version of the Octopus Deploy server are you using?</span>
     </td>
 </tr>
+<tr>
+    <th>Space name:</th>
+    <td>
+        <props:textProperty name="${keys.spaceName}" className="longField"/>
+        <span class="error" id="error_${keys.spaceName}"></span>
+        <span class="smallNote">Specify Octopus Space name. Leave blank to use the default space.</span>
+    </td>
+</tr>
 </l:settingsGroup>
 
 <l:settingsGroup title="Deployment">
