@@ -49,6 +49,11 @@
 </div>
 
 <div class="parameter">
+  Commit processing:
+  <strong><props:displayValue name="${keys.commentParserKey}" emptyValue="not specified"/></strong>
+</div>
+
+<div class="parameter">
   Publish packages as build artifacts:
   <strong><props:displayValue name="${keys.publishArtifactsKey}" emptyValue="not specified"/></strong>
 </div>

@@ -82,6 +82,8 @@ public class OctopusConstants {
     public String getPackageSourcePathKey() { return "octopus_packagesourcepath"; }
     public String getPackageOutputPathKey() { return "octopus_packageoutputpath"; }
 
+    public String getCommentParserKey() { return "octopus_commentParserKey"; }
+
     public String getPackagePathsKey() {
         return "octopus_packagepaths";
     }

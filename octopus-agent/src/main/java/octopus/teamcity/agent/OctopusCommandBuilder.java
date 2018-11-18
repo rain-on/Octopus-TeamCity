@@ -16,6 +16,7 @@
 
 package octopus.teamcity.agent;
 
+import jetbrains.buildServer.RunBuildException;
 import jetbrains.buildServer.util.StringUtil;
 
 import java.util.ArrayList;
@@ -24,15 +25,15 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public abstract class OctopusCommandBuilder {
-    public String[] buildCommand() {
+    public String[] buildCommand() throws RunBuildException {
         return buildCommand(false);
     }
 
-    public String[] buildMaskedCommand() {
+    public String[] buildMaskedCommand() throws RunBuildException {
         return buildCommand(true);
     }
 
-    protected abstract String[] buildCommand(boolean masked);
+    protected abstract String[] buildCommand(boolean masked) throws RunBuildException;
 
     protected String Quote(String value) {
         return "\"" + value + "\"";

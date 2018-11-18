@@ -85,7 +85,7 @@ public class OctopusPackPackageBuildProcess extends OctopusBuildProcess {
 
         return new OctopusCommandBuilder() {
             @Override
-            protected String[] buildCommand(boolean masked) {
+            protected String[] buildCommand(boolean masked) throws RunBuildException {
                 final ArrayList<String> commands = new ArrayList<String>();
                 final String packageId = parameters.get(constants.getPackageIdKey());
                 final String packageFormat = parameters.get(constants.getPackageFormatKey()).toLowerCase();
@@ -93,6 +93,7 @@ public class OctopusPackPackageBuildProcess extends OctopusBuildProcess {
                 final String sourcePath = parameters.get(constants.getPackageSourcePathKey());
                 final String outputPath = parameters.get(constants.getPackageOutputPathKey());
                 final String commandLineArguments = parameters.get(constants.getCommandLineArgumentsKey());
+                final String commentParser = parameters.get(constants.getCommentParserKey());
 
                 commands.add("pack");
 
@@ -113,6 +114,15 @@ public class OctopusPackPackageBuildProcess extends OctopusBuildProcess {
 
                 if (commandLineArguments != null && !commandLineArguments.isEmpty()) {
                     commands.addAll(splitSpaceSeparatedValues(commandLineArguments));
+                }
+
+                if (commentParser != null && !commentParser.isEmpty()) {
+                    try {
+                        final CommentWorkItemHandler commentHandler = new CommentWorkItemHandler();
+                        commentHandler.processComments(myRunningBuild, commentParser, sourcePath);
+                    } catch (Exception ex) {
+                        throw new RunBuildException("Error processing comment messages", ex);
+                    }
                 }
 
                 return commands.toArray(new String[commands.size()]);
