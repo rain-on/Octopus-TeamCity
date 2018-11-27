@@ -29,10 +29,10 @@ public class CommentWorkItemHandler {
         }
 
         if (workItems.size() > 0) {
-            buildLogger.message("Found work items in comments, adding " + workItems.size() + " work items to octopus.meta");
+            buildLogger.message("Found work items in comments, adding " + workItems.size() + " work items to octopus.metadata");
 
             try {
-                final String metaFile = Paths.get(myRunningBuild.getCheckoutDirectory().getPath(), basePath, "octopus.meta").toAbsolutePath().toString();
+                final String metaFile = Paths.get(myRunningBuild.getCheckoutDirectory().getPath(), basePath, "octopus.metadata").toAbsolutePath().toString();
                 buildLogger.message("Creating " + metaFile);
 
                 final Gson gson = new GsonBuilder().setPrettyPrinting().create();
@@ -48,7 +48,7 @@ public class CommentWorkItemHandler {
                 buildLogger.message("Wrote " + metaFile);
             } catch (IOException e) {
                 e.printStackTrace();
-                buildLogger.message("Error writing the octopus.meta file");
+                buildLogger.message("Error writing the octopus.metadata file");
                 throw e;
             }
         } else {
