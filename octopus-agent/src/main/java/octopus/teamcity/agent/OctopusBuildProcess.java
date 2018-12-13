@@ -116,7 +116,18 @@ public abstract class OctopusBuildProcess implements BuildProcess {
             arguments.addAll(Arrays.asList(realCommand));
 
             final String extensionVersion = getClass().getPackage().getImplementationVersion();
-            process = runtime.exec(arguments.toArray(new String[arguments.size()]), new String [] {"OCTOEXTENSION=" + extensionVersion}, context.getWorkingDirectory());
+
+            final ProcessBuilder builder = new ProcessBuilder();
+
+            Map<String, String> programEnvironmentVariables = context.getBuildParameters().getEnvironmentVariables();
+            Map<String, String> environment = builder.environment();
+            environment.put("OCTOEXTENSION", extensionVersion);
+            environment.putAll(programEnvironmentVariables);
+
+            process = builder
+                    .command(arguments)
+                    .directory(context.getWorkingDirectory())
+                    .start();
 
             final LoggingProcessListener listener = new LoggingProcessListener(logger);
 
