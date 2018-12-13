@@ -20,7 +20,7 @@ public class OctopusPackBuildStartProcessor implements BuildStartContextProcesso
     @Override
     public void updateParameters(@NotNull BuildStartContext buildStartContext) {
 
-        final List<SVcsModification> changes = buildStartContext.getBuild().getChanges(SelectPrevBuildPolicy.SINCE_FIRST_BUILD, true);
+        final List<SVcsModification> changes = buildStartContext.getBuild().getChanges(SelectPrevBuildPolicy.SINCE_LAST_SUCCESSFULLY_FINISHED_BUILD, true);
         String changesText = "";
 
         for (SVcsModification change : changes) {
