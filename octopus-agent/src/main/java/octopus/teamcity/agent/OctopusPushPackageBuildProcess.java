@@ -96,6 +96,7 @@ public class OctopusPushPackageBuildProcess extends OctopusBuildProcess {
                 final ArrayList<String> commands = new ArrayList<String>();
                 final String serverUrl = parameters.get(constants.getServerKey());
                 final String apiKey = parameters.get(constants.getApiKey());
+                final String spaceName = parameters.get(constants.getSpaceName());
                 final String commandLineArguments = parameters.get(constants.getCommandLineArgumentsKey());
 
                 final boolean forcePush = Boolean.parseBoolean(parameters.get(constants.getForcePushKey()));
@@ -105,6 +106,11 @@ public class OctopusPushPackageBuildProcess extends OctopusBuildProcess {
                 commands.add(serverUrl);
                 commands.add("--apikey");
                 commands.add(masked ? "SECRET" : apiKey);
+
+                if (spaceName != null && !spaceName.isEmpty()) {
+                    commands.add("--space");
+                    commands.add(spaceName);
+                }
 
                 for (ArtifactsCollection artifactsCollection : artifactsCollections) {
                     for (Map.Entry<File, String> fileStringEntry : artifactsCollection.getFilePathMap().entrySet()) {

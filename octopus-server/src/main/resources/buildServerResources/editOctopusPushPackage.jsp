@@ -40,6 +40,14 @@
       <span class="smallNote">Specify Octopus API key. You can get this from your user page in the Octopus web portal.</span>
     </td>
   </tr>
+  <tr>
+    <th>Space name:</th>
+    <td>
+      <props:textProperty name="${keys.spaceName}" className="longField"/>
+      <span class="error" id="error_${keys.spaceName}"></span>
+      <span class="smallNote">Specify Octopus Space name. Leave blank to use the default space.</span>
+    </td>
+  </tr>
 </l:settingsGroup>
 
 <l:settingsGroup title="Package Push">

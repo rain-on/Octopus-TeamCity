@@ -13,6 +13,11 @@
 </div>
 
 <div class="parameter">
+    Space name:
+    <strong><props:displayValue name="${keys.spaceName}" emptyValue="not specified"/></strong>
+</div>
+
+<div class="parameter">
     Project:
     <strong><props:displayValue name="${keys.projectNameKey}" emptyValue="not specified"/></strong>
 </div>

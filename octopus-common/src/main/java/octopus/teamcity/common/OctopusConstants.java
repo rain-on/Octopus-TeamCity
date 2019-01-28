@@ -49,6 +49,10 @@ public class OctopusConstants {
         return new String[] { getVersion3(), getVersion2(), getVersion1() };
     }
 
+    public String getSpaceName() {
+        return "octopus_space_name";
+    }
+
     public String getProjectNameKey() {
         return "octopus_project_name";
     }
