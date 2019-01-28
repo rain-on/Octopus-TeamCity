@@ -45,6 +45,7 @@ public class OctopusCreateReleaseBuildProcess extends OctopusBuildProcess {
                 final ArrayList<String> commands = new ArrayList<String>();
                 final String serverUrl = parameters.get(constants.getServerKey());
                 final String apiKey = parameters.get(constants.getApiKey());
+                final String spaceName = parameters.get(constants.getSpaceName());
                 final String commandLineArguments = parameters.get(constants.getCommandLineArgumentsKey());
                 final String releaseNumber = parameters.get(constants.getReleaseNumberKey());
                 final String channelName = parameters.get(constants.getChannelNameKey());
@@ -59,6 +60,11 @@ public class OctopusCreateReleaseBuildProcess extends OctopusBuildProcess {
                 commands.add(serverUrl);
                 commands.add("--apikey");
                 commands.add(masked ? "SECRET" : apiKey);
+
+                if (spaceName != null && !spaceName.isEmpty()) {
+                    commands.add("--space");
+                    commands.add(spaceName);
+                }
 
                 commands.add("--project");
                 commands.add(projectName);
