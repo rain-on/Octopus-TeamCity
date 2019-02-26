@@ -24,31 +24,11 @@
 <jsp:useBean id="propertiesBean" scope="request" type="jetbrains.buildServer.controllers.BasePropertiesBean"/>
 
 <div class="parameter">
-  Package ID:
-  <strong><props:displayValue name="${keys.packageIdKey}" emptyValue="not specified"/></strong>
+  Metadata Output path:
+  <strong><props:displayValue name="${keys.metadataOutputPathKey}" emptyValue="not specified"/></strong>
 </div>
 
 <div class="parameter">
-  Package format:
-  <strong><props:displayValue name="${keys.packageFormat}" emptyValue="not specified"/></strong>
-</div>
-
-<div class="parameter">
-  Package version:
-  <strong><props:displayValue name="${keys.packageVersion}" emptyValue="not specified"/></strong>
-</div>
-      
-<div class="parameter">
-  Source path:
-  <strong><props:displayValue name="${keys.packageSourcePathKey}" emptyValue="not specified"/></strong>
-</div>
-
-<div class="parameter">
-  Output path:
-  <strong><props:displayValue name="${keys.packageOutputPathKey}" emptyValue="not specified"/></strong>
-</div>
-
-<div class="parameter">
-  Publish packages as build artifacts:
-  <strong><props:displayValue name="${keys.publishArtifactsKey}" emptyValue="not specified"/></strong>
+  Commit processing:
+  <strong><props:displayValue name="${keys.commentParserKey}" emptyValue="not specified"/></strong>
 </div>

@@ -86,6 +86,7 @@ public class OctopusConstants {
     public String getPackageSourcePathKey() { return "octopus_packagesourcepath"; }
     public String getPackageOutputPathKey() { return "octopus_packageoutputpath"; }
 
+    public String getMetadataOutputPathKey() { return "octopus_metadataoutputpath"; }
     public String getCommentParserKey() { return "octopus_commentParserKey"; }
 
     public String getPackagePathsKey() {
@@ -125,4 +126,5 @@ public class OctopusConstants {
     public static final String PROMOTE_RELEASE_RUNNER_TYPE = "octopus.promote.release";
     public static final String PACK_PACKAGE_RUNNER_TYPE = "octopus.pack.package";
     public static final String PUSH_PACKAGE_RUNNER_TYPE = "octopus.push.package";
+    public static final String METADATA_RUNNER_TYPE = "octopus.metadata";
 }

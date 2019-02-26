@@ -9,11 +9,11 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
-public class OctopusPackBuildStartProcessor implements BuildStartContextProcessor {
+public class OctopusMetadataBuildStartProcessor implements BuildStartContextProcessor {
 
     private ExtensionHolder extensionHolder;
 
-    public OctopusPackBuildStartProcessor(@NotNull ExtensionHolder extensionHolder) {
+    public OctopusMetadataBuildStartProcessor(@NotNull ExtensionHolder extensionHolder) {
         this.extensionHolder = extensionHolder;
     }
 

@@ -81,20 +81,6 @@
     </td>
   </tr>
 
-  <tr>
-    <th>Commit processing:<l:star/></th>
-    <td>
-      <props:selectProperty name="${keys.commentParserKey}" multiple="false">
-        <props:option value="" selected="${keys.commentParserKey == ''}"></props:option>
-        <props:option value="Jira" selected="${keys.commentParserKey == 'Jira'}">Jira</props:option>
-      </props:selectProperty>
-      <span class="error" id="error_${keys.commentParserKey}"></span>
-      <span class="smallNote">
-        Process the commit messages looking for work item references and include them in the package
-      </span>
-    </td>
-  </tr>
-
   <tr class="advancedSetting">
     <th>Publish packages as build artifacts:</th>
     <td>
