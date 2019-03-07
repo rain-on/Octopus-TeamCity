@@ -10,6 +10,10 @@ import java.util.regex.Pattern;
 public class JiraCommentParser extends CommentParser {
     private static final String JIRA_ID_REGEX = "[A-Z]*-\\d+";
 
+    public String getIssueTrackerSuffix() {
+        return "jira";
+    }
+
     public List<WorkItem> parse(final String comment, final BuildProgressLogger buildLogger) {
         buildLogger.message("Parsing comments for Jira work items");
         final List<WorkItem> workItems = new ArrayList<WorkItem>();
@@ -19,12 +23,12 @@ public class JiraCommentParser extends CommentParser {
 
         while (jiraMatcher.find()) {
             final WorkItem workItem = new WorkItem();
+
             workItem.Id = jiraMatcher.group(0);
-            workItem.IssueTrackerId = "issuetracker-jira";
-            workItem.LinkUrl = "browse/" + jiraMatcher.group(0);
+            workItem.LinkData = jiraMatcher.group(0);
             workItem.LinkText = jiraMatcher.group(0);
 
-            buildLogger.message("Located Jira work item " + workItem.Id);
+            buildLogger.message("Located Jira work item " + workItem.LinkData);
 
             workItems.add(workItem);
         }

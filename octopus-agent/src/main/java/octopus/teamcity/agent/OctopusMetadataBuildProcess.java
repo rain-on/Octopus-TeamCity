@@ -16,55 +16,100 @@
 
 package octopus.teamcity.agent;
 
-import jetbrains.buildServer.RunBuildException;
 import jetbrains.buildServer.agent.*;
 import octopus.teamcity.common.OctopusConstants;
 import org.jetbrains.annotations.NotNull;
 
+import java.io.File;
+import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.Map;
 
-public class OctopusMetadataBuildProcess implements BuildProcess {
+public class OctopusMetadataBuildProcess extends OctopusBuildProcess {
 
-    private boolean isFinished;
-    private final AgentRunningBuild myRunningBuild;
-    private final BuildRunnerContext myContext;
+    private final String serverUrl;
+    private final File checkoutDir;
+    private final Map<String, String> sharedConfigParameters;
 
     public OctopusMetadataBuildProcess(@NotNull AgentRunningBuild runningBuild, @NotNull BuildRunnerContext context) {
-        myRunningBuild = runningBuild;
-        myContext = context;
+        super(runningBuild, context);
+
+        serverUrl = runningBuild.getAgentConfiguration().getServerUrl();
+        checkoutDir = runningBuild.getCheckoutDirectory();
+        sharedConfigParameters = runningBuild.getSharedConfigParameters();
     }
 
-    public void start() throws RunBuildException {
-        final Map<String, String> parameters = myContext.getRunnerParameters();
+    @Override
+    protected String getLogMessage() {
+        return "Pushing package metadata to Octopus server";
+    }
+
+    @Override
+    protected OctopusCommandBuilder createCommand() {
+
+        final BuildProgressLogger buildLogger = getLogger();
+
+        final Map<String, String> parameters = getContext().getRunnerParameters();
         final OctopusConstants constants = OctopusConstants.Instance;
 
-        final String outputPath = parameters.get(constants.getMetadataOutputPathKey());
         final String commentParser = parameters.get(constants.getCommentParserKey());
 
+        final String metaFile = Paths.get(checkoutDir.getPath(), "octopus.metadata").toAbsolutePath().toString();
+
         try {
-            final CommentWorkItemHandler commentHandler = new CommentWorkItemHandler();
-            commentHandler.processComments(myRunningBuild, commentParser, outputPath);
+            AgentRunningBuild build = getContext().getBuild();
+
+            final OctopusMetadataBuilder builder = new OctopusMetadataBuilder(buildLogger);
+            final OctopusPackageMetadata metadata = builder.build(sharedConfigParameters, commentParser, serverUrl, Long.toString(build.getBuildId()), build.getBuildNumber());
+
+            buildLogger.message("Creating " + metaFile);
+
+            final OctopusMetadataWriter writer = new OctopusMetadataWriter(buildLogger);
+            writer.writeToFile(metadata, metaFile);
+
         } catch (Exception ex) {
-            throw new RunBuildException("Error processing comment messages", ex);
+            buildLogger.error("Error processing comment messages " + ex);
+            return null;
         }
+
+        return new OctopusCommandBuilder() {
+            @Override
+            protected String[] buildCommand(boolean masked) {
+                final ArrayList<String> commands = new ArrayList<String>();
+                final String serverUrl = parameters.get(constants.getServerKey());
+                final String apiKey = parameters.get(constants.getApiKey());
+                final String spaceName = parameters.get(constants.getSpaceName());
+                final String packageId = parameters.get(constants.getPackageIdKey());
+                final String packageVersion = parameters.get(constants.getPackageVersionKey());
+
+                final boolean forcePush = Boolean.parseBoolean(parameters.get(constants.getForcePushKey()));
+
+                commands.add("push-metadata");
+                commands.add("--server");
+                commands.add(serverUrl);
+                commands.add("--apikey");
+                commands.add(masked ? "SECRET" : apiKey);
+
+                if (spaceName != null && !spaceName.isEmpty()) {
+                    commands.add("--space");
+                    commands.add(spaceName);
+                }
+
+                commands.add("--package-id");
+                commands.add(packageId);
+
+                commands.add("--version");
+                commands.add(packageVersion);
+
+                commands.add("--metadata-file");
+                commands.add(metaFile);
+
+                if (forcePush) {
+                    commands.add("--replace-existing");
+                }
+
+                return commands.toArray(new String[commands.size()]);
+            }
+        };
     }
-
-    public boolean isInterrupted() {
-        return false;
-    }
-
-    public boolean isFinished() {
-        return isFinished;
-    }
-
-    public void interrupt() {
-    }
-
-    @NotNull
-    public BuildFinishedStatus waitFor() {
-        isFinished = true;
-
-        return BuildFinishedStatus.FINISHED_SUCCESS;
-    }
-
 }

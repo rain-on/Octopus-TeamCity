@@ -23,15 +23,52 @@
 <jsp:useBean id="keys" class="octopus.teamcity.common.OctopusConstants" />
 <jsp:useBean id="propertiesBean" scope="request" type="jetbrains.buildServer.controllers.BasePropertiesBean"/>
 
-<l:settingsGroup title="Pack">
+<l:settingsGroup title="Octopus Connection">
+  <tr>
+    <th>Octopus URL:<l:star/></th>
+    <td>
+      <props:textProperty name="${keys.serverKey}" className="longField"/>
+      <span class="error" id="error_${keys.serverKey}"></span>
+      <span class="smallNote">Specify Octopus web portal URL</span>
+    </td>
+  </tr>
+  <tr>
+    <th>API key:<l:star/></th>
+    <td>
+      <props:passwordProperty name="${keys.apiKey}" className="longField"/>
+      <span class="error" id="error_${keys.apiKey}"></span>
+      <span class="smallNote">Specify Octopus API key. You can get this from your user page in the Octopus web portal.</span>
+    </td>
+  </tr>
+  <tr>
+    <th>Space name:</th>
+    <td>
+      <props:textProperty name="${keys.spaceName}" className="longField"/>
+      <span class="error" id="error_${keys.spaceName}"></span>
+      <span class="smallNote">Specify Octopus Space name. Leave blank to use the default space.</span>
+    </td>
+  </tr>
+</l:settingsGroup>
+
+<l:settingsGroup title="Metadata">
 
   <tr>
-    <th>Metadata Output path:<l:star/></th>
+    <th>Package ID:<l:star/></th>
     <td>
-      <props:textProperty name="${keys.metadataOutputPathKey}" className="longField" />
-      <span class="error" id="error_${keys.metadataOutputPathKey}"></span>
+      <props:textProperty name="${keys.packageIdKey}" className="longField" />
+      <span class="error" id="error_${keys.packageIdKey}"></span>
       <span class="smallNote">
-        Directory to write the metadata file to.
+        The package's identifier.
+      </span>
+    </td>
+  </tr>
+  <tr>
+    <th>Package version:<l:star/></th>
+    <td>
+      <props:textProperty name="${keys.packageVersionKey}" className="longField" />
+      <span class="error" id="error_${keys.packageVersionKey}"></span>
+      <span class="smallNote">
+        The package's version.
       </span>
     </td>
   </tr>
@@ -45,8 +82,17 @@
       </props:selectProperty>
       <span class="error" id="error_${keys.commentParserKey}"></span>
       <span class="smallNote">
-        Process the commit messages looking for work item references and include them in the package
+        Process the commit messages looking for work item references and include them in the metadata
       </span>
+    </td>
+  </tr>
+
+  <tr class="advancedSetting">
+    <th>Force overwrite existing metadata:</th>
+    <td>
+      <props:checkboxProperty name="${keys.forcePushKey}" />
+      <span class="error" id="error_${keys.forcePushKey}"></span>
+      <span class="smallNote">Normally, if a the same package metadata already exists on the server, the server will reject the push. This is a good practice as it ensures metadata isn't accidentally overwritten. Enable this setting to override this behavior.</span>
     </td>
   </tr>
 

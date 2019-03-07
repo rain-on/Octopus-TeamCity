@@ -24,11 +24,31 @@
 <jsp:useBean id="propertiesBean" scope="request" type="jetbrains.buildServer.controllers.BasePropertiesBean"/>
 
 <div class="parameter">
-  Metadata Output path:
-  <strong><props:displayValue name="${keys.metadataOutputPathKey}" emptyValue="not specified"/></strong>
+  Octopus URL:
+  <strong><props:displayValue name="${keys.serverKey}" emptyValue="not specified"/></strong>
+</div>
+
+<div class="parameter">
+  Space name:
+  <strong><props:displayValue name="${keys.spaceName}" emptyValue="not specified"/></strong>
+</div>
+
+<div class="parameter">
+  Package ID:
+  <strong><props:displayValue name="${keys.packageIdKey}" emptyValue="not specified"/></strong>
+</div>
+
+<div class="parameter">
+  Package version:
+  <strong><props:displayValue name="${keys.packageVersion}" emptyValue="not specified"/></strong>
 </div>
 
 <div class="parameter">
   Commit processing:
   <strong><props:displayValue name="${keys.commentParserKey}" emptyValue="not specified"/></strong>
+</div>
+
+<div class="parameter">
+  Force push:
+  <strong><props:displayValue name="${keys.forcePushKey}" emptyValue="not specified"/></strong>
 </div>

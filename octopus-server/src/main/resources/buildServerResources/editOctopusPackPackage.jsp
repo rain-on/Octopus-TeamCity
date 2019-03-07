@@ -54,7 +54,7 @@
       <props:textProperty name="${keys.packageVersionKey}" className="longField" />
       <span class="error" id="error_${keys.packageVersionKey}"></span>
       <span class="smallNote">
-        The package's version, e.g. "NuGet" or "zip". Defaults to NuGet if left blank.
+        The package's version.
       </span>
     </td>
   </tr>

@@ -51,7 +51,7 @@ public class OctopusMetadataRunType extends RunType {
 
     @Override
     public String getDescription() {
-        return "Collect related work items from commit messages and store in custom metadata for Octopus.";
+        return "Collect information related to the build, including work items from commit messages, and store in custom metadata in Octopus.";
     }
 
     @Nullable
@@ -73,8 +73,10 @@ public class OctopusMetadataRunType extends RunType {
                 final Collection<InvalidProperty> result = new ArrayList<InvalidProperty>();
                 if (p == null) return result;
 
-                checkNotEmpty(p, c.getMetadataOutputPathKey(), "Metadata output path must be specified", result);
-                checkNotEmpty(p, c.getCommentParserKey(), "Comment parser must be specified", result);
+                checkNotEmpty(p, c.getServerKey(), "Server must be specified", result);
+                checkNotEmpty(p, c.getApiKey(), "API key must be specified", result);
+                checkNotEmpty(p, c.getPackageIdKey(), "Package ID must be specified", result);
+                checkNotEmpty(p, c.getPackageVersionKey(), "Package version be specified", result);
 
                 return result;
             }

@@ -43,6 +43,8 @@ public abstract class OctopusBuildProcess implements BuildProcess {
     protected OctopusBuildProcess(@NotNull AgentRunningBuild runningBuild, @NotNull BuildRunnerContext context) {
         this.runningBuild = runningBuild;
         this.context = context;
+
+        logger = runningBuild.getBuildLogger();
     }
 
     public void start() throws RunBuildException {
@@ -57,6 +59,10 @@ public abstract class OctopusBuildProcess implements BuildProcess {
 
     protected BuildRunnerContext getContext() {
         return context;
+    }
+
+    protected BuildProgressLogger getLogger() {
+        return logger;
     }
 
     private void extractOctoExe() throws RunBuildException {
@@ -86,7 +92,6 @@ public abstract class OctopusBuildProcess implements BuildProcess {
             useOcto = OctopusOsUtils.HasOcto(runningBuild.getAgentConfiguration());
         }
 
-        logger = runningBuild.getBuildLogger();
         logger.activityStarted("Octopus Deploy", DefaultMessagesInfo.BLOCK_TYPE_INDENTATION);
         if(useExe) {
             logger.message("Running command:   octo.exe " + StringUtils.arrayToDelimitedString(userVisibleCommand, " "));
