@@ -5,7 +5,6 @@ import jetbrains.buildServer.util.StringUtil;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 public class OctopusMetadataBuilder {
 
@@ -16,10 +15,14 @@ public class OctopusMetadataBuilder {
         this.buildLogger = buildLogger;
     }
 
-    public OctopusPackageMetadata build(final Map<String, String> sharedConfigParameters, final String commentParser, final String serverUrl, final String buildId, final String buildNumber) throws Exception {
-
-        final String vcsRoot = sharedConfigParameters.get("vcsroot");
-        final String vcsCommitNumber = sharedConfigParameters.get("build.vcs.number");
+    public OctopusPackageMetadata build(
+            final String vcsRoot,
+            final String vcsCommitNumber,
+            final String comments,
+            final String commentParser,
+            final String serverUrl,
+            final String buildId,
+            final String buildNumber) throws Exception {
 
         final OctopusPackageMetadata metadata = new OctopusPackageMetadata();
 
@@ -29,7 +32,6 @@ public class OctopusMetadataBuilder {
 
             metadata.IssueTrackerId = "issuetracker-" + parser.getIssueTrackerSuffix();
 
-            final String comments = sharedConfigParameters.get("comments");
             final List<WorkItem> workItems = new ArrayList<WorkItem>();
 
             if (comments != null && !comments.isEmpty()) {

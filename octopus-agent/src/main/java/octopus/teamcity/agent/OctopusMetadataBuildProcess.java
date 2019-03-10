@@ -60,7 +60,14 @@ public class OctopusMetadataBuildProcess extends OctopusBuildProcess {
             AgentRunningBuild build = getContext().getBuild();
 
             final OctopusMetadataBuilder builder = new OctopusMetadataBuilder(buildLogger);
-            final OctopusPackageMetadata metadata = builder.build(sharedConfigParameters, commentParser, serverUrl, Long.toString(build.getBuildId()), build.getBuildNumber());
+            final OctopusPackageMetadata metadata = builder.build(
+                    sharedConfigParameters.get("vcsroot"),
+                    sharedConfigParameters.get("build.vcs.number"),
+                    sharedConfigParameters.get("comments"),
+                    commentParser,
+                    serverUrl,
+                    Long.toString(build.getBuildId()),
+                    build.getBuildNumber());
 
             buildLogger.message("Creating " + metaFile);
 
