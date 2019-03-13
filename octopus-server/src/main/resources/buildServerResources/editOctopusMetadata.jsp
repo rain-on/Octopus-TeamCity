@@ -79,6 +79,7 @@
       <props:selectProperty name="${keys.commentParserKey}" multiple="false">
         <props:option value="" selected="${keys.commentParserKey == ''}"></props:option>
         <props:option value="Jira" selected="${keys.commentParserKey == 'Jira'}">Jira</props:option>
+        <props:option value="GitHub" selected="${keys.commentParserKey == 'GitHub'}">GitHub</props:option>
       </props:selectProperty>
       <span class="error" id="error_${keys.commentParserKey}"></span>
       <span class="smallNote">
