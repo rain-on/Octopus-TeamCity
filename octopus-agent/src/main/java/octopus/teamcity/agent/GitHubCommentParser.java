@@ -18,7 +18,7 @@ public class GitHubCommentParser extends CommentParser {
         buildLogger.message("Parsing comments for GitHub issues");
         final List<WorkItem> workItems = new ArrayList<WorkItem>();
 
-        final Pattern githubId = Pattern.compile(GITHUB_ID_REGEX);
+        final Pattern githubId = Pattern.compile(GITHUB_ID_REGEX, Pattern.CASE_INSENSITIVE);
         final Matcher githubMatcher = githubId.matcher(comment);
 
         while (githubMatcher.find()) {

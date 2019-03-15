@@ -18,7 +18,7 @@ public class JiraCommentParser extends CommentParser {
         buildLogger.message("Parsing comments for Jira work items");
         final List<WorkItem> workItems = new ArrayList<WorkItem>();
 
-        final Pattern jiraId = Pattern.compile(JIRA_ID_REGEX);
+        final Pattern jiraId = Pattern.compile(JIRA_ID_REGEX, Pattern.CASE_INSENSITIVE);
         final Matcher jiraMatcher = jiraId.matcher(comment);
 
         while (jiraMatcher.find()) {
