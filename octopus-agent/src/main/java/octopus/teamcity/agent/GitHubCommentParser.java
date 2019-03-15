@@ -8,7 +8,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class GitHubCommentParser extends CommentParser {
-    private static final String GITHUB_ID_REGEX = "(?:([/A-Z]*)#|GH-|http[/A-Z:.]*/issues/)(\\d+)";
+    private static final String GITHUB_ID_REGEX = "(?:close[d|s]*|fix[ed|es]*|resolve[d|s]*):?\\s((?:#|GH-|http[/A-Z:.]*/issues/)(\\d+))";
 
     public String getIssueTrackerSuffix() {
         return "github";
@@ -23,7 +23,7 @@ public class GitHubCommentParser extends CommentParser {
 
         while (githubMatcher.find()) {
             final WorkItem workItem = new WorkItem();
-            final String linkData = githubMatcher.group(0);
+            final String linkData = githubMatcher.group(1);
             final String issueNumber = githubMatcher.group(2);
 
             workItem.Id = issueNumber;
