@@ -51,7 +51,7 @@
   <td>
     <props:textProperty name="${keys.spaceName}" className="longField"/>
     <span class="error" id="error_${keys.spaceName}"></span>
-    <span class="smallNote">Specify Octopus Space name. Leave blank to use the default space.</span>
+    <span class="smallNote">Specify the Octopus Space name to release to. Leave blank to use the default space.</span>
   </td>
 </tr>
 </l:settingsGroup>
