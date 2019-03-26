@@ -28,7 +28,7 @@ public class OctopusMetadataBuildStartProcessor implements BuildStartContextProc
     public void updateParameters(@NotNull BuildStartContext buildStartContext) {
 
         final SRunningBuild build = buildStartContext.getBuild();
-        final List<SVcsModification> changes = build.getChanges(SelectPrevBuildPolicy.SINCE_LAST_SUCCESSFULLY_FINISHED_BUILD, true);
+        final List<SVcsModification> changes = build.getChanges(SelectPrevBuildPolicy.SINCE_LAST_BUILD, true);
         final List<VcsRootInstanceEntry> vcsRoots = build.getVcsRootEntries();
 
         final VcsRootInstanceEntry vcsRoot = vcsRoots.get(0);
