@@ -13,14 +13,4 @@ public class CommentParserFactory {
     public static List<String> getParsers() {
         return parsers;
     }
-
-    public CommentParser getParser(String parser) throws Exception {
-        switch (parser) {
-            case JIRA_PARSER:
-                return new JiraCommentParser();
-            case GITHUB_PARSER:
-                return new GitHubCommentParser();
-        }
-        throw new Exception("Unsupported parser value " + parser);
-    }
 }

@@ -63,7 +63,7 @@ public class OctopusMetadataBuildProcess extends OctopusBuildProcess {
             final OctopusPackageMetadata metadata = builder.build(
                     sharedConfigParameters.get("vcsroot"),
                     sharedConfigParameters.get("build.vcs.number"),
-                    sharedConfigParameters.get("comments"),
+                    sharedConfigParameters.get("commits"),
                     commentParser,
                     serverUrl,
                     Long.toString(build.getBuildId()),

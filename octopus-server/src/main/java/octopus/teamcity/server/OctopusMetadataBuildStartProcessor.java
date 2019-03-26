@@ -1,5 +1,7 @@
 package octopus.teamcity.server;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import jetbrains.buildServer.ExtensionHolder;
 import jetbrains.buildServer.serverSide.BuildStartContext;
 import jetbrains.buildServer.serverSide.BuildStartContextProcessor;
@@ -7,8 +9,10 @@ import jetbrains.buildServer.serverSide.SRunningBuild;
 import jetbrains.buildServer.vcs.SVcsModification;
 import jetbrains.buildServer.vcs.SelectPrevBuildPolicy;
 import jetbrains.buildServer.vcs.VcsRootInstanceEntry;
+import octopus.teamcity.common.Commit;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -26,17 +30,28 @@ public class OctopusMetadataBuildStartProcessor implements BuildStartContextProc
         final SRunningBuild build = buildStartContext.getBuild();
         final List<SVcsModification> changes = build.getChanges(SelectPrevBuildPolicy.SINCE_LAST_SUCCESSFULLY_FINISHED_BUILD, true);
         final List<VcsRootInstanceEntry> vcsRoots = build.getVcsRootEntries();
-        String changesText = "";
 
         final VcsRootInstanceEntry vcsRoot = vcsRoots.get(0);
         final Map<String, String> props = vcsRoot.getProperties();
         final String vcsRootUrl = props.get("url");
 
+        final List<Commit> commits = new ArrayList<Commit>();
         for (SVcsModification change : changes) {
-            changesText += change.getDescription();
+
+            final Commit c = new Commit();
+            c.Id = change.getVersion();
+            c.Comment = change.getDescription();
+
+            commits.add(c);
         }
 
-        buildStartContext.addSharedParameter("comments", changesText);
+        final Gson gson = new GsonBuilder()
+                .setPrettyPrinting()
+                .disableHtmlEscaping()
+                .create();
+        final String jsonData = gson.toJson(commits);
+
+        buildStartContext.addSharedParameter("commits", jsonData);
         buildStartContext.addSharedParameter("vcsroot", vcsRootUrl);
     }
 

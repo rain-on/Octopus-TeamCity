@@ -1,9 +1,11 @@
 package octopus.teamcity.agent;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.reflect.TypeToken;
 import jetbrains.buildServer.agent.BuildProgressLogger;
-import jetbrains.buildServer.util.StringUtil;
+import octopus.teamcity.common.Commit;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class OctopusMetadataBuilder {
@@ -18,37 +20,19 @@ public class OctopusMetadataBuilder {
     public OctopusPackageMetadata build(
             final String vcsRoot,
             final String vcsCommitNumber,
-            final String comments,
+            final String commitsJson,
             final String commentParser,
             final String serverUrl,
             final String buildId,
-            final String buildNumber) throws Exception {
+            final String buildNumber) {
 
         final OctopusPackageMetadata metadata = new OctopusPackageMetadata();
 
-        if (!StringUtil.isEmptyOrSpaces(commentParser)) {
-            final CommentParserFactory parserFactory = new CommentParserFactory();
-            final CommentParser parser = parserFactory.getParser(commentParser);
+        final Gson gson = new GsonBuilder()
+                .create();
 
-            metadata.IssueTrackerId = "issuetracker-" + parser.getIssueTrackerSuffix();
-
-            final List<WorkItem> workItems = new ArrayList<WorkItem>();
-
-            if (comments != null && !comments.isEmpty()) {
-                final List<WorkItem> items = parser.parse(comments, buildLogger);
-                workItems.addAll(items);
-            }
-
-            if (workItems.size() > 0) {
-                buildLogger.message("Found work items in comments, adding " + workItems.size() + " work items to octopus.metadata");
-
-                metadata.WorkItems = workItems;
-
-            } else {
-                buildLogger.message("No work items found in comments");
-            }
-        }
-
+        metadata.Commits = gson.fromJson(commitsJson, new TypeToken<List<Commit>>() {}.getType());
+        metadata.CommentParser = commentParser;
         metadata.BuildNumber = buildNumber;
         metadata.BuildLink = serverUrl + "/viewLog.html?buildId=" + buildId;
         metadata.VcsRoot = vcsRoot;
