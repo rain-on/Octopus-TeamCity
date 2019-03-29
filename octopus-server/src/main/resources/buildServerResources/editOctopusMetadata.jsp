@@ -95,6 +95,12 @@
       <span class="error" id="error_${keys.forcePushKey}"></span>
       <span class="smallNote">Normally, if a the same package metadata already exists on the server, the server will reject the push. This is a good practice as it ensures metadata isn't accidentally overwritten. Enable this setting to override this behavior.</span>
     </td>
+    <th>Verbose logging:</th>
+    <td>
+      <props:checkboxProperty name="${keys.verboseLoggingKey}" />
+      <span class="error" id="error_${keys.verboseLoggingKey}"></span>
+      <span class="smallNote">Set this to get more verbose logging.</span>
+    </td>
   </tr>
 
 </l:settingsGroup>

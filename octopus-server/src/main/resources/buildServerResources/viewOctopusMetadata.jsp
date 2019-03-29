@@ -52,3 +52,8 @@
   Force push:
   <strong><props:displayValue name="${keys.forcePushKey}" emptyValue="not specified"/></strong>
 </div>
+
+<div class="parameter">
+  Verbose logging:
+  <strong><props:displayValue name="${keys.verboseLoggingKey}" emptyValue="not specified"/></strong>
+</div>

@@ -34,6 +34,10 @@ public class OctopusMetadataBuildStartProcessor implements BuildStartContextProc
         final VcsRootInstanceEntry vcsRoot = vcsRoots.get(0);
         final Map<String, String> props = vcsRoot.getProperties();
         final String vcsRootUrl = props.get("url");
+        String vcsType = "Unknown";
+        if (vcsRoot.getVcsName().contains("git")) {
+            vcsType = "Git";
+        }
 
         final List<Commit> commits = new ArrayList<Commit>();
         for (SVcsModification change : changes) {
@@ -52,6 +56,7 @@ public class OctopusMetadataBuildStartProcessor implements BuildStartContextProc
         final String jsonData = gson.toJson(commits);
 
         buildStartContext.addSharedParameter("commits", jsonData);
+        buildStartContext.addSharedParameter("vcstype", vcsType);
         buildStartContext.addSharedParameter("vcsroot", vcsRootUrl);
     }
 

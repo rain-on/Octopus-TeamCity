@@ -51,6 +51,7 @@ public class OctopusMetadataBuildProcess extends OctopusBuildProcess {
 
         final Map<String, String> parameters = getContext().getRunnerParameters();
         final OctopusConstants constants = OctopusConstants.Instance;
+        final Boolean verboseLogging = Boolean.parseBoolean(parameters.get(constants.getVerboseLoggingKey()));
 
         final String commentParser = parameters.get(constants.getCommentParserKey());
 
@@ -59,8 +60,9 @@ public class OctopusMetadataBuildProcess extends OctopusBuildProcess {
         try {
             AgentRunningBuild build = getContext().getBuild();
 
-            final OctopusMetadataBuilder builder = new OctopusMetadataBuilder(buildLogger);
+            final OctopusMetadataBuilder builder = new OctopusMetadataBuilder();
             final OctopusPackageMetadata metadata = builder.build(
+                    sharedConfigParameters.get("vcstype"),
                     sharedConfigParameters.get("vcsroot"),
                     sharedConfigParameters.get("build.vcs.number"),
                     sharedConfigParameters.get("commits"),
@@ -69,9 +71,11 @@ public class OctopusMetadataBuildProcess extends OctopusBuildProcess {
                     Long.toString(build.getBuildId()),
                     build.getBuildNumber());
 
-            buildLogger.message("Creating " + metaFile);
+            if (verboseLogging) {
+                buildLogger.message("Creating " + metaFile);
+            }
 
-            final OctopusMetadataWriter writer = new OctopusMetadataWriter(buildLogger);
+            final OctopusMetadataWriter writer = new OctopusMetadataWriter(buildLogger, verboseLogging);
             writer.writeToFile(metadata, metaFile);
 
         } catch (Exception ex) {
