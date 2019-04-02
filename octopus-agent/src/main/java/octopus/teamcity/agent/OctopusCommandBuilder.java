@@ -16,7 +16,6 @@
 
 package octopus.teamcity.agent;
 
-import jetbrains.buildServer.RunBuildException;
 import jetbrains.buildServer.util.StringUtil;
 
 import java.util.ArrayList;
