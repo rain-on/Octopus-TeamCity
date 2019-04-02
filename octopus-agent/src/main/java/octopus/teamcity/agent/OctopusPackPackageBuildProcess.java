@@ -19,23 +19,18 @@ package octopus.teamcity.agent;
 import jetbrains.buildServer.ExtensionHolder;
 import jetbrains.buildServer.RunBuildException;
 import jetbrains.buildServer.agent.*;
-import jetbrains.buildServer.agent.impl.artifacts.ArtifactsBuilder;
-import jetbrains.buildServer.agent.impl.artifacts.ArtifactsCollection;
 import jetbrains.buildServer.messages.serviceMessages.ServiceMessage;
 import octopus.teamcity.common.OctopusConstants;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
 import java.util.Map;
 
 public class OctopusPackPackageBuildProcess extends OctopusBuildProcess {
 
     protected final ExtensionHolder myExtensionHolder;
     protected final AgentRunningBuild myRunningBuild;
-    protected List<ArtifactsCollection> artifactsCollections;
 
     public OctopusPackPackageBuildProcess(@NotNull AgentRunningBuild runningBuild, @NotNull BuildRunnerContext context, @NotNull final ExtensionHolder extensionHolder) {
        super(runningBuild, context);
