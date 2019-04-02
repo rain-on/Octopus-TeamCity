@@ -80,7 +80,7 @@ public class OctopusPackPackageBuildProcess extends OctopusBuildProcess {
 
         return new OctopusCommandBuilder() {
             @Override
-            protected String[] buildCommand(boolean masked) throws RunBuildException {
+            protected String[] buildCommand(boolean masked) {
                 final ArrayList<String> commands = new ArrayList<String>();
                 final String packageId = parameters.get(constants.getPackageIdKey());
                 final String packageFormat = parameters.get(constants.getPackageFormatKey()).toLowerCase();

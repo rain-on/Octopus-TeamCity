@@ -25,15 +25,15 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public abstract class OctopusCommandBuilder {
-    public String[] buildCommand() throws RunBuildException {
+    public String[] buildCommand() {
         return buildCommand(false);
     }
 
-    public String[] buildMaskedCommand() throws RunBuildException {
+    public String[] buildMaskedCommand() {
         return buildCommand(true);
     }
 
-    protected abstract String[] buildCommand(boolean masked) throws RunBuildException;
+    protected abstract String[] buildCommand(boolean masked);
 
     protected String Quote(String value) {
         return "\"" + value + "\"";
