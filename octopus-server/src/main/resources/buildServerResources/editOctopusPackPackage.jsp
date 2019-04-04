@@ -95,7 +95,7 @@
     <td>
       <props:textProperty name="${keys.commandLineArgumentsKey}" className="longField"/>
       <span class="error" id="error_${keys.commandLineArgumentsKey}"></span>
-      <span class="smallNote">Additional arguments to be passed to <a href="https://github.com/OctopusDeploy/Octo.exe">Octo.exe</a></span>
+      <span class="smallNote">Additional arguments to be passed to <a href="https://g.octopushq.com/OctoExePack">Octo.exe</a></span>
     </td>
   </tr>
 </l:settingsGroup>
