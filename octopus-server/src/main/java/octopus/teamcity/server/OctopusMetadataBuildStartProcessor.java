@@ -31,6 +31,10 @@ public class OctopusMetadataBuildStartProcessor implements BuildStartContextProc
         final List<SVcsModification> changes = build.getChanges(SelectPrevBuildPolicy.SINCE_LAST_BUILD, true);
         final List<VcsRootInstanceEntry> vcsRoots = build.getVcsRootEntries();
 
+        if (vcsRoots.size() == 0) {
+            return;
+        }
+
         final VcsRootInstanceEntry vcsRoot = vcsRoots.get(0);
         final Map<String, String> props = vcsRoot.getProperties();
         final String vcsRootUrl = props.get("url");
