@@ -29,16 +29,17 @@ public class OctopusOsUtils {
     private static final Logger LOGGER = Loggers.AGENT;
 
     public static Boolean CanRunOcto(@NotNull BuildAgentConfiguration agentConfiguration){
-        if (agentConfiguration.getSystemInfo().isUnix()) {
+        if (agentConfiguration.getSystemInfo().isUnix() || agentConfiguration.getSystemInfo().isMac()) {
+            String os = agentConfiguration.getSystemInfo().isUnix() ? "Unix" : "OSX";
             if(HasDotNet(agentConfiguration)){
-                LOGGER.info("Octopus can run on agent with Unix and DotNot");
+                LOGGER.info(String.format("Octopus can run on agent with %s and DotNot", os));
                 return true;
             } else {
                 if (HasOcto(agentConfiguration)) {
-                    LOGGER.info("Octopus can run on agent with Unix and Octo.exe");
+                    LOGGER.info(String.format("Octopus can run on agent with %s and Octo.exe", os));
                     return true;
                 } else {
-                    LOGGER.info("Octopus can not run on agent with Unix and without Octo.exe or DotNET");
+                    LOGGER.info(String.format("Octopus can not run on agent with %s and without Octo.exe or DotNET", os));
                     return false;
                 }
             }
@@ -47,7 +48,7 @@ public class OctopusOsUtils {
             return true;
         }
 
-        LOGGER.info("Octopus cannot run on agent without Windows or Unix");
+        LOGGER.info("Octopus cannot run on agent without Windows, Unix or OSX");
         return false;
     }
 
