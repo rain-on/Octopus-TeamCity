@@ -48,7 +48,7 @@ public class OctopusOsUtils {
             return true;
         }
 
-        LOGGER.info("Octopus cannot run on agent without Windows, Unix or OSX");
+        LOGGER.info("Octopus cannot run on agent without Windows, Unix or Mac");
         return false;
     }
 
