@@ -30,7 +30,7 @@ public class OctopusOsUtils {
 
     public static Boolean CanRunOcto(@NotNull BuildAgentConfiguration agentConfiguration){
         if (agentConfiguration.getSystemInfo().isUnix() || agentConfiguration.getSystemInfo().isMac()) {
-            String os = agentConfiguration.getSystemInfo().isUnix() ? "Unix" : "OSX";
+            String os = agentConfiguration.getSystemInfo().isUnix() ? "Unix" : "Mac";
             if(HasDotNet(agentConfiguration)){
                 LOGGER.info(String.format("Octopus can run on agent with %s and DotNot", os));
                 return true;
