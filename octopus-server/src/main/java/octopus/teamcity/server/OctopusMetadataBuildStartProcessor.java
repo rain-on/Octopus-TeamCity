@@ -61,7 +61,9 @@ public class OctopusMetadataBuildStartProcessor implements BuildStartContextProc
 
         buildStartContext.addSharedParameter("commits", jsonData);
         buildStartContext.addSharedParameter("vcstype", vcsType);
-        buildStartContext.addSharedParameter("vcsroot", vcsRootUrl);
+        if (vcsRootUrl != null) {
+            buildStartContext.addSharedParameter("vcsroot", vcsRootUrl);
+        }
     }
 
     public void register() {
