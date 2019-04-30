@@ -4,7 +4,7 @@ This plug-in allows TeamCity builds to trigger deployments in Octopus Deploy.
 
 ## Get the plugin
 
-Download the plugin from [the Octopus Deploy downloads page](http://octopusdeploy.com/downloads).
+Download the plugin from [the Octopus Deploy downloads page](http://octopusdeploy.com/downloads) or the [JetBrains plugins downloads](<https://plugins.jetbrains.com/plugin/9038-octopus-deploy>).
 
 Installation and usage instructions are available in [the Octopus Deploy documentation](http://octopusdeploy.com/documentation/integration/teamcity). 
 
@@ -18,7 +18,7 @@ To build the plugin from code:
     directory to the location where you extracted or installed TeamCity locally). 
     The `mvnw` script will download Maven for you if it is not already installed.
  5. The plugin is available at `octopus-distribution/target/Octopus.TeamCity.zip`
- 
+
 ## Editing and debugging in IntelliJ
 
 1. Install TeamCity locally to `C:\TeamCity`. Allow the service to start for the first time, and add an 
