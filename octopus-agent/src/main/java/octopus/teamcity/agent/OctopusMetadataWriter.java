@@ -4,9 +4,8 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import jetbrains.buildServer.agent.BuildProgressLogger;
 
-import java.io.BufferedWriter;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
+import java.nio.charset.StandardCharsets;
 
 public class OctopusMetadataWriter {
 
@@ -34,7 +33,7 @@ public class OctopusMetadataWriter {
                 buildLogger.message("Serialized Octopus metadata - " + jsonData);
             }
 
-            BufferedWriter bw = new BufferedWriter(new FileWriter(metaFile));
+            OutputStreamWriter bw = new OutputStreamWriter(new FileOutputStream(metaFile), StandardCharsets.UTF_16);
             bw.write(jsonData);
             bw.close();
 
