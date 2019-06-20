@@ -27,14 +27,12 @@ import java.util.Map;
 
 public class OctopusMetadataBuildProcess extends OctopusBuildProcess {
 
-    private final String serverUrl;
     private final File checkoutDir;
     private final Map<String, String> sharedConfigParameters;
 
     public OctopusMetadataBuildProcess(@NotNull AgentRunningBuild runningBuild, @NotNull BuildRunnerContext context) {
         super(runningBuild, context);
 
-        serverUrl = runningBuild.getAgentConfiguration().getServerUrl();
         checkoutDir = runningBuild.getCheckoutDirectory();
         sharedConfigParameters = runningBuild.getSharedConfigParameters();
     }
@@ -67,7 +65,7 @@ public class OctopusMetadataBuildProcess extends OctopusBuildProcess {
                     sharedConfigParameters.get("build.vcs.number"),
                     sharedConfigParameters.get("commits"),
                     commentParser,
-                    serverUrl,
+                    sharedConfigParameters.get("serverRootUrl"),
                     Long.toString(build.getBuildId()),
                     build.getBuildNumber());
 

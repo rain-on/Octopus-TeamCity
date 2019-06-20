@@ -3,9 +3,7 @@ package octopus.teamcity.server;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import jetbrains.buildServer.ExtensionHolder;
-import jetbrains.buildServer.serverSide.BuildStartContext;
-import jetbrains.buildServer.serverSide.BuildStartContextProcessor;
-import jetbrains.buildServer.serverSide.SRunningBuild;
+import jetbrains.buildServer.serverSide.*;
 import jetbrains.buildServer.vcs.SVcsModification;
 import jetbrains.buildServer.vcs.SelectPrevBuildPolicy;
 import jetbrains.buildServer.vcs.VcsRootInstanceEntry;
@@ -19,9 +17,12 @@ import java.util.Map;
 public class OctopusMetadataBuildStartProcessor implements BuildStartContextProcessor {
 
     private ExtensionHolder extensionHolder;
+    private WebLinks webLinks;
 
-    public OctopusMetadataBuildStartProcessor(@NotNull ExtensionHolder extensionHolder) {
+    public OctopusMetadataBuildStartProcessor(@NotNull final ExtensionHolder extensionHolder,
+                                              @NotNull final WebLinks webLinks) {
         this.extensionHolder = extensionHolder;
+        this.webLinks = webLinks;
     }
 
     @Override
@@ -59,6 +60,7 @@ public class OctopusMetadataBuildStartProcessor implements BuildStartContextProc
                 .create();
         final String jsonData = gson.toJson(commits);
 
+        buildStartContext.addSharedParameter("serverRootUrl", webLinks.getRootUrl());
         buildStartContext.addSharedParameter("commits", jsonData);
         buildStartContext.addSharedParameter("vcstype", vcsType);
         if (vcsRootUrl != null) {
