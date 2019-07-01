@@ -120,8 +120,23 @@
     <span class="smallNote">If checked, the build process will only succeed if the deployment is successful. Output from the deployment will appear in the build output.</span>
   </td>
 </tr>
+<tr>
+  <th>Time to wait for deployment:</th>
+  <td>
+    <props:textProperty name="${keys.deploymentTimeout}" />
+    <span class="error" id="error_${keys.deploymentTimeout}"></span>
+    <span class="smallNote">The amount of time, specified in timespan format, to wait for the deployment to complete. Default is 00:10:00 if left blank. The deployment task itself does not timeout, this timeout is  purely how long the client will keep polling to see if it has completed.</span>
+  </td>
+</tr>
+<tr>
+  <th>Cancel deployment on timeout:</th>
+  <td>
+    <props:checkboxProperty name="${keys.cancelDeploymentOnTimeout}" />
+    <span class="error" id="error_${keys.cancelDeploymentOnTimeout}"></span>
+    <span class="smallNote">If checked, and <strong>Show deployment progress</strong> is also checked, then the deployment will be explicitly canceled if the time to wait has expired and the task has not completed.</span>
+  </td>
+</tr>
 </l:settingsGroup>
-
 
 <l:settingsGroup title="Advanced">
 <tr>

@@ -113,12 +113,9 @@ public class OctopusConstants {
 		return "octopus_channel_name";
 	}
 
-    public String getWaitForDeployments() {
-        return "octopus_waitfordeployments";
-    }
-    public String getShowProgress() {
-        return "octopus_progress";
-    }
+    public String getWaitForDeployments() { return "octopus_waitfordeployments"; }
+    public String getDeploymentTimeout() { return "octopus_deploymenttimeout"; }
+    public String getCancelDeploymentOnTimeout() { return "octopus_cancelontimeout"; }
 
     public String getVerboseLoggingKey() {
         return "octopus_verbose_logging";

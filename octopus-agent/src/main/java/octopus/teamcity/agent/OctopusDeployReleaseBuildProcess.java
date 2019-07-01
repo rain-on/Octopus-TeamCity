@@ -53,6 +53,8 @@ public class OctopusDeployReleaseBuildProcess extends OctopusBuildProcess {
                 final String tenanttags = parameters.get(constants.getTenantTagsKey());
                 final String projectName = parameters.get(constants.getProjectNameKey());
                 final boolean wait = Boolean.parseBoolean(parameters.get(constants.getWaitForDeployments()));
+                final String deploymentTimeout = parameters.get(constants.getDeploymentTimeout());
+                final boolean cancelOnTimeout = Boolean.parseBoolean(parameters.get(constants.getCancelDeploymentOnTimeout()));
 
                 commands.add("deploy-release");
                 commands.add("--server");
@@ -93,6 +95,15 @@ public class OctopusDeployReleaseBuildProcess extends OctopusBuildProcess {
 
                 if (wait && deployTo != null && !deployTo.isEmpty()) {
                     commands.add("--progress");
+
+                    if (!deploymentTimeout.isEmpty()) {
+                        commands.add("--deploymenttimeout");
+                        commands.add(deploymentTimeout);
+                    }
+
+                    if (cancelOnTimeout) {
+                        commands.add("--cancelontimeout");
+                    }
                 }
 
                 if (commandLineArguments != null && !commandLineArguments.isEmpty()) {

@@ -38,6 +38,16 @@
 </div>
 
 <div class="parameter">
-    Show progress:
+    Show deployment progress:
     <strong><props:displayValue name="${keys.waitForDeployments}" emptyValue="not specified"/></strong>
+</div>
+
+<div class="parameter">
+    Time to wait for deployment:
+    <strong><props:displayValue name="${keys.deploymentTimeout}" emptyValue="not specified"/></strong>
+</div>
+
+<div class="parameter">
+    Cancel deployment on timeout:
+    <strong><props:displayValue name="${keys.cancelDeploymentOnTimeout}" emptyValue="not specified"/></strong>
 </div>
