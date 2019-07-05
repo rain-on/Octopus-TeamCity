@@ -102,10 +102,12 @@ public class OctopusPushPackageBuildProcess extends OctopusBuildProcess {
 
                 final String forcePush = parameters.get(constants.getForcePushKey());
                 OverwriteMode overwriteMode = OverwriteMode.FailIfExists;
-                if (forcePush == "true")
+                if ("true".equals(forcePush)) {
                     overwriteMode = OverwriteMode.OverwriteExisting;
-                else if (forcePush == OverwriteMode.IgnoreIfExists.name())
+                }
+                else if (OverwriteMode.IgnoreIfExists.name().equals(forcePush)) {
                     overwriteMode = OverwriteMode.IgnoreIfExists;
+                }
 
                 commands.add("push");
                 commands.add("--server");
