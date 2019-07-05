@@ -18,6 +18,7 @@ package octopus.teamcity.agent;
 
 import jetbrains.buildServer.agent.*;
 import octopus.teamcity.common.OctopusConstants;
+import octopus.teamcity.common.OverwriteMode;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
@@ -91,7 +92,12 @@ public class OctopusMetadataBuildProcess extends OctopusBuildProcess {
                 final String packageId = parameters.get(constants.getPackageIdKey());
                 final String packageVersion = parameters.get(constants.getPackageVersionKey());
 
-                final boolean forcePush = Boolean.parseBoolean(parameters.get(constants.getForcePushKey()));
+                final String forcePush = parameters.get(constants.getForcePushKey());
+                OverwriteMode overwriteMode = OverwriteMode.FailIfExists;
+                if (forcePush == "true")
+                    overwriteMode = OverwriteMode.OverwriteExisting;
+                else if (forcePush == OverwriteMode.IgnoreIfExists.name())
+                    overwriteMode = OverwriteMode.IgnoreIfExists;
 
                 commands.add("push-metadata");
                 commands.add("--server");
@@ -113,8 +119,9 @@ public class OctopusMetadataBuildProcess extends OctopusBuildProcess {
                 commands.add("--metadata-file");
                 commands.add(metaFile);
 
-                if (forcePush) {
-                    commands.add("--replace-existing");
+                if (overwriteMode != OverwriteMode.FailIfExists) {
+                    commands.add("--overwrite-mode");
+                    commands.add(overwriteMode.name());
                 }
 
                 return commands.toArray(new String[commands.size()]);

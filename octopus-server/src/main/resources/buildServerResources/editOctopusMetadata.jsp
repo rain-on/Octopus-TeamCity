@@ -77,9 +77,9 @@
     <th>Commit processing:<l:star/></th>
     <td>
       <props:selectProperty name="${keys.commentParserKey}" multiple="false">
-        <props:option value="" selected="${keys.commentParserKey == ''}"></props:option>
-        <props:option value="Jira" selected="${keys.commentParserKey == 'Jira'}">Jira</props:option>
-        <props:option value="GitHub" selected="${keys.commentParserKey == 'GitHub'}">GitHub</props:option>
+        <props:option value=""></props:option>
+        <props:option value="Jira">Jira</props:option>
+        <props:option value="GitHub">GitHub</props:option>
       </props:selectProperty>
       <span class="error" id="error_${keys.commentParserKey}"></span>
       <span class="smallNote">
@@ -89,9 +89,13 @@
   </tr>
 
   <tr class="advancedSetting">
-    <th>Force overwrite existing metadata:</th>
+    <th>Overwrite Mode:</th>
     <td>
-      <props:checkboxProperty name="${keys.forcePushKey}" />
+      <props:selectProperty name="${keys.forcePushKey}">
+        <props:option value="false">Fail If Exists</props:option>
+        <props:option value="true">Overwrite Existing</props:option>
+        <props:option value="IgnoreIfExists">Ignore If Exists</props:option>
+      </props:selectProperty>
       <span class="error" id="error_${keys.forcePushKey}"></span>
       <span class="smallNote">Normally, if a the same package metadata already exists on the server, the server will reject the push. This is a good practice as it ensures metadata isn't accidentally overwritten. Enable this setting to override this behavior.</span>
     </td>
