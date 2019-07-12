@@ -18,5 +18,11 @@
             <outputDirectory>/lib</outputDirectory>
             <outputFileNameMapping>Octopus.TeamCity-${artifact.artifactId}.${artifact.extension}</outputFileNameMapping>
         </dependencySet>
+        <dependencySet>
+            <includes>
+                <include>com.google.code.gson:gson</include>
+            </includes>
+            <outputDirectory>/lib</outputDirectory>
+        </dependencySet>
     </dependencySets>
 </assembly>
