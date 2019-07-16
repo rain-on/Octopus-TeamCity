@@ -71,7 +71,7 @@
         <props:option value="IgnoreIfExists">Ignore If Exists</props:option>
       </props:selectProperty>
       <span class="error" id="error_${keys.forcePushKey}"></span>
-      <span class="smallNote">Normally, if a the same package already exists on the server, the server will reject the package push. This is a good practice as it ensures a package isn't accidentally overwritten. Use this setting to override this behavior.</span>
+      <span class="smallNote">Normally, if the same package already exists on the server, the server will reject the package push. This is a good practice as it ensures a package isn't accidentally overwritten. Use this setting to override this behavior.</span>
     </td>
   </tr>
 
