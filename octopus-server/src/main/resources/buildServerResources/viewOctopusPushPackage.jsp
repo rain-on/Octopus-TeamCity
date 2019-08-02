@@ -39,7 +39,7 @@
 </div>
 
 <div class="parameter">
-    Overwrite Mode:
+    Force push:
     <strong><props:displayValue name="${keys.forcePushKey}" emptyValue="not specified"/></strong>
 </div>
 

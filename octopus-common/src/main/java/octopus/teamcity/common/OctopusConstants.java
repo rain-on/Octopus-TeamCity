@@ -91,7 +91,9 @@ public class OctopusConstants {
     public String getPackagePathsKey() {
         return "octopus_packagepaths";
     }
-    public String getForcePushKey() {return "octopus_forcepush";}
+    public String getForcePushKey() {
+        return "octopus_forcepush";
+    }
     public String getPublishArtifactsKey() {
         return "octopus_publishartifacts";
     }
