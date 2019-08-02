@@ -45,3 +45,21 @@ To build the plugin from code:
 
 At this point the you can run TeamCity from IntelliJ. If need be you can run  TeamCity in debug mode and step 
 through the plugin code as it is executed by TeamCity.
+
+## Publishing a new version to the JetBrains Marketplace
+
+_Currently we manually publish new versions of the TeamCity plugin directly in the JetBrains Marketplace due to the lack of support for specifying release notes as part of publishing via `cUrl` or `gradle`, once they've [added support for this](https://youtrack.jetbrains.com/issue/MP-2369) we will automate this part of the process._
+
+1. Tag `master` with the next `major.minor.patch` version and wait for the tag to be built by TeamCity
+2. Download the `Octopus.TeamCity.zip` artifact from the TeamCity Plugin build
+    ![Download artifact from TeamCity](DownloadArtifact.png)
+3. Login to the [JetBrains Marketplace](https://plugins.jetbrains.com/plugin/9038-octopus-deploy-integration) using the devops@octopus.com account - credentials are in the password manager.
+4. Click the `Edit` button in the top right corner
+    ![Edit plugin](EditPlugin.png)
+5. Choose the artifact that you downloaded from TeamCity
+6. Leave the `Channel` as `Stable`
+7. Enter the release notes for the version of the plugin that your creating. **Note:** The `Change Notes` field does not support `Markdown` it only supports `Html`.
+8. Click `Upload new build` to publish the new version of the TeamCity plugin
+9. Currently we also need to update the downloads page with the new version as we allow customers to download the TeamCity plugin from there _(this is also changing and we will be updating the downloads page to link to the JetBrains Marketplace listing instead like we do with our Azure DevOps extension and Bamboo plugin. **Once this change has been implemented this step is no longer required**.)_
+    - Jump into the TeamCity Plugin project in Octopus and create a new release and deploy that release to `Production`
+    - Jump into Octofront and update the latest `FastLane` and the two latest `LTS` releases with the new version of the TeamCity plugin
