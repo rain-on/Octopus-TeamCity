@@ -53,7 +53,7 @@ _Currently we manually publish new versions of the TeamCity plugin directly in t
 1. Tag `master` with the next `major.minor.patch` version and wait for the tag to be built by TeamCity
 2. Download the `Octopus.TeamCity.zip` artifact from the TeamCity Plugin build
     ![Download artifact from TeamCity](DownloadArtifact.png)
-3. Login to the [JetBrains Marketplace](https://plugins.jetbrains.com/plugin/9038-octopus-deploy-integration) using the devops@octopus.com account - credentials are in the password manager.
+3. Login to the [JetBrains Marketplace](https://plugins.jetbrains.com/plugin/9038-octopus-deploy-integration) using the "Jetbrains account" credentials from the password manager.
 4. Click the `Edit` button in the top right corner
     ![Edit plugin](EditPlugin.png)
 5. Choose the artifact that you downloaded from TeamCity
