@@ -60,6 +60,3 @@ _Currently we manually publish new versions of the TeamCity plugin directly in t
 6. Leave the `Channel` as `Stable`
 7. Enter the release notes for the version of the plugin that your creating. **Note:** The `Change Notes` field does not support `Markdown` it only supports `Html`.
 8. Click `Upload new build` to publish the new version of the TeamCity plugin
-9. Currently we also need to update the downloads page with the new version as we allow customers to download the TeamCity plugin from there _(this is also changing and we will be updating the downloads page to link to the JetBrains Marketplace listing instead like we do with our Azure DevOps extension and Bamboo plugin. **Once this change has been implemented this step is no longer required**.)_
-    - Jump into the TeamCity Plugin project in Octopus and create a new release and deploy that release to `Production`
-    - Jump into Octofront and update the latest `FastLane` and the two latest `LTS` releases with the new version of the TeamCity plugin
