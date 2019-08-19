@@ -26,6 +26,7 @@ import jetbrains.buildServer.agent.impl.artifacts.ArtifactsBuilder;
 import jetbrains.buildServer.agent.impl.artifacts.ArtifactsCollection;
 import jetbrains.buildServer.messages.serviceMessages.ServiceMessage;
 import octopus.teamcity.common.OctopusConstants;
+import octopus.teamcity.common.OverwriteMode;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
@@ -99,7 +100,14 @@ public class OctopusPushPackageBuildProcess extends OctopusBuildProcess {
                 final String spaceName = parameters.get(constants.getSpaceName());
                 final String commandLineArguments = parameters.get(constants.getCommandLineArgumentsKey());
 
-                final boolean forcePush = Boolean.parseBoolean(parameters.get(constants.getForcePushKey()));
+                final String forcePush = parameters.get(constants.getForcePushKey());
+                OverwriteMode overwriteMode = OverwriteMode.FailIfExists;
+                if ("true".equals(forcePush)) {
+                    overwriteMode = OverwriteMode.OverwriteExisting;
+                }
+                else if (OverwriteMode.IgnoreIfExists.name().equals(forcePush)) {
+                    overwriteMode = OverwriteMode.IgnoreIfExists;
+                }
 
                 commands.add("push");
                 commands.add("--server");
@@ -121,8 +129,9 @@ public class OctopusPushPackageBuildProcess extends OctopusBuildProcess {
                     }
                 }
 
-                if (forcePush) {
-                    commands.add("--replace-existing");
+                if (overwriteMode != OverwriteMode.FailIfExists) {
+                    commands.add("--overwrite-mode");
+                    commands.add(overwriteMode.name());
                 }
 
                 if (commandLineArguments != null && !commandLineArguments.isEmpty()) {
