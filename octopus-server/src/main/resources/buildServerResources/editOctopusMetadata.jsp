@@ -97,7 +97,7 @@
         <props:option value="IgnoreIfExists">Ignore If Exists</props:option>
       </props:selectProperty>
       <span class="error" id="error_${keys.forcePushKey}"></span>
-      <span class="smallNote">Normally, if the same package metadata already exists on the server, the server will reject the push. This is a good practice as it ensures metadata isn't accidentally overwritten. Use this setting to override this behavior.</span>
+      <span class="smallNote">Normally, if the same package metadata already exists on the server, the server will reject the package metadata push. This is a good practice as it ensures metadata isn't accidentally overwritten or ignored. Use this setting to override this behavior.</span>
     </td>
   </tr>
   <tr>
