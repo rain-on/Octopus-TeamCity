@@ -26,12 +26,12 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Map;
 
-public class OctopusMetadataBuildProcess extends OctopusBuildProcess {
+public class OctopusBuildInformationBuildProcess extends OctopusBuildProcess {
 
     private final File checkoutDir;
     private final Map<String, String> sharedConfigParameters;
 
-    public OctopusMetadataBuildProcess(@NotNull AgentRunningBuild runningBuild, @NotNull BuildRunnerContext context) {
+    public OctopusBuildInformationBuildProcess(@NotNull AgentRunningBuild runningBuild, @NotNull BuildRunnerContext context) {
         super(runningBuild, context);
 
         checkoutDir = runningBuild.getCheckoutDirectory();
@@ -40,7 +40,7 @@ public class OctopusMetadataBuildProcess extends OctopusBuildProcess {
 
     @Override
     protected String getLogMessage() {
-        return "Pushing package metadata to Octopus server";
+        return "Pushing build information to Octopus server";
     }
 
     @Override
@@ -52,30 +52,28 @@ public class OctopusMetadataBuildProcess extends OctopusBuildProcess {
         final OctopusConstants constants = OctopusConstants.Instance;
         final Boolean verboseLogging = Boolean.parseBoolean(parameters.get(constants.getVerboseLoggingKey()));
 
-        final String commentParser = parameters.get(constants.getCommentParserKey());
-
-        final String metaFile = Paths.get(checkoutDir.getPath(), "octopus.metadata").toAbsolutePath().toString();
+        final String dataFile = Paths.get(checkoutDir.getPath(), "octopus.buildinfo").toAbsolutePath().toString();
 
         try {
             AgentRunningBuild build = getContext().getBuild();
 
-            final OctopusMetadataBuilder builder = new OctopusMetadataBuilder();
-            final OctopusPackageMetadata metadata = builder.build(
+            final OctopusBuildInformationBuilder builder = new OctopusBuildInformationBuilder();
+            final OctopusBuildInformation buildInformation = builder.build(
                     sharedConfigParameters.get("vcstype"),
                     sharedConfigParameters.get("vcsroot"),
                     sharedConfigParameters.get("build.vcs.number"),
+                    sharedConfigParameters.get("branch"),
                     sharedConfigParameters.get("commits"),
-                    commentParser,
                     sharedConfigParameters.get("serverRootUrl"),
                     Long.toString(build.getBuildId()),
                     build.getBuildNumber());
 
             if (verboseLogging) {
-                buildLogger.message("Creating " + metaFile);
+                buildLogger.message("Creating " + dataFile);
             }
 
-            final OctopusMetadataWriter writer = new OctopusMetadataWriter(buildLogger, verboseLogging);
-            writer.writeToFile(metadata, metaFile);
+            final OctopusBuildInformationWriter writer = new OctopusBuildInformationWriter(buildLogger, verboseLogging);
+            writer.writeToFile(buildInformation, dataFile);
 
         } catch (Exception ex) {
             buildLogger.error("Error processing comment messages " + ex);
@@ -106,7 +104,7 @@ public class OctopusMetadataBuildProcess extends OctopusBuildProcess {
                     buildLogger.message("OverwriteMode: " + overwriteMode.name());
                 }
 
-                commands.add("push-metadata");
+                commands.add("build-information");
                 commands.add("--server");
                 commands.add(serverUrl);
                 commands.add("--apikey");
@@ -123,8 +121,8 @@ public class OctopusMetadataBuildProcess extends OctopusBuildProcess {
                 commands.add("--version");
                 commands.add(packageVersion);
 
-                commands.add("--metadata-file");
-                commands.add(metaFile);
+                commands.add("--file");
+                commands.add(dataFile);
 
                 if (overwriteMode != OverwriteMode.FailIfExists) {
                     commands.add("--overwrite-mode");

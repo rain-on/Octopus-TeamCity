@@ -30,10 +30,10 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
-public class OctopusMetadataRunType extends RunType {
+public class OctopusBuildInformationRunType extends RunType {
     private final PluginDescriptor pluginDescriptor;
 
-    public OctopusMetadataRunType(final RunTypeRegistry runTypeRegistry, final PluginDescriptor pluginDescriptor) {
+    public OctopusBuildInformationRunType(final RunTypeRegistry runTypeRegistry, final PluginDescriptor pluginDescriptor) {
         this.pluginDescriptor = pluginDescriptor;
         runTypeRegistry.registerRunType(this);
     }
@@ -46,12 +46,12 @@ public class OctopusMetadataRunType extends RunType {
 
     @Override
     public String getDisplayName() {
-        return "OctopusDeploy: Metadata";
+        return "OctopusDeploy: Build Information";
     }
 
     @Override
     public String getDescription() {
-        return "Collect information related to the build, including work items from commit messages, and store in custom metadata in Octopus.";
+        return "Collect information related to the build, including commit messages, and store in custom build information in Octopus.";
     }
 
     @Nullable
@@ -86,13 +86,13 @@ public class OctopusMetadataRunType extends RunType {
     @Nullable
     @Override
     public String getEditRunnerParamsJspFilePath() {
-        return pluginDescriptor.getPluginResourcesPath("editOctopusMetadata.jsp");
+        return pluginDescriptor.getPluginResourcesPath("editOctopusBuildInformation.jsp");
     }
 
     @Nullable
     @Override
     public String getViewRunnerParamsJspFilePath() {
-        return pluginDescriptor.getPluginResourcesPath("viewOctopusMetadata.jsp");
+        return pluginDescriptor.getPluginResourcesPath("viewOctopusBuildInformation.jsp");
     }
 
     @Nullable

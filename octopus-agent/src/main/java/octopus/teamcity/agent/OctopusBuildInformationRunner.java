@@ -20,11 +20,11 @@ import jetbrains.buildServer.agent.*;
 import octopus.teamcity.common.OctopusConstants;
 import org.jetbrains.annotations.NotNull;
 
-public class OctopusMetadataRunner implements AgentBuildRunner {
+public class OctopusBuildInformationRunner implements AgentBuildRunner {
 
     @NotNull
     public BuildProcess createBuildProcess(@NotNull AgentRunningBuild runningBuild, @NotNull BuildRunnerContext context) {
-        return new OctopusMetadataBuildProcess(runningBuild, context);
+        return new OctopusBuildInformationBuildProcess(runningBuild, context);
     }
 
     @NotNull
