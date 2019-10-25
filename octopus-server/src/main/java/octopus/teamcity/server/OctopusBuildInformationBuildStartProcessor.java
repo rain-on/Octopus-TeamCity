@@ -14,13 +14,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-public class OctopusMetadataBuildStartProcessor implements BuildStartContextProcessor {
+public class OctopusBuildInformationBuildStartProcessor implements BuildStartContextProcessor {
 
     private ExtensionHolder extensionHolder;
     private WebLinks webLinks;
 
-    public OctopusMetadataBuildStartProcessor(@NotNull final ExtensionHolder extensionHolder,
-                                              @NotNull final WebLinks webLinks) {
+    public OctopusBuildInformationBuildStartProcessor(@NotNull final ExtensionHolder extensionHolder,
+                                                      @NotNull final WebLinks webLinks) {
         this.extensionHolder = extensionHolder;
         this.webLinks = webLinks;
     }
@@ -44,6 +44,10 @@ public class OctopusMetadataBuildStartProcessor implements BuildStartContextProc
             vcsType = "Git";
         }
 
+        final BuildPromotion promotion = build.getBuildPromotion();
+        Branch branch = promotion.getBranch();
+        final String branchName = branch.getDisplayName();
+
         final List<Commit> commits = new ArrayList<Commit>();
         for (SVcsModification change : changes) {
 
@@ -62,6 +66,7 @@ public class OctopusMetadataBuildStartProcessor implements BuildStartContextProc
 
         buildStartContext.addSharedParameter("serverRootUrl", webLinks.getRootUrl());
         buildStartContext.addSharedParameter("commits", jsonData);
+        buildStartContext.addSharedParameter("branch", branchName);
         buildStartContext.addSharedParameter("vcstype", vcsType);
         if (vcsRootUrl != null) {
             buildStartContext.addSharedParameter("vcsroot", vcsRootUrl);

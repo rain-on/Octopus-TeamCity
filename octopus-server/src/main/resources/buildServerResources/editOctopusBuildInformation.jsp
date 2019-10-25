@@ -50,7 +50,7 @@
   </tr>
 </l:settingsGroup>
 
-<l:settingsGroup title="Metadata">
+<l:settingsGroup title="Package">
 
   <tr>
     <th>Package ID:<l:star/></th>
@@ -73,21 +73,6 @@
     </td>
   </tr>
 
-  <tr>
-    <th>Commit processing:<l:star/></th>
-    <td>
-      <props:selectProperty name="${keys.commentParserKey}" multiple="false">
-        <props:option value=""></props:option>
-        <props:option value="Jira">Jira</props:option>
-        <props:option value="GitHub">GitHub</props:option>
-      </props:selectProperty>
-      <span class="error" id="error_${keys.commentParserKey}"></span>
-      <span class="smallNote">
-        Process the commit messages looking for work item references and include them in the metadata
-      </span>
-    </td>
-  </tr>
-
   <tr class="advancedSetting">
     <th>Overwrite Mode:</th>
     <td>
@@ -97,7 +82,7 @@
         <props:option value="IgnoreIfExists">Ignore If Exists</props:option>
       </props:selectProperty>
       <span class="error" id="error_${keys.forcePushKey}"></span>
-      <span class="smallNote">Normally, if the same package metadata already exists on the server, the server will reject the package metadata push. This is a good practice as it ensures metadata isn't accidentally overwritten or ignored. Use this setting to override this behavior.</span>
+      <span class="smallNote">Normally, if the same build information already exists on the server, the server will reject the build information push. This is a good practice as it ensures build information isn't accidentally overwritten or ignored. Use this setting to override this behavior.</span>
     </td>
   </tr>
   <tr>

@@ -44,11 +44,6 @@
 </div>
 
 <div class="parameter">
-  Commit processing:
-  <strong><props:displayValue name="${keys.commentParserKey}" emptyValue="not specified"/></strong>
-</div>
-
-<div class="parameter">
   Overwrite Mode:
   <strong><props:displayValue name="${keys.forcePushKey}" emptyValue="not specified"/></strong>
 </div>
