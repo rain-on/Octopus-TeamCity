@@ -46,7 +46,7 @@ public class OctopusBuildInformationBuildStartProcessor implements BuildStartCon
 
         final BuildPromotion promotion = build.getBuildPromotion();
         Branch branch = promotion.getBranch();
-        final String branchName = branch.getDisplayName();
+        final String branchName = branch == null ? "" : branch.getDisplayName();
 
         final List<Commit> commits = new ArrayList<Commit>();
         for (SVcsModification change : changes) {
