@@ -16,6 +16,7 @@
 
 package octopus.teamcity.agent;
 
+import com.google.common.base.Splitter;
 import jetbrains.buildServer.util.StringUtil;
 
 import java.util.ArrayList;
@@ -74,6 +75,23 @@ public abstract class OctopusCommandBuilder {
             }
         }
 
+        return results;
+    }
+
+    protected List<String> splitNewlineSeparatedValues(String text) {
+        final List<String> results = new ArrayList<>();
+        if (text == null || StringUtil.isEmptyOrSpaces(text)) {
+            return results;
+        }
+
+        Iterable<String> textSplit = Splitter.on("\n")
+                .trimResults()
+                .omitEmptyStrings()
+                .split(text);
+
+        for (String t : textSplit) {
+            results.add(t);
+        }
         return results;
     }
 }

@@ -87,7 +87,7 @@ public class OctopusBuildInformationBuildProcess extends OctopusBuildProcess {
                 final String serverUrl = parameters.get(constants.getServerKey());
                 final String apiKey = parameters.get(constants.getApiKey());
                 final String spaceName = parameters.get(constants.getSpaceName());
-                final String packageId = parameters.get(constants.getPackageIdKey());
+                final String packageIds = parameters.get(constants.getPackageIdKey());
                 final String packageVersion = parameters.get(constants.getPackageVersionKey());
 
                 final String forcePush = parameters.get(constants.getForcePushKey());
@@ -115,8 +115,10 @@ public class OctopusBuildInformationBuildProcess extends OctopusBuildProcess {
                     commands.add(spaceName);
                 }
 
-                commands.add("--package-id");
-                commands.add(packageId);
+                for(String packageId : splitNewlineSeparatedValues(packageIds)) {
+                    commands.add("--package-id");
+                    commands.add(packageId);
+                }
 
                 commands.add("--version");
                 commands.add(packageVersion);
