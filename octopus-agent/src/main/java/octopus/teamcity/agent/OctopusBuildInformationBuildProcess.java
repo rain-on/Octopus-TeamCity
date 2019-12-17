@@ -17,6 +17,7 @@
 package octopus.teamcity.agent;
 
 import jetbrains.buildServer.agent.*;
+import jetbrains.buildServer.util.StringUtil;
 import octopus.teamcity.common.OctopusConstants;
 import octopus.teamcity.common.OverwriteMode;
 import org.jetbrains.annotations.NotNull;
@@ -115,7 +116,7 @@ public class OctopusBuildInformationBuildProcess extends OctopusBuildProcess {
                     commands.add(spaceName);
                 }
 
-                for(String packageId : splitNewlineSeparatedValues(packageIds)) {
+                for(String packageId : StringUtil.split(packageIds, "\n")) {
                     commands.add("--package-id");
                     commands.add(packageId);
                 }
