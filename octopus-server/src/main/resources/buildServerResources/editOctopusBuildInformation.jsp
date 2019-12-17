@@ -58,7 +58,7 @@
       <props:multilineProperty name="${keys.packageIdKey}" rows="5" cols="50" linkTitle="Package IDs" expanded="true" />
       <span class="error" id="error_${keys.packageIdKey}"></span>
       <span class="smallNote">
-        Newline-separated package IDs, e.g.<br/>MyCompany.MyApp<br/>MyCompany.MyApp2
+        Newline-separated package IDs; e.g.<br/>MyCompany.MyApp<br/>MyCompany.MyApp2
       </span>
     </td>
   </tr>
