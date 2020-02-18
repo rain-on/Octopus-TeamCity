@@ -96,9 +96,9 @@ public abstract class OctopusBuildProcess implements BuildProcess {
         if(useExe) {
             logger.message("Running command:   octo.exe " + StringUtils.arrayToDelimitedString(userVisibleCommand, " "));
         } else if(useOcto) {
-            logger.message("Running command:   Octo " + StringUtils.arrayToDelimitedString(userVisibleCommand, " "));
+            logger.message("Running command:   octo " + StringUtils.arrayToDelimitedString(userVisibleCommand, " "));
         } else {
-            logger.message("Running command:   dotnet Octo.dll " + StringUtils.arrayToDelimitedString(userVisibleCommand, " "));
+            logger.message("Running command:   dotnet octo.dll " + StringUtils.arrayToDelimitedString(userVisibleCommand, " "));
         }
         logger.progressMessage(getLogMessage());
 
@@ -111,10 +111,10 @@ public abstract class OctopusBuildProcess implements BuildProcess {
             if(useExe) {
                 arguments.add(new File(extractedTo, octopusVersion + "/octo.exe").getAbsolutePath());
             } else if(useOcto) {
-                arguments.add("Octo");
+                arguments.add("octo");
             } else {
                 arguments.add("dotnet");
-                String dllPath = new File(extractedTo, octopusVersion + "/Core/Octo.dll").getAbsolutePath();
+                String dllPath = new File(extractedTo, octopusVersion + "/Core/octo.dll").getAbsolutePath();
                 arguments.add(dllPath);
             }
 
@@ -150,7 +150,7 @@ public abstract class OctopusBuildProcess implements BuildProcess {
             standardError.start();
             standardOutput.start();
         } catch (IOException e) {
-            final String message = "Error from Octo.exe: " + e.getMessage();
+            final String message = "Error from octo: " + e.getMessage();
             Logger.getInstance(getClass().getName()).error(message, e);
             throw new RunBuildException(message);
         }
@@ -197,14 +197,14 @@ public abstract class OctopusBuildProcess implements BuildProcess {
             standardError.join();
             standardOutput.join();
 
-            logger.message("Octo.exe exit code: " + exitCode);
+            logger.message("octo exit code: " + exitCode);
             logger.activityFinished("Octopus Deploy", DefaultMessagesInfo.BLOCK_TYPE_INDENTATION);
 
             isFinished = true;
         }
         catch (InterruptedException e) {
             isFinished = true;
-            final String message = "Unable to wait for Octo.exe: " + e.getMessage();
+            final String message = "Unable to wait for octo: " + e.getMessage();
             Logger.getInstance(getClass().getName()).error(message, e);
             throw new RunBuildException(message);
         }
