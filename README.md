@@ -46,6 +46,16 @@ To build the plugin from code:
 At this point the you can run TeamCity from IntelliJ. If need be you can run  TeamCity in debug mode and step 
 through the plugin code as it is executed by TeamCity.
 
+## Updating the version of Octopus CLI we embed
+
+If the Octopus CLI has changed such that we need to update the version we embed with the plugin the steps are as follows:
+
+- Locate the build in TeamCity and navigate to the Artifacts tab
+- Expand the OctopusTools.Zips.*version*.zip file
+- Download `octo.exe` from the OctopusTools.*version*.zip file. Also download the OctopusTools.*version*.portable.zip file
+  ![Artifacts](artifacts.png)
+- Rename the latter to `OctopusTools.portable.zip` and then copy them into the `\octopus-agent\src\main\resources\resources\3\0` folder, over the existing files
+
 ## Publishing a new version to the JetBrains Marketplace
 
 _Currently we manually publish new versions of the TeamCity plugin directly in the JetBrains Marketplace due to the lack of support for specifying release notes as part of publishing via `cUrl` or `gradle`, once they've [added support for this](https://youtrack.jetbrains.com/issue/MP-2369) we will automate this part of the process._

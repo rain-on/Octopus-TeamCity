@@ -36,10 +36,10 @@ public class OctopusOsUtils {
                 return true;
             } else {
                 if (HasOcto(agentConfiguration)) {
-                    LOGGER.info(String.format("Octopus can run on agent with %s and Octo.exe", os));
+                    LOGGER.info(String.format("Octopus can run on agent with %s and octo", os));
                     return true;
                 } else {
-                    LOGGER.info(String.format("Octopus can not run on agent with %s and without Octo.exe or DotNET", os));
+                    LOGGER.info(String.format("Octopus can not run on agent with %s and without octo or DotNET", os));
                     return false;
                 }
             }
@@ -59,7 +59,7 @@ public class OctopusOsUtils {
     }
 
     public static Boolean HasOcto(@NotNull BuildAgentConfiguration agentConfiguration){
-        String result = executeCommand("Octo");
+        String result = executeCommand("octo");
         return result.contains("Octopus");
     }
 
