@@ -64,12 +64,12 @@ public class OctopusBuildInformationBuildStartProcessor implements BuildStartCon
                 .create();
         final String jsonData = gson.toJson(commits);
 
-        buildStartContext.addSharedParameter("serverRootUrl", webLinks.getRootUrl());
-        buildStartContext.addSharedParameter("commits", jsonData);
-        buildStartContext.addSharedParameter("branch", branchName);
-        buildStartContext.addSharedParameter("vcstype", vcsType);
+        buildStartContext.addSharedParameter("octopus_serverRootUrl", webLinks.getRootUrl());
+        buildStartContext.addSharedParameter("octopus_commits", jsonData);
+        buildStartContext.addSharedParameter("octopus_branch", branchName);
+        buildStartContext.addSharedParameter("octopus_vcstype", vcsType);
         if (vcsRootUrl != null) {
-            buildStartContext.addSharedParameter("vcsroot", vcsRootUrl);
+            buildStartContext.addSharedParameter("octopus_vcsroot", vcsRootUrl);
         }
     }
 
