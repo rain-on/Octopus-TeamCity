@@ -33,6 +33,11 @@
 </div>
 
 <div class="parameter">
+    Git Ref:
+    <strong><props:displayValue name="${keys.gitRefKey}" emptyValue="not specified"/></strong>
+</div>
+
+<div class="parameter">
     Deploy to:
     <strong><props:displayValue name="${keys.deployToKey}" emptyValue="not specified"/></strong>
 </div>

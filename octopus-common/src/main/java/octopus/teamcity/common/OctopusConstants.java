@@ -117,6 +117,10 @@ public class OctopusConstants {
         return "octopus_verbose_logging";
     }
 
+    public String getGitRefKey() {
+        return "octopus_git_ref";
+    }
+
     public static final String CREATE_RELEASE_RUNNER_TYPE = "octopus.create.release";
     public static final String DEPLOY_RELEASE_RUNNER_TYPE = "octopus.deploy.release";
     public static final String PROMOTE_RELEASE_RUNNER_TYPE = "octopus.promote.release";

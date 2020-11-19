@@ -81,6 +81,14 @@
     <span class="smallNote">The channel to create the release for</span>
   </td>
 </tr>
+<tr>
+    <th>Git Ref:</th>
+    <td>
+        <props:textProperty name="${keys.gitRefKey}" className="longField"/>
+        <span class="error" id="error_${keys.gitRefKey}"></span>
+        <span class="smallNote">The git reference to use when creating the release, ignored for non-version-controlled projects.</span>
+    </td>
+</tr>
 </l:settingsGroup>
 
 
