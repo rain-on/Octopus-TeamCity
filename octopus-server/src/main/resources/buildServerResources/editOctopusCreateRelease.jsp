@@ -86,7 +86,8 @@
     <td>
         <props:textProperty name="${keys.gitRefKey}" className="longField"/>
         <span class="error" id="error_${keys.gitRefKey}"></span>
-        <span class="smallNote">The git reference to use when creating the release, ignored for non-version controlled projects.</span>
+        <span class="smallNote">The git reference to use when creating the release, e.g. commit hash, tag, branch name.</span>
+        <span class="smallNote">Ignored for non-version controlled projects.</span>
     </td>
 </tr>
 </l:settingsGroup>
