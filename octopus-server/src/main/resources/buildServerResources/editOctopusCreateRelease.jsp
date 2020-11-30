@@ -10,6 +10,30 @@
 <c:set var="selectedOctopusVersion"
        value="${propertiesBean.properties['octopus_version']}"/>
 
+<script type="text/javascript">
+
+    function showHideGitRefField() {
+        const gitRefRow  = document.getElementById("gitRefRow");
+        let previewIsSelected = document.getElementById("${keys.octopusVersion}").value === "${keys.previewVersion}";
+        if (previewIsSelected) {
+            gitRefRow.style.display = "table-row";
+        } else {
+            gitRefRow.style.display = "none";
+            document.getElementById("${keys.gitRefKey}").value = null
+        }
+    }
+
+    // Select the first version that isn't the preview version once the page has loaded
+    $j(document).ready(function ($) {
+
+        // Bind the event
+        document.getElementById("${keys.octopusVersion}").addEventListener("change", showHideGitRefField);
+
+        // Run the check for the first time
+        showHideGitRefField();
+    });
+</script>
+
 <l:settingsGroup title="Octopus Connection">
 <tr>
   <th>Octopus URL:<l:star/></th>
@@ -81,7 +105,7 @@
     <span class="smallNote">The channel to create the release for</span>
   </td>
 </tr>
-<tr>
+<tr id="gitRefRow">
     <th>Git Ref:</th>
     <td>
         <props:textProperty name="${keys.gitRefKey}" className="longField"/>

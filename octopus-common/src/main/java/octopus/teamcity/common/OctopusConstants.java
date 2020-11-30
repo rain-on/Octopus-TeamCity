@@ -45,8 +45,10 @@ public class OctopusConstants {
 		return "3.0+";
 	}
 
+	public String getPreviewVersion () { return "Preview"; }
+
     public String[] getOctopusVersions() {
-        return new String[] { getVersion3(), getVersion2(), getVersion1() };
+        return new String[] { getVersion3(), getVersion2(), getVersion1(), getPreviewVersion() };
     }
 
     public String getSpaceName() {

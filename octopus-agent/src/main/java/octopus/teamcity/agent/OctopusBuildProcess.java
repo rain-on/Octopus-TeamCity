@@ -166,7 +166,9 @@ public abstract class OctopusBuildProcess implements BuildProcess {
         }
 
         final String octopusVersion = parameters.get(constants.getOctopusVersion());
-        if (octopusVersion == null || octopusVersion.length() == 0) {
+        if (octopusVersion == null ||
+                octopusVersion.length() == 0 ||
+                octopusVersion.equals(constants.getPreviewVersion())) {
             return constants.getVersion3().replace("+", "");
         }
 
