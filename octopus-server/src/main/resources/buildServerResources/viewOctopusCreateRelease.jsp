@@ -7,6 +7,9 @@
 <jsp:useBean id="keys" class="octopus.teamcity.common.OctopusConstants"/>
 <jsp:useBean id="propertiesBean" scope="request" type="jetbrains.buildServer.controllers.BasePropertiesBean"/>
 
+<c:set var="selectedOctopusVersion"
+       value="${propertiesBean.properties['octopus_version']}"/>
+
 <div class="parameter">
     Octopus URL:
     <strong><props:displayValue name="${keys.serverKey}" emptyValue="not specified"/></strong>
@@ -31,6 +34,12 @@
     Channel:
     <strong><props:displayValue name="${keys.channelNameKey}" emptyValue="not specified"/></strong>
 </div>
+<c:if test="${selectedOctopusVersion == keys.previewVersion}">
+    <div class="parameter">
+        Git Ref:
+        <strong><props:displayValue name="${keys.gitRefKey}" emptyValue="not specified"/></strong>
+    </div>
+</c:if>
 
 <div class="parameter">
     Deploy to:

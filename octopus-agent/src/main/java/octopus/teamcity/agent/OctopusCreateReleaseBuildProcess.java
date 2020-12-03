@@ -56,6 +56,7 @@ public class OctopusCreateReleaseBuildProcess extends OctopusBuildProcess {
                 final boolean wait = Boolean.parseBoolean(parameters.get(constants.getWaitForDeployments()));
                 final String deploymentTimeout = parameters.get(constants.getDeploymentTimeout());
                 final boolean cancelOnTimeout = Boolean.parseBoolean(parameters.get(constants.getCancelDeploymentOnTimeout()));
+                final String gitRef = parameters.get(constants.getGitRefKey());
 
 
                 commands.add("create-release");
@@ -109,6 +110,11 @@ public class OctopusCreateReleaseBuildProcess extends OctopusBuildProcess {
                 for(String tenanttag : splitCommaSeparatedValues(tenanttags)) {
                     commands.add("--tenanttag");
                     commands.add(tenanttag);
+                }
+
+                if (gitRef != null && !gitRef.isEmpty()) {
+                    commands.add("--gitRef");
+                    commands.add(gitRef);
                 }
 
                 if (commandLineArguments != null && !commandLineArguments.isEmpty()) {
