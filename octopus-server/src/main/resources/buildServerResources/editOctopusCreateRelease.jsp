@@ -171,12 +171,12 @@
 </l:settingsGroup>
 
 <l:settingsGroup title="Advanced">
-<tr>
-  <th>Additional command line arguments:</th>
-  <td>
-    <props:textProperty name="${keys.commandLineArgumentsKey}" className="longField"/>
-    <span class="error" id="error_${keys.commandLineArgumentsKey}"></span>
-    <span class="smallNote">Additional arguments to be passed to <a href="https://g.octopushq.com/OctoExeCreateRelease">Octopus CLI</a></span>
-  </td>
-</tr>
+  <tr>
+    <th>Additional command line arguments:</th>
+    <td>
+      <props:textProperty name="${keys.commandLineArgumentsKey}" className="longField"/>
+      <span class="error" id="error_${keys.commandLineArgumentsKey}"></span>
+      <span class="smallNote">Additional arguments to be passed to <a href="https://g.octopushq.com/OctoExeCreateRelease">Octopus CLI</a></span>
+    </td>
+  </tr>
 </l:settingsGroup>

@@ -89,8 +89,10 @@
       <span class="smallNote">Set this option to automatically publish any packages as TeamCity build artifacts. This is useful if you are creating a package from a directory, and want the package to appear in TeamCity as a build artifact.</span>
     </td>
   </tr>
+</l:settingsGroup>
 
-  <tr class="advancedSetting">
+<l:settingsGroup title="Advanced">
+  <tr>
     <th>Additional command line arguments:</th>
     <td>
       <props:textProperty name="${keys.commandLineArgumentsKey}" className="longField"/>
