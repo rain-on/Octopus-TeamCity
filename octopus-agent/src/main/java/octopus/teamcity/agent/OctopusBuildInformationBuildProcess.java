@@ -90,6 +90,7 @@ public class OctopusBuildInformationBuildProcess extends OctopusBuildProcess {
                 final String spaceName = parameters.get(constants.getSpaceName());
                 final String packageIds = parameters.get(constants.getPackageIdKey());
                 final String packageVersion = parameters.get(constants.getPackageVersionKey());
+                final String commandLineArguments = parameters.get(constants.getCommandLineArgumentsKey());
 
                 final String forcePush = parameters.get(constants.getForcePushKey());
                 OverwriteMode overwriteMode = OverwriteMode.FailIfExists;
@@ -130,6 +131,10 @@ public class OctopusBuildInformationBuildProcess extends OctopusBuildProcess {
                 if (overwriteMode != OverwriteMode.FailIfExists) {
                     commands.add("--overwrite-mode");
                     commands.add(overwriteMode.name());
+                }
+
+                if (commandLineArguments != null && !commandLineArguments.isEmpty()) {
+                    commands.addAll(splitSpaceSeparatedValues(commandLineArguments));
                 }
 
                 return commands.toArray(new String[commands.size()]);
