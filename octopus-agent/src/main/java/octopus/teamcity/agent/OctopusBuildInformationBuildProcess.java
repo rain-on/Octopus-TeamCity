@@ -63,7 +63,7 @@ public class OctopusBuildInformationBuildProcess extends OctopusBuildProcess {
                     sharedConfigParameters.get("octopus_vcstype"),
                     sharedConfigParameters.get("octopus_vcsroot"),
                     sharedConfigParameters.get("build.vcs.number"),
-                    sharedConfigParameters.get("octopus_branch"),
+                    sharedConfigParameters.get("vcsroot.branch"),
                     sharedConfigParameters.get("octopus_commits"),
                     sharedConfigParameters.get("octopus_serverRootUrl"),
                     Long.toString(build.getBuildId()),
