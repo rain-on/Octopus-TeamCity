@@ -103,6 +103,10 @@ public class OctopusConstants {
         return "octopus_additionalcommandlinearguments";
     }
 
+    public String getDetachFromAgent() {
+        return "octopus_detachfromagent";
+    }
+
     public String getReleaseNumberKey() {
         return "octopus_releasenumber";
     }
