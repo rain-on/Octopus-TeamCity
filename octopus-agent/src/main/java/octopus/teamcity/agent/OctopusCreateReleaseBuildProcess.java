@@ -47,7 +47,6 @@ public class OctopusCreateReleaseBuildProcess extends OctopusBuildProcess {
                 final String apiKey = parameters.get(constants.getApiKey());
                 final String spaceName = parameters.get(constants.getSpaceName());
                 final String commandLineArguments = parameters.get(constants.getCommandLineArgumentsKey());
-                final String detachFromAgent = parameters.get(constants.getDetachFromAgent());
                 final String releaseNumber = parameters.get(constants.getReleaseNumberKey());
                 final String channelName = parameters.get(constants.getChannelNameKey());
                 final String deployTo = parameters.get(constants.getDeployToKey());

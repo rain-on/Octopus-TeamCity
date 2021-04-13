@@ -133,12 +133,4 @@
     <span class="smallNote">Additional arguments to be passed to <a href="https://g.octopushq.com/OctoExeDeployRelease">Octopus CLI</a></span>
   </td>
 </tr>
-<tr>
-  <th>Detach from agent:</th>
-  <td>
-    <props:checkboxProperty name="${keys.detachFromAgent}" />
-    <span class="error" id="error_${keys.detachFromAgent}"></span>
-    <span class="smallNote">If checked, the runner will detach the build from the agent. This makes this agent available to other builds. The build then continues running on the TeamCity server, and Octopus Deploy reports its progress directly to the server.</span>
-  </td>
-</tr>
 </l:settingsGroup>
