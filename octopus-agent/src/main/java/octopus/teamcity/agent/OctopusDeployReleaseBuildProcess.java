@@ -115,17 +115,19 @@ public class OctopusDeployReleaseBuildProcess extends OctopusBuildProcess {
                     commands.add("--variable");
                     commands.add("Octopus.TeamCity.Agentless:True");
 
-                    commands.add("--variable");
-                    commands.add("Octopus.TeamCity.UserId:" + getContext().getBuild().getAccessUser());
+                    AgentRunningBuild build = getContext().getBuild();
 
                     commands.add("--variable");
-                    commands.add("Octopus.TeamCity.Password:" + getContext().getBuild().getAccessCode());
+                    commands.add("Octopus.TeamCity.UserId:" + build.getAccessUser());
 
                     commands.add("--variable");
-                    commands.add("Octopus.TeamCity.Build.Id:" + getContext().getBuild().getBuildId());
+                    commands.add("Octopus.TeamCity.Password:" + build.getAccessCode());
 
                     commands.add("--variable");
-                    commands.add("Octopus.TeamCity.ServerUrl:" + getContext().getBuild().getAgentConfiguration().getServerUrl());
+                    commands.add("Octopus.TeamCity.Build.Id:" + build.getBuildId());
+
+                    commands.add("--variable");
+                    commands.add("Octopus.TeamCity.ServerUrl:" + build.getAgentConfiguration().getServerUrl());
                 }
 
                 return commands.toArray(new String[commands.size()]);
