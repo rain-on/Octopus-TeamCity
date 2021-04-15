@@ -46,3 +46,8 @@
     Cancel deployment on timeout:
     <strong><props:displayValue name="${keys.cancelDeploymentOnTimeout}" emptyValue="not specified"/></strong>
 </div>
+
+<div class="parameter">
+    Run detached from agent:
+    <strong><props:displayValue name="${keys.detachFromAgent}" emptyValue="not specified" /></strong>
+</div>

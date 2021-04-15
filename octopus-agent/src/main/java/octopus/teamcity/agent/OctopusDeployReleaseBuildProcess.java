@@ -55,6 +55,7 @@ public class OctopusDeployReleaseBuildProcess extends OctopusBuildProcess {
                 final boolean wait = Boolean.parseBoolean(parameters.get(constants.getWaitForDeployments()));
                 final String deploymentTimeout = parameters.get(constants.getDeploymentTimeout());
                 final boolean cancelOnTimeout = Boolean.parseBoolean(parameters.get(constants.getCancelDeploymentOnTimeout()));
+                final boolean detachFromAgent = Boolean.parseBoolean(parameters.get(constants.getDetachFromAgent()));
 
                 commands.add("deploy-release");
                 commands.add("--server");
@@ -108,6 +109,23 @@ public class OctopusDeployReleaseBuildProcess extends OctopusBuildProcess {
 
                 if (commandLineArguments != null && !commandLineArguments.isEmpty()) {
                     commands.addAll(splitSpaceSeparatedValues(commandLineArguments));
+                }
+
+                if (detachFromAgent) {
+                    commands.add("--variable");
+                    commands.add("Octopus.TeamCity.Agentless:True");
+
+                    commands.add("--variable");
+                    commands.add("Octopus.TeamCity.UserId:" + getContext().getBuild().getAccessUser());
+
+                    commands.add("--variable");
+                    commands.add("Octopus.TeamCity.Password:" + getContext().getBuild().getAccessCode());
+
+                    commands.add("--variable");
+                    commands.add("Octopus.TeamCity.Build.Id:" + getContext().getBuild().getBuildId());
+
+                    commands.add("--variable");
+                    commands.add("Octopus.TeamCity.ServerUrl:" + getContext().getBuild().getAgentConfiguration().getServerUrl());
                 }
 
                 return commands.toArray(new String[commands.size()]);

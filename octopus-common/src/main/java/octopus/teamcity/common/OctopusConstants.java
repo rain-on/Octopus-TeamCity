@@ -114,6 +114,7 @@ public class OctopusConstants {
     public String getWaitForDeployments() { return "octopus_waitfordeployments"; }
     public String getDeploymentTimeout() { return "octopus_deploymenttimeout"; }
     public String getCancelDeploymentOnTimeout() { return "octopus_cancelontimeout"; }
+    public String getDetachFromAgent() { return "octopus_detachfromagent"; }
 
     public String getVerboseLoggingKey() {
         return "octopus_verbose_logging";

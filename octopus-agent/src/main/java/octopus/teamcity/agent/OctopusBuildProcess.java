@@ -39,15 +39,26 @@ public abstract class OctopusBuildProcess implements BuildProcess {
     private OutputReaderThread standardOutput;
     private boolean isFinished;
     private BuildProgressLogger logger;
+    private boolean detachFromAgent;
 
     protected OctopusBuildProcess(@NotNull AgentRunningBuild runningBuild, @NotNull BuildRunnerContext context) {
         this.runningBuild = runningBuild;
         this.context = context;
 
+        Map<String, String> parameters = context.getRunnerParameters();
+        this.detachFromAgent = Boolean.parseBoolean(parameters.get(OctopusConstants.Instance.getDetachFromAgent()));
+
         logger = runningBuild.getBuildLogger();
     }
 
     public void start() throws RunBuildException {
+        if (detachFromAgent) {
+            // this service message informs TeamCity that the current build
+            // should detach from the build (AKA, run as an agentless build
+            // step)
+            logger.message("##teamcity[buildDetachedFromAgent]");
+        }
+
         extractOctoExe();
 
         OctopusCommandBuilder arguments = createCommand();
