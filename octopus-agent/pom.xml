@@ -8,8 +8,16 @@
         <artifactId>plugin</artifactId>
         <version>1.0</version>
     </parent>
-    <artifactId>agent</artifactId>
+    <artifactId>octopus-agent</artifactId>
     <packaging>jar</packaging>
+
+    <repositories>
+        <repository>
+            <id>jetbrains-rest-client</id>
+            <url>https://packages.jetbrains.team/maven/p/teamcity-rest-client/teamcity-rest-client</url>
+        </repository>
+    </repositories>
+
 
     <name>Octopus Deploy TeamCity Plugin - Agent</name>
 
@@ -36,6 +44,7 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-assembly-plugin</artifactId>
                 <configuration>
+                    <appendAssemblyId>false</appendAssemblyId>
                     <descriptor>assembly.xml</descriptor>
                     <finalName>Octopus.TeamCity</finalName>
                 </configuration>
@@ -44,24 +53,6 @@
                         <phase>package</phase>
                         <goals>
                             <goal>single</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-antrun-plugin</artifactId>
-                <version>1.7</version>
-                <executions>
-                    <execution>
-                        <phase>package</phase>
-                        <configuration>
-                            <target>
-                                <move file="${project.build.directory}/Octopus.TeamCity-zip.zip" tofile="${project.build.directory}/Octopus.TeamCity.zip" />
-                            </target>
-                        </configuration>
-                        <goals>
-                            <goal>run</goal>
                         </goals>
                     </execution>
                 </executions>
@@ -92,6 +83,11 @@
             <artifactId>agent-api</artifactId>
             <version>${teamcity.version}</version>
             <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.jetbrains.teamcity</groupId>
+            <artifactId>teamcity-rest-client</artifactId>
+            <version>3.5</version>
         </dependency>
         <dependency>
             <groupId>org.jetbrains.teamcity</groupId>

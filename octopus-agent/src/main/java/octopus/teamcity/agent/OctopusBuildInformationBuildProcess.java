@@ -16,27 +16,37 @@
 
 package octopus.teamcity.agent;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import jetbrains.buildServer.agent.*;
 import jetbrains.buildServer.util.StringUtil;
+import octopus.teamcity.common.Commit;
 import octopus.teamcity.common.OctopusConstants;
 import octopus.teamcity.common.OverwriteMode;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.teamcity.rest.*;
 
 import java.io.File;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 public class OctopusBuildInformationBuildProcess extends OctopusBuildProcess {
 
     private final File checkoutDir;
     private final Map<String, String> sharedConfigParameters;
+    private final String teamCityServerUrl;
 
     public OctopusBuildInformationBuildProcess(@NotNull AgentRunningBuild runningBuild, @NotNull BuildRunnerContext context) {
         super(runningBuild, context);
 
         checkoutDir = runningBuild.getCheckoutDirectory();
         sharedConfigParameters = runningBuild.getSharedConfigParameters();
+        teamCityServerUrl = runningBuild.getAgentConfiguration().getServerUrl();
+
     }
 
     @Override
@@ -59,14 +69,24 @@ public class OctopusBuildInformationBuildProcess extends OctopusBuildProcess {
             AgentRunningBuild build = getContext().getBuild();
 
             final OctopusBuildInformationBuilder builder = new OctopusBuildInformationBuilder();
+
+            final String buildIdString = Long.toString(build.getBuildId());
+            final TeamCityInstance teamCityServer = TeamCityInstance.httpAuth(teamCityServerUrl, build.getAccessUser(), build.getAccessCode());
+            final Build restfulBuild = teamCityServer.build(new BuildId(buildIdString));
+
+            final Optional<Revision> revision = restfulBuild.fetchRevisions().stream().findFirst();
+            final String reportedBranch = restfulBuild.getBranch().getName();
+            final String vcsRoot = sharedConfigParameters.get("vcsroot.url");
+            final String vcsType = getVcsType(vcsRoot);
+
             final OctopusBuildInformation buildInformation = builder.build(
-                    sharedConfigParameters.get("octopus_vcstype"),
-                    sharedConfigParameters.get("octopus_vcsroot"),
+                    vcsType,
+                    vcsRoot,
                     sharedConfigParameters.get("build.vcs.number"),
-                    sharedConfigParameters.get("octopus_branch"),
-                    sharedConfigParameters.get("octopus_commits"),
-                    sharedConfigParameters.get("octopus_serverRootUrl"),
-                    Long.toString(build.getBuildId()),
+                    revision.map(Revision::getVcsBranchName).orElse(reportedBranch != null ? reportedBranch  : ""),
+                    createJsonCommitHistory(restfulBuild),
+                    teamCityServerUrl,
+                    buildIdString,
                     build.getBuildNumber());
 
             if (verboseLogging) {
@@ -140,5 +160,40 @@ public class OctopusBuildInformationBuildProcess extends OctopusBuildProcess {
                 return commands.toArray(new String[commands.size()]);
             }
         };
+    }
+
+    private String createJsonCommitHistory(final Build build) {
+        final List<Change> changes = build.fetchChanges();
+
+
+        final List<Commit> commits = new ArrayList<>();
+        for (Change change : changes) {
+
+            final Commit c = new Commit();
+            c.Id = change.getVersion();
+            c.Comment = change.getComment();
+
+            commits.add(c);
+        }
+
+        final Gson gson = new GsonBuilder()
+                .setPrettyPrinting()
+                .disableHtmlEscaping()
+                .create();
+        return gson.toJson(commits);
+    }
+
+    private String getBranch(final Build build) {
+        final String reportedBranch = build.getBranch().getName();
+        return build.fetchRevisions().stream().findFirst().map(Revision::getVcsBranchName).orElse(
+                reportedBranch == null ? "" : reportedBranch);
+    }
+
+    private String getVcsType(final String vcsRoot) {
+        return vcsRoot.startsWith("git") ? "git" : "unknown";
+    }
+
+    private String getVcsRoot(final Optional<Revision> revision) {
+        return revision.map(r -> r.getVcsRoot().getName()).orElse("uknown");
     }
 }
