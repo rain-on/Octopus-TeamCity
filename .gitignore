@@ -2,10 +2,13 @@
 *.class
 
 # Package Files #
-*.jar
+**/build/**/*.jar
 *.nupkg
 .idea
 *.iml
 
+.gradle/
+
 **/target
+**/build
 *.DS_Store
