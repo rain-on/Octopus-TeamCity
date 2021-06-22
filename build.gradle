@@ -66,7 +66,7 @@ allprojects {
   repositories {
     mavenCentral()
     maven { url "https://download.jetbrains.com/teamcity-repository" }
-    maven { url "https://packages.jetbrains.team/maven/p/teamcity-rest-client/teamcity-rest-client" }
+    maven { url 'https://packages.octopushq.com/artifactory/maven' }
   }
 
   dependencies {
@@ -169,25 +169,85 @@ distributions {
   }
 }
 
+/**
+ * Tasks to allow for the running up of a TeamCity Server/Agent
+ */
 
+
+def teamCityInstallDir = System.getenv("TEAMCITY_INSTALL_DIR")
+def teamCityDataDir = System.getenv("TEAMCITY_DATA_DIR") ?: System.getenv("HOME") + "/.BuildServer"
+
+// Used to deploy the built zip file to the 'global' teamcity install
 task deployLocal(type: Copy) {
-  def teamCityDataDir = System.getenv("TEAMCITY_DATA_DIR") ?: System.getenv("HOME") + "/.BuildServer"
-
   into(teamCityDataDir + "/plugins")
   from tasks.findByPath(":distZip")
 }
 
+// Used to deploy the server-side JSP files to the 'global' teamcity install
 task updateJsp(type: Copy) {
-  def teamCityDataDir = System.getenv("TEAMCITY_INSTALL_DIR")
   def subPath = "/webapps/ROOT/plugins/Octopus.TeamCity"
 
   doFirst() {
-    if(${teamCityData} == null) {
+    if(teamCityInstallDir == null) {
       throw new GradleException("TEAMCITY_INSTALL_DIR env var not set, unable to copy jsps")
     }
   }
 
   outputs.upToDateWhen { false }
-  into(teamCityDataDir + subPath)
+  into(teamCityInstallDir + subPath)
   from project(":octopus-server").absoluteProjectPath("src/main/resources/buildServerResources")
+}
+
+// Creates a team-city data directory in the build area of this project (allowing other tasks to have an controlled
+// build area).
+task setupTeamCityDirectory(type: Copy) {
+  from zipTree("e2e/src/test/resources/teamcity_config.zip")
+  from zipTree("e2e/src/test/resources//projects.zip")
+  into("plugins/") {
+    from tasks.findByPath(":distZip")
+  }
+  duplicatesStrategy = DuplicatesStrategy.INCLUDE
+  into "${buildDir}/tc_datadir"
+}
+
+task runSystem {
+  dependsOn ":runTeamCityServer"
+  dependsOn ":runTeamCityAgent"
+}
+
+task stopSystem {
+  dependsOn ":stopTeamCityServer"
+  dependsOn ":stopTeamCityAgent"
+
+}
+
+task runTeamCityServer(type: Exec) {
+  dependsOn ":setupTeamCityDirectory"
+  def subPath = "/bin/"
+
+  environment("TEAMCITY_SERVER_OPTS",
+          "-Dteamcity.development.mode=true -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5011")
+  environment("TEAMCITY_DATA_PATH", tasks.findByPath(":setupTeamCityDirectory").outputs.files.singleFile)
+
+  commandLine teamCityInstallDir + subPath + "teamcity-server.sh", "start"
+}
+
+task runTeamCityAgent(type: Exec) {
+
+  def subPath = "/buildAgent/bin/"
+
+  environment("TEAMCITY_AGENT_OPTS", "-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5010")
+  environment("TEAMCITY_DATA_PATH", tasks.findByPath(":setupTeamCityDirectory").outputs.files.singleFile)
+
+  commandLine teamCityInstallDir + subPath  + "agent.sh", "start"
+}
+
+task stopTeamCityServer(type:Exec) {
+  def subPath = "/bin/"
+  commandLine teamCityInstallDir + subPath + "teamcity-server.sh", "stop"
+}
+
+task stopTeamCityAgent(type:Exec) {
+  def subPath = "/buildAgent/bin/"
+  commandLine teamCityInstallDir + subPath + "agent.sh", "stop"
 }

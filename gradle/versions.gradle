@@ -14,7 +14,7 @@ dependencyManagement {
       entry 'common-api'
       entry 'server-api'
     }
-    dependency 'org.jetbrains.teamcity:teamcity-rest-client:1.14.0'
+    dependency 'org.jetbrains.teamcity:teamcity-rest-client:1.15.9999-SNAPSHOT'
 
     dependency 'com.google.guava:guava:30.1.1-jre'
 
@@ -24,5 +24,22 @@ dependencyManagement {
       entry 'error_prone_core'
       entry 'error_prone_test_helpers'
     }
-  }
+
+        dependencySet(group: "org.testcontainers", version: '1.15.3') {
+            entry 'testcontainers'
+            entry 'junit-jupiter'
+        }
+
+        dependencySet(group: 'org.apache.logging.log4j', version: '2.12.0') {
+            entry 'log4j-api'
+            entry 'log4j-core'
+            entry 'log4j-slf4j-impl'
+        }
+        dependency 'net.lingala.zip4j:zip4j:2.8.0'
+
+        dependencySet(group: 'org.mock-server', version: '5.11.2') {
+            entry 'mockserver-netty'
+            entry 'mockserver-client-java'
+        }
+    }
 }
