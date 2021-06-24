@@ -74,16 +74,11 @@ public class OctopusBuildInformationBuildProcess extends OctopusBuildProcess {
             final TeamCityInstance teamCityServer = TeamCityInstance.httpAuth(teamCityServerUrl, build.getAccessUser(), build.getAccessCode());
             final Build restfulBuild = teamCityServer.build(new BuildId(buildIdString));
 
-            final Optional<Revision> revision = restfulBuild.fetchRevisions().stream().findFirst();
-            final String reportedBranch = restfulBuild.getBranch().getName();
-            final String vcsRoot = sharedConfigParameters.get("vcsroot.url");
-            final String vcsType = getVcsType(vcsRoot);
-
             final OctopusBuildInformation buildInformation = builder.build(
-                    vcsType,
-                    vcsRoot,
+                    sharedConfigParameters.get("octopus_vcstype"),
+                    sharedConfigParameters.get("vcsroot.url"),
                     sharedConfigParameters.get("build.vcs.number"),
-                    revision.map(Revision::getVcsBranchName).orElse(reportedBranch != null ? reportedBranch  : ""),
+                    restfulBuild.getBranch().getName(),
                     createJsonCommitHistory(restfulBuild),
                     teamCityServerUrl,
                     buildIdString,
@@ -181,19 +176,5 @@ public class OctopusBuildInformationBuildProcess extends OctopusBuildProcess {
                 .disableHtmlEscaping()
                 .create();
         return gson.toJson(commits);
-    }
-
-    private String getBranch(final Build build) {
-        final String reportedBranch = build.getBranch().getName();
-        return build.fetchRevisions().stream().findFirst().map(Revision::getVcsBranchName).orElse(
-                reportedBranch == null ? "" : reportedBranch);
-    }
-
-    private String getVcsType(final String vcsRoot) {
-        return vcsRoot.startsWith("git") ? "git" : "unknown";
-    }
-
-    private String getVcsRoot(final Optional<Revision> revision) {
-        return revision.map(r -> r.getVcsRoot().getName()).orElse("uknown");
     }
 }
