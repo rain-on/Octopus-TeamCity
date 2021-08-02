@@ -1,8 +1,8 @@
 package octopus.teamcity.agent;
 
-import java.util.List;
+import com.octopus.sdk.operations.buildinformation.Commit;
 
-import octopus.teamcity.common.Commit;
+import java.util.List;
 
 public class OctopusBuildInformation {
   public String BuildEnvironment;

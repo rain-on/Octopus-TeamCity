@@ -16,6 +16,8 @@
 
 package octopus.teamcity.agent;
 
+import com.octopus.sdk.operations.buildinformation.Commit;
+
 import java.io.File;
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -28,7 +30,6 @@ import jetbrains.buildServer.agent.AgentRunningBuild;
 import jetbrains.buildServer.agent.BuildProgressLogger;
 import jetbrains.buildServer.agent.BuildRunnerContext;
 import jetbrains.buildServer.util.StringUtil;
-import octopus.teamcity.common.Commit;
 import octopus.teamcity.common.OctopusConstants;
 import octopus.teamcity.common.OverwriteMode;
 import org.jetbrains.annotations.NotNull;
@@ -171,11 +172,7 @@ public class OctopusBuildInformationBuildProcess extends OctopusBuildProcess {
 
     final List<Commit> commits = new ArrayList<>();
     for (Change change : changes) {
-
-      final Commit c = new Commit();
-      c.Id = change.getVersion();
-      c.Comment = change.getComment();
-
+      final Commit c = new Commit(change.getVersion(), change.getComment());
       commits.add(c);
     }
 

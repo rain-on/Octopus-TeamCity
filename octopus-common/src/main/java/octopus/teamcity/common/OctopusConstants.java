@@ -21,6 +21,10 @@ import jetbrains.buildServer.agent.Constants;
 public class OctopusConstants {
   public static final OctopusConstants Instance = new OctopusConstants();
 
+  public String getStepType() {
+    return "octopus_step_type";
+  }
+
   public String getServerKey() {
     return "octopus_host";
   }
@@ -171,4 +175,5 @@ public class OctopusConstants {
   public static final String PACK_PACKAGE_RUNNER_TYPE = "octopus.pack.package";
   public static final String PUSH_PACKAGE_RUNNER_TYPE = "octopus.push.package";
   public static final String METADATA_RUNNER_TYPE = "octopus.metadata";
+  public static final String GENERIC_RUNNER_TYPE = "octopus.create.generic";
 }

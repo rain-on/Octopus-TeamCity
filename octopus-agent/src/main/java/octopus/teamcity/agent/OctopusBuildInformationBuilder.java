@@ -1,11 +1,12 @@
 package octopus.teamcity.agent;
 
+import com.octopus.sdk.operations.buildinformation.Commit;
+
 import java.util.List;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
-import octopus.teamcity.common.Commit;
 
 public class OctopusBuildInformationBuilder {
 
