@@ -23,15 +23,16 @@ import org.jetbrains.annotations.NotNull;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 
 public class OctopusOsUtils {
 
     private static final Logger LOGGER = Loggers.AGENT;
 
-    public static Boolean CanRunOcto(@NotNull BuildAgentConfiguration agentConfiguration){
+    public static Boolean CanRunOcto(@NotNull BuildAgentConfiguration agentConfiguration) {
         if (agentConfiguration.getSystemInfo().isUnix() || agentConfiguration.getSystemInfo().isMac()) {
             String os = agentConfiguration.getSystemInfo().isUnix() ? "Unix" : "Mac";
-            if(HasDotNet(agentConfiguration)){
+            if (HasDotNet(agentConfiguration)) {
                 LOGGER.info(String.format("Octopus can run on agent with %s and DotNot", os));
                 return true;
             } else {
@@ -52,34 +53,36 @@ public class OctopusOsUtils {
         return false;
     }
 
-    public static Boolean HasDotNet(@NotNull BuildAgentConfiguration agentConfiguration){
+    public static Boolean HasDotNet(@NotNull BuildAgentConfiguration agentConfiguration) {
         String result = executeCommand("dotnet");
         // v1 of dotnet outputs Microsoft, v2 outputs Usage
         return result.contains("Microsoft") || result.contains("Usage");
     }
 
-    public static Boolean HasOcto(@NotNull BuildAgentConfiguration agentConfiguration){
+    public static Boolean HasOcto(@NotNull BuildAgentConfiguration agentConfiguration) {
         String result = executeCommand("octo");
         return result.contains("Octopus");
     }
 
-    private static String executeCommand(String command) {
+    private static String executeCommand(final String command) {
 
-        StringBuffer output = new StringBuffer();
+        final StringBuilder output = new StringBuilder();
 
         Process p;
         try {
             p = Runtime.getRuntime().exec(command);
             p.waitFor();
-            BufferedReader reader = new BufferedReader(new InputStreamReader(p.getInputStream()));
+            final BufferedReader reader = new BufferedReader(new InputStreamReader(p.getInputStream(),
+                StandardCharsets.UTF_8));
 
             String line = "";
-            while ((line = reader.readLine())!= null) {
+            while ((line = reader.readLine()) != null) {
                 output.append(line + "\n");
             }
 
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (final Exception e) {
+            LOGGER.error("Failed to execute command " + command);
+            LOGGER.error(e);
         }
 
         return output.toString();
