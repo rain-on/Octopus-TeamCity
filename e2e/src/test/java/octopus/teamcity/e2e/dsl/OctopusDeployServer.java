@@ -15,6 +15,11 @@
 
 package octopus.teamcity.e2e.dsl;
 
+import java.io.IOException;
+import java.net.URL;
+import java.time.Duration;
+import java.time.Instant;
+
 import com.octopus.sdk.api.LicenseApi;
 import com.octopus.sdk.api.UsersApi;
 import com.octopus.sdk.http.OctopusClient;
@@ -29,12 +34,8 @@ import org.testcontainers.containers.Network;
 import org.testcontainers.containers.wait.strategy.Wait;
 import org.testcontainers.utility.DockerImageName;
 
-import java.io.IOException;
-import java.net.URL;
-import java.time.Duration;
-import java.time.Instant;
-
-// This is copied from the octopus-java-sdk (REALLY should put it somewhere common) - or publish it to maven.
+// This is copied from the octopus-java-sdk (REALLY should put it somewhere common) - or publish it
+// to maven.
 public class OctopusDeployServer {
 
   private static final Logger LOG = LoggerFactory.getLogger(OctopusDeployServer.class);

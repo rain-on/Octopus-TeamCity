@@ -1,5 +1,13 @@
 package octopus.teamcity.e2e;
 
+import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.time.Duration;
+import java.time.Instant;
+import java.util.Collections;
+import java.util.Iterator;
+
 import octopus.teamcity.e2e.dsl.TeamCityContainers;
 import octopus.teamcity.e2e.dsl.TeamCityFactory;
 import org.jetbrains.teamcity.rest.Build;
@@ -13,14 +21,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.testcontainers.containers.Network;
 
-import java.io.IOException;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.time.Duration;
-import java.time.Instant;
-import java.util.Collections;
-import java.util.Iterator;
-
 public abstract class BaseRecordReplay {
   private static final Logger LOG = LoggerFactory.getLogger(BaseRecordReplay.class);
   protected static final String USERNAME = "admin";
@@ -29,7 +29,8 @@ public abstract class BaseRecordReplay {
   protected TeamCityContainers teamCityContainers;
   protected ClientAndServer mockServer;
 
-  protected void executeTeamCityBuild(final Path teamCityDataDir) throws IOException, InterruptedException {
+  protected void executeTeamCityBuild(final Path teamCityDataDir)
+      throws IOException, InterruptedException {
 
     final Network networkForTest = Network.newNetwork();
     final TeamCityFactory tcFactory = new TeamCityFactory(teamCityDataDir, networkForTest);
@@ -39,8 +40,9 @@ public abstract class BaseRecordReplay {
 
     teamCityContainers = tcFactory.createTeamCityServerAndAgent(mockServer.getPort());
 
-    final String teamCityUrl = String.format("http://localhost:%d",
-        teamCityContainers.serverContainer.getFirstMappedPort());
+    final String teamCityUrl =
+        String.format(
+            "http://localhost:%d", teamCityContainers.serverContainer.getFirstMappedPort());
     final TeamCityInstance tcInstance = TeamCityInstance.httpAuth(teamCityUrl, USERNAME, PASSWORD);
 
     final Iterator<BuildAgent> iBuildAgent = tcInstance.buildAgents().all().iterator();
@@ -49,16 +51,11 @@ public abstract class BaseRecordReplay {
       agent.setAuthorized(true);
     }
 
-    final BuildConfiguration buildConf = tcInstance.buildConfiguration(new BuildConfigurationId(
-        "OctopusStepsWithVcs"));
-    final Build build = buildConf.runBuild(
-        Collections.emptyMap(),
-        true,
-        true,
-        true,
-        "My Test build run",
-        null,
-        false);
+    final BuildConfiguration buildConf =
+        tcInstance.buildConfiguration(new BuildConfigurationId("OctopusStepsWithVcs"));
+    final Build build =
+        buildConf.runBuild(
+            Collections.emptyMap(), true, true, true, "My Test build run", null, false);
 
     final Duration buildTimeout = Duration.ofSeconds(30);
     final Instant buildStart = Instant.now();
@@ -75,7 +72,7 @@ public abstract class BaseRecordReplay {
       LOG.info("The build is finished, and it {}", build.getStatus());
     } else {
       LOG.info("Build did not complete in time");
-      //assertThat(false).withFailMessage("Build did not complete in time");
+      // assertThat(false).withFailMessage("Build did not complete in time");
     }
   }
 
@@ -84,5 +81,4 @@ public abstract class BaseRecordReplay {
   }
 
   protected abstract ClientAndServer createMockServer();
-
 }

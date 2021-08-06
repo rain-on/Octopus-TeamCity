@@ -226,7 +226,7 @@ task runTeamCityServer(type: Exec) {
   def subPath = "/bin/"
 
   environment("TEAMCITY_SERVER_OPTS",
-          "-Dteamcity.development.mode=true -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5011")
+    "-Dteamcity.development.mode=true -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5011")
   environment("TEAMCITY_DATA_PATH", tasks.findByPath(":setupTeamCityDirectory").outputs.files.singleFile)
 
   commandLine teamCityInstallDir + subPath + "teamcity-server.sh", "start"

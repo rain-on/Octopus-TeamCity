@@ -1,5 +1,14 @@
 package octopus.teamcity.e2e.test;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
+import java.io.IOException;
+import java.nio.file.Path;
+import java.time.Duration;
+import java.time.Instant;
+import java.util.Collections;
+import java.util.Iterator;
+
 import octopus.teamcity.e2e.dsl.OctopusDeployServer;
 import octopus.teamcity.e2e.dsl.TeamCityContainers;
 import octopus.teamcity.e2e.dsl.TeamCityFactory;
@@ -16,15 +25,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 import org.testcontainers.containers.Network;
 
-import java.io.IOException;
-import java.nio.file.Path;
-import java.time.Duration;
-import java.time.Instant;
-import java.util.Collections;
-import java.util.Iterator;
-
-import static org.assertj.core.api.Assertions.assertThat;
-
 public class BuildInformationTest {
 
   private static final Logger LOG = LogManager.getLogger();
@@ -39,10 +39,12 @@ public class BuildInformationTest {
     final OctopusDeployServer octoServer = OctopusDeployServer.createOctopusServer(network);
 
     final TeamCityFactory tcFactory = new TeamCityFactory(teamcityDataDir, network);
-    final TeamCityContainers teamCityContainers = tcFactory.createTeamCityServerAndAgent(octoServer.getOctopusUrl());
+    final TeamCityContainers teamCityContainers =
+        tcFactory.createTeamCityServerAndAgent(octoServer.getOctopusUrl());
 
-    final String teamCityUrl = String.format("http://localhost:%d",
-        teamCityContainers.serverContainer.getFirstMappedPort());
+    final String teamCityUrl =
+        String.format(
+            "http://localhost:%d", teamCityContainers.serverContainer.getFirstMappedPort());
     final TeamCityInstance tcInstance = TeamCityInstance.httpAuth(teamCityUrl, USERNAME, PASSWORD);
 
     final Iterator<BuildAgent> iBuildAgent = tcInstance.buildAgents().all().iterator();
@@ -51,16 +53,11 @@ public class BuildInformationTest {
       agent.setAuthorized(true);
     }
 
-    final BuildConfiguration buildConf = tcInstance.buildConfiguration(new BuildConfigurationId(
-        "OctopusStepsWithVcs"));
-    final Build build = buildConf.runBuild(
-        Collections.emptyMap(),
-        true,
-        true,
-        true,
-        "My Test build run",
-        null,
-        false);
+    final BuildConfiguration buildConf =
+        tcInstance.buildConfiguration(new BuildConfigurationId("OctopusStepsWithVcs"));
+    final Build build =
+        buildConf.runBuild(
+            Collections.emptyMap(), true, true, true, "My Test build run", null, false);
 
     final Duration buildTimeout = Duration.ofSeconds(30);
     final Instant buildStart = Instant.now();
