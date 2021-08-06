@@ -1,4 +1,4 @@
-package octopus.teamcity.e2e;
+package octopus.teamcity.e2e.recordreplay;
 
 import static com.google.common.net.HttpHeaders.CONTENT_LENGTH;
 

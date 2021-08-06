@@ -1,4 +1,4 @@
-package octopus.teamcity.e2e;
+package octopus.teamcity.e2e.recordreplay;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.mockserver.model.HttpRequest.request;

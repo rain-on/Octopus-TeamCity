@@ -1,4 +1,4 @@
-package octopus.teamcity.e2e;
+package octopus.teamcity.e2e.recordreplay;
 
 import java.io.IOException;
 import java.nio.file.Path;
@@ -38,11 +38,11 @@ public abstract class BaseRecordReplay {
     // mock server will act as a proxy for creating logs, and a loopback when executing them
     mockServer = createMockServer();
 
-    teamCityContainers = tcFactory.createTeamCityServerAndAgent(mockServer.getPort());
+    teamCityContainers = tcFactory.createTeamCityServerWithHostBasedOctopus(mockServer.getPort());
 
     final String teamCityUrl =
-        String.format(
-            "http://localhost:%d", teamCityContainers.serverContainer.getFirstMappedPort());
+        String.format("http://localhost:%d", teamCityContainers.serverContainer.getFirstMappedPort());
+
     final TeamCityInstance tcInstance = TeamCityInstance.httpAuth(teamCityUrl, USERNAME, PASSWORD);
 
     final Iterator<BuildAgent> iBuildAgent = tcInstance.buildAgents().all().iterator();

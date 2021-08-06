@@ -2,13 +2,16 @@ package octopus.teamcity.e2e.test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import java.io.File;
 import java.io.IOException;
+import java.net.URL;
 import java.nio.file.Path;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.Collections;
 import java.util.Iterator;
 
+import com.google.common.io.Resources;
 import octopus.teamcity.e2e.dsl.OctopusDeployServer;
 import octopus.teamcity.e2e.dsl.TeamCityContainers;
 import octopus.teamcity.e2e.dsl.TeamCityFactory;
@@ -29,36 +32,32 @@ public class BuildInformationTest {
 
   private static final Logger LOG = LogManager.getLogger();
 
-  protected static final String USERNAME = "admin";
-  protected static final String PASSWORD = "Password01!";
 
   @Test
   public void buildInformationStepPublishesToOctopusDeploy(@TempDir Path teamcityDataDir)
       throws IOException, InterruptedException {
+    final URL projectsImport = Resources.getResource("projects.zip");
+
     final Network network = Network.newNetwork();
     final OctopusDeployServer octoServer = OctopusDeployServer.createOctopusServer(network);
 
     final TeamCityFactory tcFactory = new TeamCityFactory(teamcityDataDir, network);
     final TeamCityContainers teamCityContainers =
-        tcFactory.createTeamCityServerAndAgent(octoServer.getOctopusUrl());
+        tcFactory.createTeamCityServerAndAgent(octoServer.getOctopusUrl(), Path.of(projectsImport.getFile()));
 
-    final String teamCityUrl =
-        String.format(
-            "http://localhost:%d", teamCityContainers.serverContainer.getFirstMappedPort());
-    final TeamCityInstance tcInstance = TeamCityInstance.httpAuth(teamCityUrl, USERNAME, PASSWORD);
-
-    final Iterator<BuildAgent> iBuildAgent = tcInstance.buildAgents().all().iterator();
-    while (iBuildAgent.hasNext()) {
-      final BuildAgent agent = iBuildAgent.next();
-      agent.setAuthorized(true);
-    }
+    final TeamCityInstance tcInstance = teamCityContainers.getRestAPi();
 
     final BuildConfiguration buildConf =
         tcInstance.buildConfiguration(new BuildConfigurationId("OctopusStepsWithVcs"));
-    final Build build =
-        buildConf.runBuild(
+    final Build build = buildConf.runBuild(
             Collections.emptyMap(), true, true, true, "My Test build run", null, false);
 
+    waitForBuildToFinish(build, tcInstance);
+
+    assertThat(build.getStatus()).isEqualTo(BuildStatus.SUCCESS);
+  }
+
+  private void waitForBuildToFinish(final Build build, final TeamCityInstance tcInstance) throws InterruptedException {
     final Duration buildTimeout = Duration.ofSeconds(30);
     final Instant buildStart = Instant.now();
     LOG.info("Waiting for requested build {} to complete", build.getId());
@@ -69,13 +68,6 @@ public class BuildInformationTest {
       }
       Thread.sleep(1000);
     }
-
-    if (build.getState().equals(BuildState.FINISHED)) {
-      LOG.info("The build is finished, and it {}", build.getStatus());
-      assertThat(build.getStatus()).isEqualTo(BuildStatus.SUCCESS);
-    } else {
-      LOG.info("Build did not complete in time");
-      assertThat(false).withFailMessage("Build did not complete in time");
-    }
+    throw new RuntimeException("Build Failed to complete within 30 seconds");
   }
 }

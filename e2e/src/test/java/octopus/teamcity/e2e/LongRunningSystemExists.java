@@ -2,6 +2,7 @@ package octopus.teamcity.e2e;
 
 import static com.google.common.net.HttpHeaders.CONTENT_LENGTH;
 
+import octopus.teamcity.e2e.recordreplay.BaseRecordReplay;
 import org.junit.jupiter.api.Test;
 import org.mockserver.integration.ClientAndServer;
 import org.mockserver.mock.Expectation;
@@ -24,8 +25,7 @@ public class LongRunningSystemExists extends BaseRecordReplay {
 
     for (final Expectation expectation : clientAndServer.retrieveActiveExpectations(null)) {
       // NOTE: the contentLength is a bit wrong as it doesn't know if it wants /n or not (content
-      // length implies NO,
-      // content imoplies yes!
+      // length implies NO, content implies yes!
       final String body = expectation.getHttpResponse().getBody().toString();
       final HttpResponse modifiedResponse =
           expectation

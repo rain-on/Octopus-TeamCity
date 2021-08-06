@@ -9,11 +9,15 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.time.Duration;
+import java.util.Iterator;
 
 import com.google.common.io.Resources;
 import net.lingala.zip4j.ZipFile;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.jetbrains.teamcity.rest.BuildAgent;
+import org.jetbrains.teamcity.rest.TeamCityInstance;
+import org.jetbrains.teamcity.rest.TeamCityInstanceFactory;
 import org.testcontainers.Testcontainers;
 import org.testcontainers.containers.GenericContainer;
 import org.testcontainers.containers.Network;
@@ -23,6 +27,8 @@ import org.testcontainers.utility.DockerImageName;
 public class TeamCityFactory {
 
   private static final Logger LOG = LogManager.getLogger();
+  protected static final String USERNAME = "admin";
+  protected static final String PASSWORD = "Password01!";
 
   private final Path teamCityDataDir;
   private final Network dockerNetwork;
@@ -32,18 +38,17 @@ public class TeamCityFactory {
     this.dockerNetwork = dockerNetwork;
   }
 
-  public TeamCityContainers createTeamCityServerWithHostBasedOctopus(final int octopusServerPort)
+  public TeamCityContainers createTeamCityServerWithHostBasedOctopus(final int octopusServerPort, final Path projectZipToInstall)
       throws IOException {
-    final String serverUrl =
-        String.format("http://host.testcontainers.internal:%d", octopusServerPort);
+    final String serverUrl = String.format("http://host.testcontainers.internal:%d", octopusServerPort);
     Testcontainers.exposeHostPorts(octopusServerPort);
-    return createTeamCityServerAndAgent(serverUrl);
+    return createTeamCityServerAndAgent(serverUrl, projectZipToInstall);
   }
 
-  public TeamCityContainers createTeamCityServerAndAgent(final String octopusServerUrl)
+  public TeamCityContainers createTeamCityServerAndAgent(final String octopusServerUrl, final Path projectZipToInstall)
       throws IOException {
 
-    setupDataDir(teamCityDataDir);
+    setupDataDir(teamCityDataDir, projectZipToInstall);
 
     // need to update the test directory to replace <param name="octopus_host"
     // value=<octopusServerUrl> />
@@ -66,7 +71,12 @@ public class TeamCityFactory {
 
     try {
       final GenericContainer<?> teamCityAgent = createAndStartAgent();
-      return new TeamCityContainers(teamCityServer, teamCityAgent);
+
+      final String tcServerUrlOnHost = String.format("http://localhost:%d",
+          teamCityServer.getFirstMappedPort());
+      final TeamCityInstance tcInstance = TeamCityInstanceFactory.httpAuth(tcServerUrlOnHost, USERNAME, PASSWORD);
+      authoriseAgents(tcInstance);
+      return new TeamCityContainers(teamCityServer, teamCityAgent, tcInstance);
     } catch (final Exception e) {
       teamCityServer.stop();
       throw e;
@@ -108,15 +118,13 @@ public class TeamCityFactory {
     Files.write(projectFilePath, updatedContent.getBytes(StandardCharsets.UTF_8));
   }
 
-  protected void setupDataDir(final Path teamCityDataDir) throws IOException {
+  protected void setupDataDir(final Path teamCityDataDir, final Path projectZipToInstall) throws IOException {
     LOG.info("starting test - teamcity data dir is at {}", teamCityDataDir);
     final URL teamcityInitialConfig = Resources.getResource("teamcity_config.zip");
     new ZipFile(new File(teamcityInitialConfig.getFile()).toString())
         .extractAll(teamCityDataDir.toAbsolutePath().toString());
 
-    final URL projectsImport = Resources.getResource("projects.zip");
-    new ZipFile(new File(projectsImport.getFile()).toString())
-        .extractAll(teamCityDataDir.toAbsolutePath().toString());
+    new ZipFile(projectZipToInstall.toString()).extractAll(teamCityDataDir.toAbsolutePath().toString());
 
     LOG.info("unzipped config into {}", teamCityDataDir);
     // teamcity_plugin_dist property will be set by gradle buildsystem
@@ -125,5 +133,13 @@ public class TeamCityFactory {
         Paths.get(pluginDistribution),
         teamCityDataDir.resolve("plugins").resolve("Octopus.Teamcity.zip"),
         StandardCopyOption.REPLACE_EXISTING);
+  }
+
+  private void authoriseAgents(final TeamCityInstance tcInstance) {
+    final Iterator<BuildAgent> iBuildAgent = tcInstance.buildAgents().all().iterator();
+    while (iBuildAgent.hasNext()) {
+      final BuildAgent agent = iBuildAgent.next();
+      agent.setAuthorized(true);
+    }
   }
 }
