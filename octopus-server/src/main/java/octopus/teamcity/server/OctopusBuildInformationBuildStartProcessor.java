@@ -1,5 +1,7 @@
 package octopus.teamcity.server;
 
+import java.util.List;
+
 import jetbrains.buildServer.ExtensionHolder;
 import jetbrains.buildServer.serverSide.BuildStartContext;
 import jetbrains.buildServer.serverSide.BuildStartContextProcessor;
@@ -8,14 +10,11 @@ import jetbrains.buildServer.serverSide.WebLinks;
 import jetbrains.buildServer.vcs.VcsRootInstanceEntry;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.List;
-
 public class OctopusBuildInformationBuildStartProcessor implements BuildStartContextProcessor {
 
   private final ExtensionHolder extensionHolder;
 
-  public OctopusBuildInformationBuildStartProcessor(@NotNull final ExtensionHolder extensionHolder,
-                                                    @NotNull final WebLinks webLinks) {
+  public OctopusBuildInformationBuildStartProcessor(@NotNull final ExtensionHolder extensionHolder, @NotNull final WebLinks webLinks) {
     this.extensionHolder = extensionHolder;
   }
 
