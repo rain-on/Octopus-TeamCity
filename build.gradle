@@ -44,6 +44,12 @@ allprojects {
     provided
   }
 
+  // this ensures SNAPSHOT versions are always pulled from maven repo (rather than using past
+  // cached version)
+  configurations.all {
+    resolutionStrategy.cacheChangingModulesFor 0, 'seconds'
+  }
+
   sourceSets {
     main { compileClasspath += configurations.provided }
   }

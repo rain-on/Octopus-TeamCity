@@ -1,6 +1,7 @@
 package octopus.teamcity.e2e.recordreplay;
 
 import java.io.IOException;
+import java.net.URL;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.Duration;
@@ -8,6 +9,7 @@ import java.time.Instant;
 import java.util.Collections;
 import java.util.Iterator;
 
+import com.google.common.io.Resources;
 import octopus.teamcity.e2e.dsl.TeamCityContainers;
 import octopus.teamcity.e2e.dsl.TeamCityFactory;
 import org.jetbrains.teamcity.rest.Build;
@@ -38,10 +40,12 @@ public abstract class BaseRecordReplay {
     // mock server will act as a proxy for creating logs, and a loopback when executing them
     mockServer = createMockServer();
 
-    teamCityContainers = tcFactory.createTeamCityServerWithHostBasedOctopus(mockServer.getPort());
+    final URL projectsImport = Resources.getResource("projects.zip");
+    teamCityContainers = tcFactory.createTeamCityServerAndAgent(mockServer.getPort(),
+        Path.of(projectsImport.getFile()));
 
     final String teamCityUrl =
-        String.format("http://localhost:%d", teamCityContainers.serverContainer.getFirstMappedPort());
+        String.format("http://localhost:%d", teamCityContainers.getServerContainer().getFirstMappedPort());
 
     final TeamCityInstance tcInstance = TeamCityInstance.httpAuth(teamCityUrl, USERNAME, PASSWORD);
 

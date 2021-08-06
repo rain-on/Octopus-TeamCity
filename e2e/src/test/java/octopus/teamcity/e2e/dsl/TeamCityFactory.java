@@ -38,14 +38,19 @@ public class TeamCityFactory {
     this.dockerNetwork = dockerNetwork;
   }
 
-  public TeamCityContainers createTeamCityServerWithHostBasedOctopus(final int octopusServerPort, final Path projectZipToInstall)
+  //when receiver of requests is on LOCALHOST
+  //Will also require the API Key to use
+  public TeamCityContainers createTeamCityServerAndAgent(final int octopusServerPort, final String octopusServerApiKey,
+      final Path projectZipToInstall)
       throws IOException {
     final String serverUrl = String.format("http://host.testcontainers.internal:%d", octopusServerPort);
     Testcontainers.exposeHostPorts(octopusServerPort);
-    return createTeamCityServerAndAgent(serverUrl, projectZipToInstall);
+    return createTeamCityServerAndAgent(serverUrl, octopusServerApiKey, projectZipToInstall);
   }
 
-  public TeamCityContainers createTeamCityServerAndAgent(final String octopusServerUrl, final Path projectZipToInstall)
+  //Will also require the API Key to use
+  public TeamCityContainers createTeamCityServerAndAgent(final String octopusServerUrl,
+      final String octopusServerApiKey, final Path projectZipToInstall)
       throws IOException {
 
     setupDataDir(teamCityDataDir, projectZipToInstall);
@@ -60,7 +65,7 @@ public class TeamCityFactory {
             "TeamCityTestProject",
             "buildTypes",
             "OctopusStepsWithVcs.xml");
-    updateProjectFilesWithOctopusServerEndpoint(projectFile, octopusServerUrl);
+    updateProjectFilesWithOctopusServerEndpoint(projectFile, octopusServerUrl, octopusServerApiKey);
 
     final GenericContainer<?> teamCityServer = createAndStartServer();
 
@@ -109,12 +114,17 @@ public class TeamCityFactory {
   }
 
   private void updateProjectFilesWithOctopusServerEndpoint(
-      final Path projectFilePath, final String httpEndpoint) throws IOException {
+      final Path projectFilePath, final String httpEndpoint, final String apiKey) throws IOException {
     final String projectContent = Files.readString(projectFilePath);
-    final String updatedContent =
+    String updatedContent =
         projectContent.replaceAll(
             "<param name=\"octopus_host\".*",
             "<param name=\"octopus_host\" value=\"" + httpEndpoint + "\" />");
+
+    updatedContent = updatedContent.replaceAll(
+        "<param name=\"secure:octopus_apikey\".*",
+        "<param name=\"secure:octopus_apikey\" value=\"" + apiKey + "\" />");
+
     Files.write(projectFilePath, updatedContent.getBytes(StandardCharsets.UTF_8));
   }
 
@@ -128,7 +138,7 @@ public class TeamCityFactory {
 
     LOG.info("unzipped config into {}", teamCityDataDir);
     // teamcity_plugin_dist property will be set by gradle buildsystem
-    final String pluginDistribution = System.getProperty("teamcity_plugin_dist");
+    final String pluginDistribution = System.getenv("teamcity_plugin_dist");
     Files.copy(
         Paths.get(pluginDistribution),
         teamCityDataDir.resolve("plugins").resolve("Octopus.Teamcity.zip"),
@@ -136,7 +146,7 @@ public class TeamCityFactory {
   }
 
   private void authoriseAgents(final TeamCityInstance tcInstance) {
-    final Iterator<BuildAgent> iBuildAgent = tcInstance.buildAgents().all().iterator();
+    final Iterator<BuildAgent> iBuildAgent = tcInstance.buildAgents().all(true).iterator();
     while (iBuildAgent.hasNext()) {
       final BuildAgent agent = iBuildAgent.next();
       agent.setAuthorized(true);
