@@ -32,52 +32,57 @@ public class TeamCityFactory {
     this.dockerNetwork = dockerNetwork;
   }
 
-  public TeamCityContainers createTeamCityServerAndAgent(final int octopusServerPort)
-      throws IOException {
+  public TeamCityContainers createTeamCityServerWithHostBasedOctopus(final int octopusServerPort) throws IOException {
+    final String serverUrl = String.format("http://host.testcontainers.internal:%d", octopusServerPort);
+    Testcontainers.exposeHostPorts(octopusServerPort);
+    return createTeamCityServerAndAgent(serverUrl);
+  }
+
+  public TeamCityContainers createTeamCityServerAndAgent(final String octopusServerUrl) throws IOException {
 
     setupDataDir(teamCityDataDir);
 
-    // need to update the test directory to replace <param name="octopus_host" value="http://localhost:8065" />
-    // with port that the mockServer is actually listening on.
-    final String mockServerEndpoint = String.format("http://host.testcontainers.internal:%d", octopusServerPort);
-    final Path projectFile =
-        teamCityDataDir.resolve("config").resolve("projects").resolve("TeamCityTestProject").resolve(
-            "buildTypes").resolve("OctopusStepsWithVcs.xml");
-    updateProjectFilesWithOctopusServerEndpoint(projectFile, mockServerEndpoint);
+    // need to update the test directory to replace <param name="octopus_host" value=<octopusServerUrl> />
+    final Path projectFile = Path.of(teamCityDataDir.toString(), "config", "projects", "TeamCityTestProject",
+        "buildTypes", "OctopusStepsWithVcs.xml");
+    updateProjectFilesWithOctopusServerEndpoint(projectFile, octopusServerUrl);
 
-    Testcontainers.exposeHostPorts(octopusServerPort);
+    final GenericContainer<?> teamCityServer = createAndStartServer();
 
+    final String teamCityUrl = String.format("http://%s:%d", teamCityServer.getHost(),
+        teamCityServer.getFirstMappedPort());
+    LOG.info("TeamCity server running on {}}", teamCityUrl);
+
+    try {
+      final GenericContainer<?> teamCityAgent = createAndStartAgent();
+      return new TeamCityContainers(teamCityServer, teamCityAgent);
+    } catch (final Exception e) {
+      teamCityServer.stop();
+      throw e;
+    }
+  }
+
+  private GenericContainer<?> createAndStartServer() {
     final GenericContainer<?> teamCityServer =
         new GenericContainer<>(DockerImageName.parse("jetbrains/teamcity-server"))
             .withExposedPorts(8111)
             .waitingFor(Wait.forLogMessage(".*Super user authentication token.*", 1))
             .withNetwork(dockerNetwork)
             .withNetworkAliases("server")
-            .withEnv("TEAMCITY_SERVER_OPTS", "-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=5011")
             .withStartupTimeout(Duration.ofMinutes(2));
     teamCityServer.withFileSystemBind(teamCityDataDir.toAbsolutePath().toString(), "/data/teamcity_server/datadir");
 
     teamCityServer.start();
-    GenericContainer<?> teamCityAgent = null;
-    try {
+    return teamCityServer;
+  }
 
-      final String teamCityUrl = String.format("http://%s:%d", teamCityServer.getHost(),
-          teamCityServer.getFirstMappedPort());
-      LOG.info("TeamCity server running on {}}", teamCityUrl);
-
-      teamCityAgent = new GenericContainer<>(DockerImageName.parse("jetbrains/teamcity-agent"))
-          .withExposedPorts(5010)
-          .withNetwork(dockerNetwork)
-          .withEnv("SERVER_URL", "http://server:8111")
-          .withEnv("TEAMCITY_AGENT_OPTS", "-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=5010")
-          .waitingFor(Wait.forLogMessage(".*jetbrains.buildServer.AGENT - Agent name was.*", 1));
-      teamCityAgent.start();
-    } catch (final Exception e) {
-      teamCityServer.stop();
-      throw e;
-    }
-
-    return new TeamCityContainers(teamCityServer, teamCityAgent);
+  private GenericContainer<?> createAndStartAgent() {
+    final GenericContainer<?> teamCityAgent =  new GenericContainer<>(DockerImageName.parse("jetbrains/teamcity-agent"))
+        .withNetwork(dockerNetwork)
+        .withEnv("SERVER_URL", "http://server:8111")
+        .waitingFor(Wait.forLogMessage(".*jetbrains.buildServer.AGENT - Agent name was.*", 1));
+    teamCityAgent.start();
+    return teamCityAgent;
   }
 
   private void updateProjectFilesWithOctopusServerEndpoint(final Path projectFilePath, final String httpEndpoint) throws

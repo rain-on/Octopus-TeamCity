@@ -34,7 +34,7 @@ import java.net.URL;
 import java.time.Duration;
 import java.time.Instant;
 
-// This is copied from the octopus-java-sdk
+// This is copied from the octopus-java-sdk (REALLY should put it somewhere common) - or publish it to maven.
 public class OctopusDeployServer {
 
   private static final Logger LOG = LoggerFactory.getLogger(OctopusDeployServer.class);
@@ -83,9 +83,8 @@ public class OctopusDeployServer {
     return apiKey;
   }
 
-  public static OctopusDeployServer createOctopusServer() throws IOException {
+  public static OctopusDeployServer createOctopusServer(final Network network) throws IOException {
 
-    final Network network = Network.newNetwork();
     final GenericContainer<?> msSqlContainer =
         new GenericContainer<>(DockerImageName.parse(MS_SQL_IMAGE))
             .withExposedPorts(1433)
