@@ -31,7 +31,7 @@ public class BuildInformationTest {
 
   protected static final String USERNAME = "admin";
   protected static final String PASSWORD = "Password01!";
-  
+
   @Test
   public void buildInformationStepPublishesToOctopusDeploy(@TempDir Path teamcityDataDir)
       throws IOException, InterruptedException {
