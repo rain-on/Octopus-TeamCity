@@ -1,7 +1,6 @@
 package octopus.teamcity.e2e.test;
 
 import com.google.common.io.Resources;
-import octopus.teamcity.e2e.dsl.OctopusDeployServer;
 import octopus.teamcity.e2e.dsl.TeamCityContainers;
 import octopus.teamcity.e2e.dsl.TeamCityFactory;
 import org.apache.logging.log4j.LogManager;
@@ -28,10 +27,14 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class AllBuildStepTest {
 
   private static final Logger LOG = LogManager.getLogger();
+  protected static String apiKey = "API-D62EQ9I4EVET1E2LJUBKEHLNBYWMO3";
+
+  // These tests assume an Octopus Server exists at a defined location - with an existing internal structure (spaces
+  // projects, packages etc).
 
   @Test
   public void buildInformationStepPublishesToOctopusDeploy(@TempDir Path teamcityDataDir)
-      throws IOException, InterruptedException {
+      throws InterruptedException, IOException {
     final URL projectsImport = Resources.getResource("projects.zip");
 
     final Network network = Network.newNetwork();
@@ -39,7 +42,7 @@ public class AllBuildStepTest {
 
     final TeamCityFactory tcFactory = new TeamCityFactory(teamcityDataDir, network);
     final TeamCityContainers teamCityContainers =
-        tcFactory.createTeamCityServerAndAgent(8065, Path.of(projectsImport.getFile()));
+        tcFactory.createTeamCityServerAndAgent(8065, apiKey, Path.of(projectsImport.getFile()));
 
     final TeamCityInstance tcRestApi = teamCityContainers.getRestAPi();
 

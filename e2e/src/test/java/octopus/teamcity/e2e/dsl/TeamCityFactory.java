@@ -13,6 +13,7 @@ import java.util.Iterator;
 
 import com.google.common.io.Resources;
 import net.lingala.zip4j.ZipFile;
+import octopus.teamcity.common.OctopusConstants;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jetbrains.teamcity.rest.BuildAgent;
@@ -65,7 +66,7 @@ public class TeamCityFactory {
             "TeamCityTestProject",
             "buildTypes",
             "OctopusStepsWithVcs.xml");
-    updateProjectFilesWithOctopusServerEndpoint(projectFile, octopusServerUrl, octopusServerApiKey);
+    updateProjectFile(projectFile, octopusServerUrl, octopusServerApiKey);
 
     final GenericContainer<?> teamCityServer = createAndStartServer();
 
@@ -113,19 +114,19 @@ public class TeamCityFactory {
     return teamCityAgent;
   }
 
-  private void updateProjectFilesWithOctopusServerEndpoint(
-      final Path projectFilePath, final String httpEndpoint, final String apiKey) throws IOException {
-    final String projectContent = Files.readString(projectFilePath);
-    String updatedContent =
-        projectContent.replaceAll(
-            "<param name=\"octopus_host\".*",
-            "<param name=\"octopus_host\" value=\"" + httpEndpoint + "\" />");
+  private void updateProjectFile(final Path projectFilePath, final String httpEndpoint, final String apiKey) throws IOException {
+    String projectContent = Files.readString(projectFilePath);
+    projectContent = updateField(projectContent, OctopusConstants.Instance.getServerKey(), httpEndpoint);
+    projectContent = updateField(projectContent, OctopusConstants.Instance.getApiKey(), apiKey);
 
-    updatedContent = updatedContent.replaceAll(
-        "<param name=\"secure:octopus_apikey\".*",
-        "<param name=\"secure:octopus_apikey\" value=\"" + apiKey + "\" />");
+    Files.write(projectFilePath, projectContent.getBytes(StandardCharsets.UTF_8));
+  }
 
-    Files.write(projectFilePath, updatedContent.getBytes(StandardCharsets.UTF_8));
+  private static  String updateField(final String input, final String fieldName, final String newValue) {
+    final String prefix = "<param name=\"" + fieldName + "\"";
+    return input.replaceAll(
+        prefix + ".*",
+        prefix + "value=\"" + newValue + "\" />");
   }
 
   protected void setupDataDir(final Path teamCityDataDir, final Path projectZipToInstall) throws IOException {

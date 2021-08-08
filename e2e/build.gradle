@@ -1,5 +1,8 @@
 
 dependencies {
+
+  testImplementation(project(':octopus-common'))
+
   testImplementation 'com.octopus:octopus-sdk'
   testImplementation 'com.octopus:octopus-openapi-wrapper'
 
