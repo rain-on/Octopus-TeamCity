@@ -15,13 +15,11 @@
 
 package octopus.teamcity.agent.pushpackage;
 
-import com.octopus.testsupport.OctopusDeployServer;
-
 import org.junit.jupiter.api.Test;
 
 class PushPackageUploaderTest {
 
-  final OctopusDeployServer server = null;
+  // final OctopusDeployServer server = null;
 
   @Test
   public void doesThisWorkInMyArea() {
