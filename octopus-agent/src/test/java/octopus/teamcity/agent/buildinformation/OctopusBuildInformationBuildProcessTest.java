@@ -15,29 +15,28 @@
 
 package octopus.teamcity.agent.buildinformation;
 
-import com.octopus.sdk.operations.buildinformation.BuildInformationUploader;
-import com.octopus.sdk.operations.buildinformation.BuildInformationUploaderContext;
-import jetbrains.buildServer.RunBuildException;
-import jetbrains.buildServer.agent.AgentRunningBuild;
-import jetbrains.buildServer.agent.BuildRunnerContext;
-import octopus.teamcity.common.OverwriteMode;
-import octopus.teamcity.common.buildinfo.BuildInfoKeys;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.ArgumentCaptor;
-import org.mockito.junit.jupiter.MockitoExtension;
-
-import java.io.IOException;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
-
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+
+import com.octopus.sdk.operations.buildinformation.BuildInformationUploader;
+import com.octopus.sdk.operations.buildinformation.BuildInformationUploaderContext;
+
+import java.io.IOException;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
+
+import jetbrains.buildServer.RunBuildException;
+import jetbrains.buildServer.agent.AgentRunningBuild;
+import jetbrains.buildServer.agent.BuildRunnerContext;
+import octopus.teamcity.common.OverwriteMode;
+import octopus.teamcity.common.buildinfo.BuildInfoKeys;
+import org.junit.jupiter.api.Test;
+import org.mockito.ArgumentCaptor;
 
 class OctopusBuildInformationBuildProcessTest {
 
@@ -49,9 +48,11 @@ class OctopusBuildInformationBuildProcessTest {
   @Test
   public void doSomething() throws IOException, RunBuildException {
     final Map<String, String> userEnteredData = new HashMap<>();
-    userEnteredData.put(BuildInfoKeys.Keys.OVERWRITE_MODE.getKeyString(), OverwriteMode.OverwriteExisting.name());
+    userEnteredData.put(
+        BuildInfoKeys.Keys.OVERWRITE_MODE.getKeyString(), OverwriteMode.OverwriteExisting.name());
     userEnteredData.put(BuildInfoKeys.Keys.PACKAGE_VERSION.getKeyString(), "1.0");
-    userEnteredData.put(BuildInfoKeys.Keys.PACKAGE_IDS.getKeyString(), "mypackage.first\nmypackage.second");
+    userEnteredData.put(
+        BuildInfoKeys.Keys.PACKAGE_IDS.getKeyString(), "mypackage.first\nmypackage.second");
 
     final Map<String, String> sharedConfigParameters = new HashMap<>();
     sharedConfigParameters.put("octopus_vcstype", "git");
@@ -60,7 +61,6 @@ class OctopusBuildInformationBuildProcessTest {
 
     when(mockBuild.getBuildNumber()).thenReturn("BuildNumber");
     when(mockBuild.getSharedConfigParameters()).thenReturn(sharedConfigParameters);
-
 
     when(vcsData.getBranchName()).thenReturn("BranchName");
     when(vcsData.getCommits()).thenReturn(Collections.emptyList());
@@ -78,7 +78,7 @@ class OctopusBuildInformationBuildProcessTest {
         ArgumentCaptor.forClass(BuildInformationUploaderContext.class);
     verify(uploader.upload(contextCaptor.capture()), times(2));
 
-    assertThat(contextCaptor.getAllValues().get(0).getBranch().get()).isEqualTo(vcsData.getBranchName());
-
+    assertThat(contextCaptor.getAllValues().get(0).getBranch().get())
+        .isEqualTo(vcsData.getBranchName());
   }
 }

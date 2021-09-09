@@ -18,6 +18,13 @@ package octopus.teamcity.agent.buildinformation;
 import com.octopus.sdk.operations.buildinformation.BuildInformationUploader;
 import com.octopus.sdk.operations.buildinformation.BuildInformationUploaderContext;
 import com.octopus.sdk.operations.buildinformation.BuildInformationUploaderContextBuilder;
+
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+
 import jetbrains.buildServer.RunBuildException;
 import jetbrains.buildServer.agent.AgentRunningBuild;
 import jetbrains.buildServer.agent.BuildFinishedStatus;
@@ -27,12 +34,6 @@ import octopus.teamcity.agent.InterruptableBuildProcess;
 import octopus.teamcity.agent.generic.TypeConverters;
 import octopus.teamcity.common.buildinfo.BuildInfoUserData;
 import octopus.teamcity.common.commonstep.CommonStepUserData;
-
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 
 public class OctopusBuildInformationBuildProcess extends InterruptableBuildProcess {
 
@@ -55,7 +56,8 @@ public class OctopusBuildInformationBuildProcess extends InterruptableBuildProce
   public void start() throws RunBuildException {
     try {
       buildLogger.message("Collating data for upload");
-      final List<BuildInformationUploaderContext> buildInformationContexts = collateBuildInformation();
+      final List<BuildInformationUploaderContext> buildInformationContexts =
+          collateBuildInformation();
 
       if (isInterrupted()) {
         complete(BuildFinishedStatus.INTERRUPTED);
@@ -83,7 +85,6 @@ public class OctopusBuildInformationBuildProcess extends InterruptableBuildProce
     final BuildInfoUserData buildInfoUserData = new BuildInfoUserData(parameters);
     final String buildId = Long.toString(runningBuild.getBuildId());
 
-
     final BuildInformationUploaderContextBuilder buildInfoBuilder =
         new BuildInformationUploaderContextBuilder()
             .withBuildEnvironment("TeamCity")
@@ -94,13 +95,15 @@ public class OctopusBuildInformationBuildProcess extends InterruptableBuildProce
             .withVcsCommitNumber(sharedConfigParameters.get("build.vcs.number"))
             .withBranch(buildVcsData.getBranchName())
             .withCommits(buildVcsData.getCommits())
-            .withBuildUrl(new URL(runningBuild.getAgentConfiguration().getServerUrl() + "/viewLog.html?buildId=" + buildId))
+            .withBuildUrl(
+                new URL(
+                    runningBuild.getAgentConfiguration().getServerUrl()
+                        + "/viewLog.html?buildId="
+                        + buildId))
             .withBuildNumber(runningBuild.getBuildNumber())
             .withOverwriteMode(TypeConverters.from(buildInfoUserData.getOverwriteMode()));
 
-
-    return buildInfoUserData.getPackageIds()
-        .stream()
+    return buildInfoUserData.getPackageIds().stream()
         .map(packageId -> buildInfoBuilder.withPackageId(packageId).build())
         .collect(Collectors.toList());
   }
@@ -118,6 +121,5 @@ public class OctopusBuildInformationBuildProcess extends InterruptableBuildProce
     }
 
     return allUploadsSuccessful;
-
   }
 }

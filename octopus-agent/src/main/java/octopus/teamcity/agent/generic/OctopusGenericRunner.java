@@ -16,14 +16,11 @@
 
 package octopus.teamcity.agent.generic;
 
-import static com.octopus.sdk.http.OctopusClientFactory.createClient;
 import static jetbrains.buildServer.messages.DefaultMessagesInfo.BLOCK_TYPE_BUILD_STEP;
+import static octopus.teamcity.agent.generic.in_sdk.OctopusClientFactory.createClient;
 
-import com.octopus.sdk.http.ConnectData;
 import com.octopus.sdk.http.OctopusClient;
 import com.octopus.sdk.operations.buildinformation.BuildInformationUploader;
-import com.octopus.sdk.operations.buildinformation.OctopusBuildInformationUploader;
-import com.octopus.sdk.operations.pushpackage.PushPackageUploader;
 
 import java.net.MalformedURLException;
 
@@ -38,10 +35,11 @@ import jetbrains.buildServer.agent.BuildRunnerContext;
 import octopus.teamcity.agent.buildinformation.BaseBuildVcsData;
 import octopus.teamcity.agent.buildinformation.BuildVcsData;
 import octopus.teamcity.agent.buildinformation.OctopusBuildInformationBuildProcess;
+import octopus.teamcity.agent.generic.in_sdk.ConnectData;
 import octopus.teamcity.agent.pushpackage.OctopusPushPackageBuildProcess;
+import octopus.teamcity.agent.pushpackage.in_sdk.PushPackageUploader;
 import octopus.teamcity.common.OctopusConstants;
 import octopus.teamcity.common.commonstep.CommonStepUserData;
-import okhttp3.OkHttpClient;
 import org.jetbrains.annotations.NotNull;
 
 public class OctopusGenericRunner implements AgentBuildRunner {
@@ -87,8 +85,6 @@ public class OctopusGenericRunner implements AgentBuildRunner {
   private OctopusClient createOctopusClient(final CommonStepUserData userData)
       throws RunBuildException {
     try {
-
-      final OkHttpClient client;
       final ConnectData connection = TypeConverters.from(userData);
       return createClient(connection);
     } catch (final MalformedURLException e) {
@@ -108,7 +104,7 @@ public class OctopusGenericRunner implements AgentBuildRunner {
         final BaseBuildVcsData buildVcsData = BuildVcsData.create(runningBuild);
         return new OctopusBuildInformationBuildProcess(uploader, buildVcsData, context);
       case ("push-package"):
-        final PushPackageUploader pushPackageUploader = new PushPackageUploader(client);
+        final PushPackageUploader pushPackageUploader = PushPackageUploader.create(client);
         return new OctopusPushPackageBuildProcess(pushPackageUploader, runningBuild, context);
       default:
         throw new RunBuildException("Unknown build step type " + stepType);

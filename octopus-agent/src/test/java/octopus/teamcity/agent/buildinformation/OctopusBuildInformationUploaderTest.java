@@ -15,36 +15,4 @@
 
 package octopus.teamcity.agent.buildinformation;
 
-import static java.util.Collections.emptyMap;
-import static java.util.Collections.singletonList;
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-
-import com.octopus.sdk.http.OctopusClient;
-import com.octopus.sdk.http.RequestEndpoint;
-import com.octopus.sdk.model.RootDocument;
-import com.octopus.sdk.model.buildinformation.OctopusPackageVersionBuildInformationMappedResource;
-import com.octopus.sdk.model.spaces.SpaceOverviewPaginatedCollection;
-import com.octopus.sdk.model.spaces.SpaceOverviewWithLinks;
-
-import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URISyntaxException;
-import java.net.URL;
-import java.util.HashMap;
-import java.util.Map;
-
-import octopus.teamcity.common.OverwriteMode;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.mockito.ArgumentCaptor;
-
-class OctopusBuildInformationUploaderTest {
-
-}
+class OctopusBuildInformationUploaderTest {}

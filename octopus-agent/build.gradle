@@ -32,7 +32,7 @@ dependencies {
   testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine'
   testRuntimeOnly 'org.jetbrains.teamcity:agent-api'
 
-  testImplementation group: 'com.octopus', name:'dsl', classifier: 'test-support'
+  //testImplementation group: 'com.octopus', name:'dsl', classifier: 'test-support'
 }
 
 distZip {

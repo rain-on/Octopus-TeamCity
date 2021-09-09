@@ -17,11 +17,8 @@ package octopus.teamcity.agent.pushpackage;
 
 import static octopus.teamcity.agent.pushpackage.FileSelector.getMatchingFiles;
 
-import com.octopus.sdk.operations.pushpackage.PushPackageParameters;
-import com.octopus.sdk.operations.pushpackage.PushPackageParametersBuilder;
-import com.octopus.sdk.operations.pushpackage.PushPackageUploader;
-
 import java.io.File;
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
@@ -33,6 +30,9 @@ import jetbrains.buildServer.agent.BuildProgressLogger;
 import jetbrains.buildServer.agent.BuildRunnerContext;
 import octopus.teamcity.agent.InterruptableBuildProcess;
 import octopus.teamcity.agent.generic.TypeConverters;
+import octopus.teamcity.agent.pushpackage.in_sdk.PushPackageUploader;
+import octopus.teamcity.agent.pushpackage.in_sdk.PushPackageUploaderContext;
+import octopus.teamcity.agent.pushpackage.in_sdk.PushPackageUploaderContextBuilder;
 import octopus.teamcity.common.commonstep.CommonStepUserData;
 import octopus.teamcity.common.pushpackage.PushPackageUserData;
 import org.jetbrains.annotations.NotNull;
@@ -56,14 +56,24 @@ public class OctopusPushPackageBuildProcess extends InterruptableBuildProcess {
   public void start() throws RunBuildException {
     try {
       buildLogger.message("Collating data for upload");
-      final PushPackageParameters parameters = collateParameters();
+      final List<PushPackageUploaderContext> parameters = collateParameters();
 
       if (isInterrupted()) {
         complete(BuildFinishedStatus.INTERRUPTED);
         return;
       }
 
-      if (uploader.upload(parameters)) {
+      boolean success = true;
+      for (final PushPackageUploaderContext c : parameters) {
+        try {
+          uploader.upload(c);
+        } catch (IOException e) {
+          e.printStackTrace();
+          success = false;
+        }
+      }
+
+      if (success) {
         complete(BuildFinishedStatus.FINISHED_SUCCESS);
         return;
       }
@@ -73,7 +83,8 @@ public class OctopusPushPackageBuildProcess extends InterruptableBuildProcess {
     }
   }
 
-  private PushPackageParameters collateParameters() {
+  private List<PushPackageUploaderContext> collateParameters() {
+    final List<PushPackageUploaderContext> result = Lists.newArrayList();
     final Map<String, String> parameters = context.getRunnerParameters();
     final CommonStepUserData commonStepUserData = new CommonStepUserData(parameters);
     final PushPackageUserData pushPackageUserData = new PushPackageUserData(parameters);
@@ -88,14 +99,20 @@ public class OctopusPushPackageBuildProcess extends InterruptableBuildProcess {
       throw new IllegalStateException("No files found which match supplied glob");
     }
 
-    buildLogger.message("Files found to upload:");
-    filesToUpload.forEach(f -> buildLogger.message("- " + f.getName()));
+    final PushPackageUploaderContextBuilder pushPackageUploaderContextBuilder =
+        new PushPackageUploaderContextBuilder()
+            .withSpaceName(commonStepUserData.getSpaceName())
+            .withOverwriteMode(TypeConverters.from(pushPackageUserData.getOverwriteMode()));
 
-    return new PushPackageParametersBuilder()
-        .withSpaceName(commonStepUserData.getSpaceName())
-        .withFilesToUpload(filesToUpload)
-        .withOverwriteMode(TypeConverters.from(pushPackageUserData.getOverwriteMode()))
-        .build();
+    buildLogger.message("Files found to upload:");
+    filesToUpload.forEach(
+        f -> {
+          buildLogger.message("- " + f.getName());
+          pushPackageUploaderContextBuilder.withFileToUpload(f);
+          result.add(pushPackageUploaderContextBuilder.build());
+        });
+
+    return result;
   }
 
   private List<File> determineFilesToUpload(final String globs) {

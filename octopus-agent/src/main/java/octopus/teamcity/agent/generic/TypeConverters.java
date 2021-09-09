@@ -16,13 +16,13 @@
 package octopus.teamcity.agent.generic;
 
 import com.octopus.sdk.api.OverwriteMode;
-import com.octopus.sdk.http.ConnectData;
-import com.octopus.sdk.http.ConnectDataBuilder;
-import com.octopus.sdk.http.ProxyData;
 
 import java.net.MalformedURLException;
 import java.net.URL;
 
+import octopus.teamcity.agent.generic.in_sdk.ConnectData;
+import octopus.teamcity.agent.generic.in_sdk.ConnectDataBuilder;
+import octopus.teamcity.agent.generic.in_sdk.ProxyData;
 import octopus.teamcity.common.commonstep.CommonStepUserData;
 
 public class TypeConverters {
@@ -42,14 +42,14 @@ public class TypeConverters {
   /** This assumes the userData contains correctly formatted strings * */
   public static ConnectData from(final CommonStepUserData userData) throws MalformedURLException {
     final ConnectDataBuilder builder = new ConnectDataBuilder();
-    builder.setOctopusServerUrl(new URL(userData.getServerUrl())).setApiKey(userData.getApiKey());
+    builder.withOctopusServerUrl(new URL(userData.getServerUrl())).withApiKey(userData.getApiKey());
     if (userData.getProxyRequired()) {
       final ProxyData proxy =
           new ProxyData(
               new URL(userData.getProxyServerUrl()),
               userData.getProxyUsername(),
               userData.getProxyPassword());
-      builder.setProxy(proxy);
+      builder.withProxy(proxy);
     }
 
     return builder.build();
