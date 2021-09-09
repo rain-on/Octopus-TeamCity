@@ -1,8 +1,8 @@
 dependencyManagement {
 
     dependencies {
-        dependency 'com.octopus:octopus-sdk:9.9.9'
-        dependency 'com.octopus:octopus-openapi-wrapper:9.9.9'
+
+        dependency 'com.octopus:octopus-sdk:0.0.1-SNAPSHOT'
 
         dependencySet(group: 'org.apache.logging.log4j', version: '2.14.1') {
             entry 'log4j-api'
