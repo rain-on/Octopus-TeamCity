@@ -76,7 +76,7 @@ class OctopusBuildInformationBuildProcessTest {
 
     final ArgumentCaptor<BuildInformationUploaderContext> contextCaptor =
         ArgumentCaptor.forClass(BuildInformationUploaderContext.class);
-    verify(uploader.upload(contextCaptor.capture()), times(2));
+    verify(uploader, times(2)).upload(contextCaptor.capture());
 
     assertThat(contextCaptor.getAllValues().get(0).getBranch().get())
         .isEqualTo(vcsData.getBranchName());
