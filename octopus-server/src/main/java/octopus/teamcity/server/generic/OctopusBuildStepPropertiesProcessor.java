@@ -57,13 +57,6 @@ public class OctopusBuildStepPropertiesProcessor implements PropertiesProcessor 
             .orElseThrow(
                 () -> new IllegalArgumentException("No matching validation for selected command")));
 
-    // TODO:tmm Prevent usage of the Step Vnext until agent-side is complete (this can then be
-    // removed
-    result.add(
-        new InvalidProperty(
-            KEYS.getStepTypePropertyName(),
-            "Octopus' generic build runner is not yet ready for use in a build process"));
-
     return result;
   }
 

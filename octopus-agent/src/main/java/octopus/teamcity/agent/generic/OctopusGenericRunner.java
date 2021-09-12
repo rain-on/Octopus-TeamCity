@@ -16,18 +16,33 @@
 
 package octopus.teamcity.agent.generic;
 
+import static jetbrains.buildServer.messages.DefaultMessagesInfo.BLOCK_TYPE_BUILD_STEP;
+
+import com.octopus.sdk.http.ConnectData;
+import com.octopus.sdk.http.OctopusClient;
+import com.octopus.sdk.http.OctopusClientFactory;
+import com.octopus.sdk.operations.buildinformation.BuildInformationUploader;
+
+import java.net.MalformedURLException;
+
+import jetbrains.buildServer.RunBuildException;
 import jetbrains.buildServer.agent.AgentBuildRunner;
 import jetbrains.buildServer.agent.AgentBuildRunnerInfo;
 import jetbrains.buildServer.agent.AgentRunningBuild;
 import jetbrains.buildServer.agent.BuildAgentConfiguration;
-import jetbrains.buildServer.agent.BuildFinishedStatus;
 import jetbrains.buildServer.agent.BuildProcess;
 import jetbrains.buildServer.agent.BuildProgressLogger;
 import jetbrains.buildServer.agent.BuildRunnerContext;
+import octopus.teamcity.agent.buildinformation.BaseBuildVcsData;
+import octopus.teamcity.agent.buildinformation.BuildVcsData;
+import octopus.teamcity.agent.buildinformation.OctopusBuildInformationBuildProcess;
 import octopus.teamcity.common.OctopusConstants;
+import octopus.teamcity.common.commonstep.CommonStepUserData;
 import org.jetbrains.annotations.NotNull;
 
 public class OctopusGenericRunner implements AgentBuildRunner {
+
+  private static final String ACTIVITY_NAME = "OctopusDeploy";
 
   @NotNull
   @Override
@@ -49,35 +64,42 @@ public class OctopusGenericRunner implements AgentBuildRunner {
   @NotNull
   @Override
   public BuildProcess createBuildProcess(
-      @NotNull final AgentRunningBuild runningBuild, @NotNull final BuildRunnerContext context) {
+      @NotNull final AgentRunningBuild runningBuild, @NotNull final BuildRunnerContext context)
+      throws RunBuildException {
 
     final BuildProgressLogger logger = runningBuild.getBuildLogger();
+    final CommonStepUserData commonStepUserData =
+        new CommonStepUserData(context.getRunnerParameters());
 
-    return new BuildProcess() {
-      @Override
-      public void start() {
-        logger.buildFailureDescription(
-            "Octopus Generic Runner is not yet ready for use, please use existing steps");
-      }
+    final String activityName = ACTIVITY_NAME + " - " + commonStepUserData.getStepType();
+    logger.activityStarted(activityName, BLOCK_TYPE_BUILD_STEP);
 
-      @Override
-      public boolean isInterrupted() {
-        return false;
-      }
+    try {
+      logger.message(
+          "Creating connection to Octopus server @ "
+              + commonStepUserData.getServerUrl().toString());
+      final ConnectData connection = TypeConverters.from(commonStepUserData);
+      final OctopusClient client = OctopusClientFactory.createClient(connection);
+      return createBuildProcess(commonStepUserData.getStepType(), client, runningBuild, context);
+    } catch (final MalformedURLException e) {
+      throw new RunBuildException("Unable to decode supplied Octopus Server URL");
+    }
+  }
 
-      @Override
-      public boolean isFinished() {
-        return true;
-      }
+  private BuildProcess createBuildProcess(
+      final String stepType,
+      final OctopusClient client,
+      final AgentRunningBuild runningBuild,
+      final BuildRunnerContext context)
+      throws RunBuildException {
 
-      @Override
-      public void interrupt() {}
-
-      @NotNull
-      @Override
-      public BuildFinishedStatus waitFor() {
-        return BuildFinishedStatus.FINISHED_FAILED;
-      }
-    };
+    switch (stepType) {
+      case ("build-information"):
+        final BuildInformationUploader uploader = BuildInformationUploader.create(client);
+        final BaseBuildVcsData buildVcsData = BuildVcsData.create(runningBuild);
+        return new OctopusBuildInformationBuildProcess(uploader, buildVcsData, context);
+      default:
+        throw new RunBuildException("Unknown build step type " + stepType);
+    }
   }
 }

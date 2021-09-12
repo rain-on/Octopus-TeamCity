@@ -90,7 +90,7 @@ public class OctopusGenericRunType extends RunType {
 
     final Optional<String> space = commonStepUserData.getSpaceName();
     builder.append("Space: ");
-    builder.append(space.isPresent() ? "<default space>" : space);
+      builder.append(!space.isPresent() ? "<default space>" : space);
     builder.append("\n");
 
     if (commonStepUserData.getProxyRequired()) {

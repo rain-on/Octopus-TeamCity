@@ -4,6 +4,7 @@ dependencies {
   testImplementation(project(':octopus-common'))
 
   testImplementation 'com.octopus:octopus-sdk'
+  testImplementation 'com.octopus:test-support'
 
   testImplementation 'com.google.code.gson:gson'
 

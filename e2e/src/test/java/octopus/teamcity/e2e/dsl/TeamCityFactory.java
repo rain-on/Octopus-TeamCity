@@ -13,7 +13,7 @@ import java.util.Iterator;
 
 import com.google.common.io.Resources;
 import net.lingala.zip4j.ZipFile;
-import octopus.teamcity.common.OctopusConstants;
+import octopus.teamcity.common.commonstep.CommonStepPropertyNames;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jetbrains.teamcity.rest.BuildAgent;
@@ -39,8 +39,7 @@ public class TeamCityFactory {
     this.dockerNetwork = dockerNetwork;
   }
 
-  // when receiver of requests is on LOCALHOST
-  // Will also require the API Key to use
+  // when the OctopusServer is on LOCALHOST (i.e. not dockerised)
   public TeamCityContainers createTeamCityServerAndAgent(
       final int octopusServerPort, final String octopusServerApiKey, final Path projectZipToInstall)
       throws IOException {
@@ -50,7 +49,7 @@ public class TeamCityFactory {
     return createTeamCityServerAndAgent(serverUrl, octopusServerApiKey, projectZipToInstall);
   }
 
-  // Will also require the API Key to use
+  // When OctopusServer's URL can be fully specified
   public TeamCityContainers createTeamCityServerAndAgent(
       final String octopusServerUrl,
       final String octopusServerApiKey,
@@ -62,13 +61,13 @@ public class TeamCityFactory {
     // need to update the test directory to replace <param name="octopus_host"
     // value=<octopusServerUrl> />
     final Path projectFile =
-        Path.of(
+        Paths.get(
             teamCityDataDir.toString(),
             "config",
             "projects",
-            "TeamCityTestProject",
+            "StepVnext",
             "buildTypes",
-            "OctopusStepsWithVcs.xml");
+            "StepVnext_ExecuteBuildInfo.xml");
     updateProjectFile(projectFile, octopusServerUrl, octopusServerApiKey);
 
     final GenericContainer<?> teamCityServer = createAndStartServer();
@@ -76,7 +75,7 @@ public class TeamCityFactory {
     final String teamCityUrl =
         String.format(
             "http://%s:%d", teamCityServer.getHost(), teamCityServer.getFirstMappedPort());
-    LOG.info("TeamCity server running on {}}", teamCityUrl);
+    LOG.info("TeamCity server running on {}", teamCityUrl);
 
     try {
       final GenericContainer<?> teamCityAgent = createAndStartAgent();
@@ -121,17 +120,16 @@ public class TeamCityFactory {
   private void updateProjectFile(
       final Path projectFilePath, final String httpEndpoint, final String apiKey)
       throws IOException {
-    String projectContent = Files.readString(projectFilePath);
-    projectContent =
-        updateField(projectContent, OctopusConstants.Instance.getServerKey(), httpEndpoint);
-    projectContent = updateField(projectContent, OctopusConstants.Instance.getApiKey(), apiKey);
+    String projectContent = new String(Files.readAllBytes(projectFilePath), StandardCharsets.UTF_8);
+    projectContent = updateField(projectContent, CommonStepPropertyNames.SERVER_URL, httpEndpoint);
+    projectContent = updateField(projectContent, CommonStepPropertyNames.API_KEY, apiKey);
 
     Files.write(projectFilePath, projectContent.getBytes(StandardCharsets.UTF_8));
   }
 
   private static String updateField(
       final String input, final String fieldName, final String newValue) {
-    final String prefix = "<param name=\"" + fieldName + "\"";
+    final String prefix = "<param name=\"" + fieldName + "\" ";
     return input.replaceAll(prefix + ".*", prefix + "value=\"" + newValue + "\" />");
   }
 
@@ -148,6 +146,11 @@ public class TeamCityFactory {
     LOG.info("unzipped config into {}", teamCityDataDir);
     // teamcity_plugin_dist property will be set by gradle buildsystem
     final String pluginDistribution = System.getenv("teamcity_plugin_dist");
+    if (pluginDistribution == null) {
+      throw new RuntimeException(
+          "teamcity_plugin_dist env var has not been set - it should reference an installable "
+              + "zip");
+    }
     Files.copy(
         Paths.get(pluginDistribution),
         teamCityDataDir.resolve("plugins").resolve("Octopus.Teamcity.zip"),

@@ -13,22 +13,12 @@
  * specific language governing permissions and limitations under the License.
  */
 
-package octopus.teamcity.common;
+package octopus.teamcity.e2e.test;
 
-import java.util.Map;
+import org.junit.jupiter.api.Test;
 
-public class BaseUserData {
-  protected final Map<String, String> params;
+public class BuildInformationEndToEndTest {
 
-  public BaseUserData(final Map<String, String> params) {
-    this.params = params;
-  }
-
-  protected String fetchRaw(final String key) {
-    final String mapContent = params.get(key);
-    if (mapContent == null) {
-      throw new IllegalArgumentException("Property map does not contain an entry for " + key);
-    }
-    return mapContent;
-  }
+  @Test
+  public void buildInformationIsPropagatedToOctopusServer() {}
 }
