@@ -26,3 +26,6 @@ jobs:
         run: ./gradlew distZip
       - name: Execute end-2-end tests
         run: ./gradlew e2etest
+        env:
+          OCTOPUS_LICENSE: ${{ secrets.OCTOPUS_LICENSE }}
+          OCTOPUS_SDK_AT_USE_EXISTING_SERVER: false
