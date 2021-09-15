@@ -13,8 +13,16 @@ tasks.named('jar') {
 }
 
 dependencies {
-  implementation project(':octopus-common')
   provided 'org.jetbrains.teamcity:server-api'
+
+  implementation project(':octopus-common')
+  implementation 'com.octopus:octopus-sdk'
+
+  testImplementation 'org.jetbrains.teamcity:server-api'
+  testImplementation 'org.junit.jupiter:junit-jupiter-api'
+  testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine'
+  testImplementation 'org.junit.jupiter:junit-jupiter-params'
+  testImplementation 'org.assertj:assertj-core'
 }
 
 distributions {
