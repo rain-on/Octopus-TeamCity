@@ -31,6 +31,7 @@ task e2eTest(type: Test) {
   mustRunAfter rootProject.subprojects*.test
   environment "TEAMCITY_PLUGIN_DIST", rootProject.distZip.outputs.files.singleFile
   environment "OCTOPUS_SDK_AT_USE_EXISTING_SERVER", "false"
+  environment "TESTCONTAINERS_CHECKS_DISABLE", "true"
 
   description = 'Runs the Octopus Teamcity end-2-end tests.'
   group = 'verification'
