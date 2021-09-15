@@ -19,6 +19,8 @@ import com.octopus.sdk.operations.buildinformation.BuildInformationUploader;
 import com.octopus.sdk.operations.buildinformation.BuildInformationUploaderContext;
 import com.octopus.sdk.operations.buildinformation.BuildInformationUploaderContextBuilder;
 
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.List;
@@ -117,6 +119,11 @@ public class OctopusBuildInformationBuildProcess extends InterruptableBuildProce
       } catch (final Throwable t) {
         allUploadsSuccessful = false;
         buildLogger.error("Upload of information failed for packageId: " + context.getPackageId());
+        buildLogger.error(t.getMessage());
+        final StringWriter sw = new StringWriter();
+        final PrintWriter pw = new PrintWriter(sw);
+        t.printStackTrace(pw);
+        buildLogger.debug(pw.toString());
       }
     }
 
