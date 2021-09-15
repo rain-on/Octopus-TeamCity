@@ -34,7 +34,7 @@ import jetbrains.buildServer.RunBuildException;
 import jetbrains.buildServer.agent.AgentRunningBuild;
 import jetbrains.buildServer.agent.BuildRunnerContext;
 import octopus.teamcity.common.OverwriteMode;
-import octopus.teamcity.common.buildinfo.BuildInfoKeys;
+import octopus.teamcity.common.buildinfo.BuildInfoPropertyNames;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 
@@ -49,10 +49,9 @@ class OctopusBuildInformationBuildProcessTest {
   public void doSomething() throws IOException, RunBuildException {
     final Map<String, String> userEnteredData = new HashMap<>();
     userEnteredData.put(
-        BuildInfoKeys.Keys.OVERWRITE_MODE.getKeyString(), OverwriteMode.OverwriteExisting.name());
-    userEnteredData.put(BuildInfoKeys.Keys.PACKAGE_VERSION.getKeyString(), "1.0");
-    userEnteredData.put(
-        BuildInfoKeys.Keys.PACKAGE_IDS.getKeyString(), "mypackage.first\nmypackage.second");
+        BuildInfoPropertyNames.OVERWRITE_MODE, OverwriteMode.OverwriteExisting.name());
+    userEnteredData.put(BuildInfoPropertyNames.PACKAGE_VERSION, "1.0");
+    userEnteredData.put(BuildInfoPropertyNames.PACKAGE_IDS, "mypackage.first\nmypackage.second");
 
     final Map<String, String> sharedConfigParameters = new HashMap<>();
     sharedConfigParameters.put("octopus_vcstype", "git");
