@@ -53,9 +53,7 @@ public class BuildVcsData implements BaseBuildVcsData {
 
     final List<Commit> commits = new ArrayList<>();
     for (Change change : changes) {
-
-      final Commit c = new Commit(change.getVersion(), change.getComment());
-      commits.add(c);
+      commits.add(new Commit(change.getVersion(), change.getComment()));
     }
 
     return commits;
