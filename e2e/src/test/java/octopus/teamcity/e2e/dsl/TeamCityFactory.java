@@ -145,10 +145,10 @@ public class TeamCityFactory {
 
     LOG.info("unzipped config into {}", teamCityDataDir);
     // teamcity_plugin_dist property will be set by gradle buildsystem
-    final String pluginDistribution = System.getenv("teamcity_plugin_dist");
+    final String pluginDistribution = System.getenv("TEAMCITY_PLUGIN_DIST");
     if (pluginDistribution == null) {
       throw new RuntimeException(
-          "teamcity_plugin_dist env var has not been set - it should reference an installable "
+          "TEAMCITY_PLUGIN_DIST env var has not been set - it should reference an installable "
               + "zip");
     }
     Files.copy(

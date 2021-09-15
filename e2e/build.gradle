@@ -23,3 +23,21 @@ dependencies {
   testImplementation 'org.jetbrains.teamcity:teamcity-rest-client'
   testImplementation 'org.mock-server:mockserver-netty'
 }
+
+test.enabled = false
+
+task e2eTest(type: Test) {
+
+  mustRunAfter rootProject.subprojects*.test
+  environment "TEAMCITY_PLUGIN_DIST", rootProject.distZip.outputs.files.singleFile
+  description = 'Runs the Octopus Teamcity end-2-end tests.'
+  group = 'verification'
+  useJUnitPlatform()
+  outputs.upToDateWhen { false }
+
+
+  testLogging {
+    showStandardStreams = true
+    exceptionFormat = 'full'
+  }
+}
