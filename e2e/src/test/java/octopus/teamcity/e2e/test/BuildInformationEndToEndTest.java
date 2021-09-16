@@ -25,13 +25,9 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.nio.file.attribute.FileAttribute;
-import java.nio.file.attribute.PosixFilePermission;
-import java.nio.file.attribute.PosixFilePermissions;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.List;
-import java.util.Set;
 
 import com.google.common.io.Resources;
 import octopus.teamcity.e2e.dsl.TeamCityContainers;
@@ -76,10 +72,8 @@ public class BuildInformationEndToEndTest {
     spacesOverviewApi.create(newSpace);
 
     // This is required to ensure docker container (run as tcuser) is able to write
-    Path teamcityDataDir = testDirectory.resolve("teamcityDataDir");
-    Set<PosixFilePermission> allRWX = PosixFilePermissions.fromString("rwxrwxrwx");
-    FileAttribute<?> permissions = PosixFilePermissions.asFileAttribute(allRWX);
-    teamcityDataDir = Files.createDirectory(teamcityDataDir, permissions);
+    Path teamcityDataDir = testDirectory.resolve("teamcitydata");
+    Files.createDirectories(teamcityDataDir);
     teamcityDataDir.toFile().setWritable(true, false);
 
     final TeamCityFactory tcFactory = new TeamCityFactory(teamcityDataDir, network);

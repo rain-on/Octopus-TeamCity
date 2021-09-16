@@ -2,6 +2,7 @@ package octopus.teamcity.e2e.dsl;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -42,7 +43,7 @@ public class TeamCityFactory {
 
   public TeamCityContainers createTeamCityServerAndAgent(
       final int octopusServerPort, final String octopusServerApiKey, final Path projectZipToInstall)
-      throws IOException {
+      throws IOException, URISyntaxException {
     final String serverUrl =
         String.format("http://host.testcontainers.internal:%d", octopusServerPort);
     Testcontainers.exposeHostPorts(octopusServerPort);
@@ -54,7 +55,7 @@ public class TeamCityFactory {
       final String octopusServerUrl,
       final String octopusServerApiKey,
       final Path projectZipToInstall)
-      throws IOException {
+      throws IOException, URISyntaxException {
 
     setupDataDir(teamCityDataDir, projectZipToInstall);
 
@@ -99,6 +100,9 @@ public class TeamCityFactory {
             // .waitingFor(Wait.forLogMessage(".*Super user authentication token.*", 1))
             .withNetwork(dockerNetwork)
             .withNetworkAliases("server")
+            .withEnv(
+                "TEAMCITY_SERVER_OPTS",
+                "-Droot.log.level=TRACE -Dteamcity.development.mode=true -Djava.awt.headless=true")
             .withStartupTimeout(Duration.ofMinutes(2));
     teamCityServer.withFileSystemBind(
         teamCityDataDir.toAbsolutePath().toString(),
@@ -137,10 +141,10 @@ public class TeamCityFactory {
   }
 
   protected void setupDataDir(final Path teamCityDataDir, final Path projectZipToInstall)
-      throws IOException {
+      throws IOException, URISyntaxException {
     LOG.info("starting test - teamcity data dir is at {}", teamCityDataDir);
     final URL teamcityInitialConfig = Resources.getResource("teamcity_config.zip");
-    new ZipFile(new File(teamcityInitialConfig.getFile()).toString())
+    new ZipFile(new File(teamcityInitialConfig.toURI()).toString())
         .extractAll(teamCityDataDir.toAbsolutePath().toString());
 
     new ZipFile(projectZipToInstall.toString())
