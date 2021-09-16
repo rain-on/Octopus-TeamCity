@@ -10,8 +10,9 @@
 <jsp:useBean id="propertiesBean" scope="request"
              type="jetbrains.buildServer.controllers.BasePropertiesBean"/>
 
-<c:set var="selectedOctopusVersion"
-       value="${propertiesBean.properties['octopus_version']}"/>
+<c:set var="selectedOctopusVersion" value="${propertiesBean.properties['octopus_version']}"/>
+<c:set var="proxyServerUrl" value="${propertiesBean.properties[keys.proxyServerUrlPropertyName]}"/>
+<c:set var="proxyServerUser" value="${propertiesBean.properties[keys.proxyUsernamePropertyName]}"/>
 
 <div class="parameter">
     Octopus URL:
@@ -24,6 +25,30 @@
 </div>
 
 <div class="parameter">
+    Proxy server required:
+    <strong><props:displayValue name="${keys.proxyRequiredPropertyName}" emptyValue="not specified"/></strong>
+</div>
+
+<c:if test="${proxyServerUrl ne null and proxyServerUrl ne ''}">
+    <div class="parameter">
+        Proxy server URL:
+        <strong><props:displayValue name="${keys.proxyServerUrlPropertyName}" emptyValue="not specified"/></strong>
+    </div>
+</c:if>
+
+<c:if test="${proxyServerUser ne null and proxyServerUser ne ''}">
+    <div class="parameter">
+        Proxy server username:
+        <strong><props:displayValue name="${keys.proxyUsernamePropertyName}" emptyValue="not specified"/></strong>
+    </div>
+</c:if>
+
+<div class="parameter">
+    Verbose logging:
+    <strong><props:displayValue name="${keys.verboseLoggingPropertyName}" emptyValue="false"/></strong>
+</div>
+
+<div class="parameter">
     Sub command:
     <strong><props:displayValue name="${keys.stepTypePropertyName}" emptyValue="not specified"/></strong>
 </div>
@@ -33,8 +58,3 @@
         <jsp:include page="${teamcityPluginResourcesPath}/v2/subpages/${type.viewPage}"/>
     </c:if>
 </c:forEach>
-
-<div class="parameter">
-    Verbose logging:
-    <strong><props:displayValue name="${keys.verboseLoggingPropertyName}" emptyValue="false"/></strong>
-</div>
