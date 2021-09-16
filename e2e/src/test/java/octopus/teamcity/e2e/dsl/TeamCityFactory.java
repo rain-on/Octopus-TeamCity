@@ -96,12 +96,14 @@ public class TeamCityFactory {
     final GenericContainer<?> teamCityServer =
         new GenericContainer<>(DockerImageName.parse("jetbrains/teamcity-server"))
             .withExposedPorts(8111)
-            //.waitingFor(Wait.forLogMessage(".*Super user authentication token.*", 1))
+            // .waitingFor(Wait.forLogMessage(".*Super user authentication token.*", 1))
             .withNetwork(dockerNetwork)
             .withNetworkAliases("server")
             .withStartupTimeout(Duration.ofMinutes(2));
     teamCityServer.withFileSystemBind(
-        teamCityDataDir.toAbsolutePath().toString(), "/data/teamcity_server/datadir", BindMode.READ_WRITE);
+        teamCityDataDir.toAbsolutePath().toString(),
+        "/data/teamcity_server/datadir",
+        BindMode.READ_WRITE);
 
     teamCityServer.start();
     return teamCityServer;
