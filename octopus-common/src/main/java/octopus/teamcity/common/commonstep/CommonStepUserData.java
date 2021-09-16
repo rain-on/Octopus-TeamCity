@@ -23,7 +23,7 @@ import java.util.Optional;
 import octopus.teamcity.common.BaseUserData;
 
 /**
- * Assumes that the params passed in are correctly formatted and can be immediate converted to the
+ * Assumes that the params passed in are correctly formatted and can be immediately converted to the
  * appropriate types (URL/Boolean), as the map was verified as part of the TeamCity
  * PropertiesValidator
  */
@@ -54,7 +54,7 @@ public class CommonStepUserData extends BaseUserData {
 
   public boolean getProxyRequired() {
     final String rawInput = fetchRaw(KEYS.getProxyRequiredPropertyName());
-    return Boolean.getBoolean(rawInput);
+    return Boolean.parseBoolean(rawInput);
   }
 
   public URL getProxyServerUrl() throws MalformedURLException {
