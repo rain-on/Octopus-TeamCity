@@ -33,3 +33,8 @@
         <jsp:include page="${teamcityPluginResourcesPath}/v2/subpages/${type.viewPage}"/>
     </c:if>
 </c:forEach>
+
+<div class="parameter">
+    Verbose logging:
+    <strong><props:displayValue name="${keys.verboseLoggingPropertyName}" emptyValue="false"/></strong>
+</div>
