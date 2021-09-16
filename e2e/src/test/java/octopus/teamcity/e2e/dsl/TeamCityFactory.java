@@ -20,6 +20,7 @@ import org.jetbrains.teamcity.rest.BuildAgent;
 import org.jetbrains.teamcity.rest.TeamCityInstance;
 import org.jetbrains.teamcity.rest.TeamCityInstanceFactory;
 import org.testcontainers.Testcontainers;
+import org.testcontainers.containers.BindMode;
 import org.testcontainers.containers.GenericContainer;
 import org.testcontainers.containers.Network;
 import org.testcontainers.containers.wait.strategy.Wait;
@@ -95,12 +96,12 @@ public class TeamCityFactory {
     final GenericContainer<?> teamCityServer =
         new GenericContainer<>(DockerImageName.parse("jetbrains/teamcity-server"))
             .withExposedPorts(8111)
-            .waitingFor(Wait.forLogMessage(".*Super user authentication token.*", 1))
+            //.waitingFor(Wait.forLogMessage(".*Super user authentication token.*", 1))
             .withNetwork(dockerNetwork)
             .withNetworkAliases("server")
             .withStartupTimeout(Duration.ofMinutes(2));
     teamCityServer.withFileSystemBind(
-        teamCityDataDir.toAbsolutePath().toString(), "/data/teamcity_server/datadir");
+        teamCityDataDir.toAbsolutePath().toString(), "/data/teamcity_server/datadir", BindMode.READ_WRITE);
 
     teamCityServer.start();
     return teamCityServer;
@@ -111,7 +112,8 @@ public class TeamCityFactory {
         new GenericContainer<>(DockerImageName.parse("jetbrains/teamcity-agent"))
             .withNetwork(dockerNetwork)
             .withEnv("SERVER_URL", "http://server:8111")
-            .waitingFor(Wait.forLogMessage(".*jetbrains.buildServer.AGENT - Agent name was.*", 1));
+            .waitingFor(Wait.forLogMessage(".*jetbrains.buildServer.AGENT - Agent name was.*", 1))
+            .withStartupTimeout(Duration.ofMinutes(2));
     teamCityAgent.start();
     return teamCityAgent;
   }
