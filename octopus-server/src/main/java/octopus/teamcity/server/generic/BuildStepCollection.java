@@ -11,7 +11,8 @@ import octopus.teamcity.common.OverwriteMode;
 public class BuildStepCollection implements Serializable {
 
   private final List<OctopusBuildStep> octopusBuildSteps =
-      Stream.of(new BuildInformationStep()).collect(Collectors.toList());
+      Stream.of(new BuildInformationStep(), new CreateDeploymentStep())
+          .collect(Collectors.toList());
 
   public BuildStepCollection() {}
 
@@ -21,6 +22,6 @@ public class BuildStepCollection implements Serializable {
 
   public Map<String, String> getOverwriteModes() {
     return Stream.of(OverwriteMode.values())
-        .collect(Collectors.toMap(Enum::toString, OverwriteMode::getHumanReadable));
+        .collect(Collectors.toMap(Enum<OverwriteMode>::toString, OverwriteMode::getHumanReadable));
   }
 }
