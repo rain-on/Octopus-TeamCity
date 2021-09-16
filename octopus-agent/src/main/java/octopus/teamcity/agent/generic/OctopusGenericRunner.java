@@ -36,6 +36,7 @@ import jetbrains.buildServer.agent.BuildRunnerContext;
 import octopus.teamcity.agent.buildinformation.BaseBuildVcsData;
 import octopus.teamcity.agent.buildinformation.BuildVcsData;
 import octopus.teamcity.agent.buildinformation.OctopusBuildInformationBuildProcess;
+import octopus.teamcity.agent.createdeployment.OctopusCreateDeploymentBuildProcess;
 import octopus.teamcity.common.OctopusConstants;
 import octopus.teamcity.common.commonstep.CommonStepUserData;
 import org.jetbrains.annotations.NotNull;
@@ -98,6 +99,8 @@ public class OctopusGenericRunner implements AgentBuildRunner {
         final BuildInformationUploader uploader = BuildInformationUploader.create(client);
         final BaseBuildVcsData buildVcsData = BuildVcsData.create(runningBuild);
         return new OctopusBuildInformationBuildProcess(uploader, buildVcsData, context);
+      case ("create-deployment"):
+        return new OctopusCreateDeploymentBuildProcess(context);
       default:
         throw new RunBuildException("Unknown build step type " + stepType);
     }
