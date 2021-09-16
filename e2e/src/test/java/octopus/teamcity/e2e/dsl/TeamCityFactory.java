@@ -101,13 +101,12 @@ public class TeamCityFactory {
             .withNetwork(dockerNetwork)
             .withNetworkAliases("server")
             .withEnv(
-                "TEAMCITY_SERVER_OPTS",
-                "-Droot.log.level=TRACE -Dteamcity.development.mode=true -Djava.awt.headless=true")
-            .withStartupTimeout(Duration.ofMinutes(2));
-    teamCityServer.withFileSystemBind(
-        teamCityDataDir.toAbsolutePath().toString(),
-        "/data/teamcity_server/datadir",
-        BindMode.READ_WRITE);
+                "TEAMCITY_SERVER_OPTS", "-Droot.log.level=TRACE -Dteamcity.development.mode=true")
+            .withStartupTimeout(Duration.ofMinutes(2))
+            .withFileSystemBind(
+                teamCityDataDir.toAbsolutePath().toString(),
+                "/data/teamcity_server/datadir",
+                BindMode.READ_WRITE);
 
     teamCityServer.start();
     return teamCityServer;
@@ -119,7 +118,7 @@ public class TeamCityFactory {
             .withNetwork(dockerNetwork)
             .withEnv("SERVER_URL", "http://server:8111")
             .waitingFor(Wait.forLogMessage(".*jetbrains.buildServer.AGENT - Agent name was.*", 1))
-            .withStartupTimeout(Duration.ofMinutes(2));
+            .withStartupTimeout(Duration.ofMinutes(5));
     teamCityAgent.start();
     return teamCityAgent;
   }
