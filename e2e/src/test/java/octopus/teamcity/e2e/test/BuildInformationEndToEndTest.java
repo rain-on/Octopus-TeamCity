@@ -24,13 +24,9 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.nio.file.attribute.FileAttribute;
-import java.nio.file.attribute.PosixFilePermission;
-import java.nio.file.attribute.PosixFilePermissions;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.List;
-import java.util.Set;
 
 import com.google.common.io.Resources;
 import octopus.teamcity.e2e.dsl.TeamCityContainers;
@@ -55,7 +51,7 @@ public class BuildInformationEndToEndTest {
   private final String SPACE_NAME = "My Space";
 
   @Test
-  public void buildInformationStepPublishesToOctopusDeploy(@TempDir Path testDirectory)
+  public void buildInformationStepPublishesToOctopusDeploy(@TempDir Path teamcityDataDir)
       throws InterruptedException, IOException {
     final URL projectsImport = Resources.getResource("TeamCity_StepVnext.zip");
 
@@ -73,11 +69,6 @@ public class BuildInformationEndToEndTest {
     newSpace.setName(SPACE_NAME);
     newSpace.setSpaceManagersTeamMembers(singleton(users.getCurrentUser().getId()));
     spacesOverviewApi.create(newSpace);
-
-    final Path teamcityDataDir = testDirectory.resolve("teamcityDataDir");
-    Set<PosixFilePermission> allRWC = PosixFilePermissions.fromString("rwxrwxrwx");
-    FileAttribute<?> permissions = PosixFilePermissions.asFileAttribute(allRWC);
-    Files.createDirectories(teamcityDataDir, permissions);
 
     final TeamCityFactory tcFactory = new TeamCityFactory(teamcityDataDir, network);
 
