@@ -19,6 +19,7 @@ import com.octopus.testsupport.OctopusDeployServerFactory;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -56,7 +57,7 @@ public class BuildInformationEndToEndTest {
 
   @Test
   public void buildInformationStepPublishesToOctopusDeploy(@TempDir Path testDirectory)
-      throws InterruptedException, IOException {
+      throws InterruptedException, IOException, URISyntaxException {
     final URL projectsImport = Resources.getResource("TeamCity_StepVnext.zip");
 
     final Network network = Network.newNetwork();
@@ -85,7 +86,7 @@ public class BuildInformationEndToEndTest {
 
     final TeamCityContainers teamCityContainers =
         tcFactory.createTeamCityServerAndAgent(
-            octoServer.getPort(), octoServer.getApiKey(), Paths.get(projectsImport.getFile()));
+            octoServer.getPort(), octoServer.getApiKey(), Paths.get(projectsImport.toURI()));
 
     final TeamCityInstance tcRestApi = teamCityContainers.getRestAPi();
 

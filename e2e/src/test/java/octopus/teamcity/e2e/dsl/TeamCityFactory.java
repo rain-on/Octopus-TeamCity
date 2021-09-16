@@ -39,7 +39,6 @@ public class TeamCityFactory {
     this.dockerNetwork = dockerNetwork;
   }
 
-  // when the OctopusServer is on LOCALHOST (i.e. not dockerised)
   public TeamCityContainers createTeamCityServerAndAgent(
       final int octopusServerPort, final String octopusServerApiKey, final Path projectZipToInstall)
       throws IOException {
