@@ -13,22 +13,15 @@
  * specific language governing permissions and limitations under the License.
  */
 
-package octopus.teamcity.common;
+package octopus.teamcity.agent.buildinformation;
 
-import java.util.Map;
+import com.octopus.sdk.operations.buildinformation.Commit;
 
-public class BaseUserData {
-  protected final Map<String, String> params;
+import java.util.List;
 
-  public BaseUserData(final Map<String, String> params) {
-    this.params = params;
-  }
+public interface BaseBuildVcsData {
 
-  protected String fetchRaw(final String key) {
-    final String mapContent = params.get(key);
-    if (mapContent == null) {
-      throw new IllegalArgumentException("Property map does not contain an entry for " + key);
-    }
-    return mapContent;
-  }
+  List<Commit> getCommits();
+
+  String getBranchName();
 }
