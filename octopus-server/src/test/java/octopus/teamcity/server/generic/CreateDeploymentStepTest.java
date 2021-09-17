@@ -77,8 +77,8 @@ class CreateDeploymentStepTest {
     assertNotNull(invalidProperties);
     assertEquals(1, invalidProperties.size());
     assertEquals(
-            "At least one environment name/id must be specified.",
-            invalidProperties.get(0).getInvalidReason());
+        "At least one environment name/id must be specified.",
+        invalidProperties.get(0).getInvalidReason());
   }
 
   @Test
