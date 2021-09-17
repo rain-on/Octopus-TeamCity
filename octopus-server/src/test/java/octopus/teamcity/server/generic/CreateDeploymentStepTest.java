@@ -2,7 +2,6 @@ package octopus.teamcity.server.generic;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.util.HashMap;
 import java.util.List;
@@ -24,22 +23,23 @@ class CreateDeploymentStepTest {
   }
 
   @Test
-  public void validatePropertiesReturnsIllegalArgumentExceptionOnNullPropertyValue() {
-    Map<String, String> properties = buildPropertiesMap();
-    properties.put(CreateDeploymentPropertyNames.PROJECT_NAME_OR_ID, null);
-
-    final IllegalArgumentException exception =
-        assertThrows(IllegalArgumentException.class, () -> step.validateProperties(properties));
-    assertEquals(
-        "Property map does not contain an entry for octopus_cd_project-name-or-id",
-        exception.getMessage());
-  }
-
-  @Test
   public void validatePropertiesReturnsEmptyInvalidPropertiesListWithValidProperties() {
     List<InvalidProperty> invalidProperties = step.validateProperties(buildPropertiesMap());
     assertNotNull(invalidProperties);
     assertEquals(0, invalidProperties.size());
+  }
+
+  @Test
+  public void validatePropertiesReturnsSingleInvalidPropertyOnNullProjectNameOrId() {
+    Map<String, String> properties = buildPropertiesMap();
+    properties.put(CreateDeploymentPropertyNames.PROJECT_NAME_OR_ID, null);
+
+    List<InvalidProperty> invalidProperties = step.validateProperties(properties);
+    assertNotNull(invalidProperties);
+    assertEquals(1, invalidProperties.size());
+    assertEquals(
+        "A project name/id must be specified and cannot be whitespace.",
+        invalidProperties.get(0).getInvalidReason());
   }
 
   @Test
@@ -56,15 +56,15 @@ class CreateDeploymentStepTest {
   }
 
   @Test
-  public void validatePropertiesReturnsSingleInvalidPropertyOnWhitespaceProjectNameOrId() {
+  public void validatePropertiesReturnsSingleInvalidPropertyOnNullEnvironments() {
     Map<String, String> properties = buildPropertiesMap();
-    properties.put(CreateDeploymentPropertyNames.PROJECT_NAME_OR_ID, " ");
+    properties.put(CreateDeploymentPropertyNames.ENVIRONMENT_IDS_OR_NAMES, null);
 
     List<InvalidProperty> invalidProperties = step.validateProperties(properties);
     assertNotNull(invalidProperties);
     assertEquals(1, invalidProperties.size());
     assertEquals(
-        "A project name/id must be specified and cannot be whitespace.",
+        "At least one environment name/id must be specified.",
         invalidProperties.get(0).getInvalidReason());
   }
 
@@ -77,15 +77,15 @@ class CreateDeploymentStepTest {
     assertNotNull(invalidProperties);
     assertEquals(1, invalidProperties.size());
     assertEquals(
-        "At least one environment name/id must be specified.",
-        invalidProperties.get(0).getInvalidReason());
+            "At least one environment name/id must be specified.",
+            invalidProperties.get(0).getInvalidReason());
   }
 
   @Test
   public void
       validatePropertiesReturnsSingleInvalidPropertyOnEnvironmentsWithWhitespaceIdentifiers() {
     Map<String, String> properties = buildPropertiesMap();
-    properties.put(CreateDeploymentPropertyNames.ENVIRONMENT_IDS_OR_NAMES, " ");
+    properties.put(CreateDeploymentPropertyNames.ENVIRONMENT_IDS_OR_NAMES, "env1\n \nenv3");
 
     List<InvalidProperty> invalidProperties = step.validateProperties(properties);
     assertNotNull(invalidProperties);
@@ -96,9 +96,9 @@ class CreateDeploymentStepTest {
   }
 
   @Test
-  public void validatePropertiesReturnsSingleInvalidPropertyOnEmptyReleaseVersion() {
+  public void validatePropertiesReturnsSingleInvalidPropertyOnNullReleaseVersion() {
     Map<String, String> properties = buildPropertiesMap();
-    properties.put(CreateDeploymentPropertyNames.RELEASE_VERSION, "");
+    properties.put(CreateDeploymentPropertyNames.RELEASE_VERSION, null);
 
     List<InvalidProperty> invalidProperties = step.validateProperties(properties);
     assertNotNull(invalidProperties);
@@ -109,9 +109,9 @@ class CreateDeploymentStepTest {
   }
 
   @Test
-  public void validatePropertiesReturnsSingleInvalidPropertyOnWhitespaceReleaseVersion() {
+  public void validatePropertiesReturnsSingleInvalidPropertyOnEmptyReleaseVersion() {
     Map<String, String> properties = buildPropertiesMap();
-    properties.put(CreateDeploymentPropertyNames.RELEASE_VERSION, " ");
+    properties.put(CreateDeploymentPropertyNames.RELEASE_VERSION, "");
 
     List<InvalidProperty> invalidProperties = step.validateProperties(properties);
     assertNotNull(invalidProperties);

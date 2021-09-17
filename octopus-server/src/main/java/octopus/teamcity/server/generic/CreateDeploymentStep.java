@@ -35,23 +35,24 @@ public class CreateDeploymentStep extends OctopusBuildStep {
   @Override
   public List<InvalidProperty> validateProperties(Map<String, String> properties) {
     final List<InvalidProperty> failedProperties = Lists.newArrayList();
-    final CreateDeploymentUserData userData = new CreateDeploymentUserData(properties);
 
-    if (StringUtil.isEmpty(userData.getProjectNameOrId().trim())) {
+    if (StringUtil.isEmpty(properties.getOrDefault(KEYS.getProjectNameOrIdPropertyName(), ""))) {
       failedProperties.add(
           new InvalidProperty(
               KEYS.getProjectNameOrIdPropertyName(),
               "A project name/id must be specified and cannot be whitespace."));
     }
 
-    final List<String> environmentIdentifiers = userData.getEnvironmentIdsOrNames();
-    if (environmentIdentifiers.isEmpty()) {
+    final String environmentIdentifiers =
+        properties.getOrDefault(KEYS.getEnvironmentIdsOrNamesPropertyName(), "");
+    if (StringUtil.isEmpty(environmentIdentifiers)) {
       failedProperties.add(
           new InvalidProperty(
               KEYS.getEnvironmentIdsOrNamesPropertyName(),
               "At least one environment name/id must be specified."));
     } else {
-      for (String identifier : environmentIdentifiers) {
+      List<String> environments = StringUtil.split(environmentIdentifiers, "\n");
+      for (String identifier : environments) {
         if (StringUtil.isEmpty(identifier.trim())) {
           failedProperties.add(
               new InvalidProperty(
@@ -62,7 +63,7 @@ public class CreateDeploymentStep extends OctopusBuildStep {
       }
     }
 
-    if (StringUtil.isEmpty(userData.getReleaseVersion().trim())) {
+    if (StringUtil.isEmpty(properties.getOrDefault(KEYS.getReleaseVersionPropertyName(), ""))) {
       failedProperties.add(
           new InvalidProperty(
               KEYS.getReleaseVersionPropertyName(),
