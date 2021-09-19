@@ -54,6 +54,7 @@ public class BuildInformationEndToEndTest {
   @Test
   public void buildInformationStepPublishesToOctopusDeploy(@TempDir Path testDirectory)
       throws InterruptedException, IOException, URISyntaxException {
+
     final URL projectsImport = Resources.getResource("TeamCity_StepVnext.zip");
 
     final Network network = Network.newNetwork();
@@ -72,7 +73,7 @@ public class BuildInformationEndToEndTest {
     spacesOverviewApi.create(newSpace);
 
     // This is required to ensure docker container (run as tcuser) is able to write
-    Path teamcityDataDir = testDirectory.resolve("teamcitydata");
+    final Path teamcityDataDir = testDirectory.resolve("teamcitydata");
     Files.createDirectories(teamcityDataDir);
     teamcityDataDir.toFile().setWritable(true, false);
 
@@ -82,30 +83,56 @@ public class BuildInformationEndToEndTest {
         tcFactory.createTeamCityServerAndAgent(
             octoServer.getPort(), octoServer.getApiKey(), Paths.get(projectsImport.toURI()));
 
-    final TeamCityInstance tcRestApi = teamCityContainers.getRestAPi();
+    try {
+      final TeamCityInstance tcRestApi = teamCityContainers.getRestAPi();
 
-    final BuildConfiguration buildConf =
-        tcRestApi.buildConfiguration(new BuildConfigurationId("StepVnext_ExecuteBuildInfo"));
-    final Build build =
-        buildConf.runBuild(emptyMap(), true, true, true, "My Test build run", null, false);
+      final BuildConfiguration buildConf =
+          tcRestApi.buildConfiguration(new BuildConfigurationId("StepVnext_ExecuteBuildInfo"));
+      final Build build =
+          buildConf.runBuild(emptyMap(), true, true, true, "My Test build run", null, false);
 
-    waitForBuildToFinish(build, tcRestApi);
+      waitForBuildToFinish(build, tcRestApi);
 
-    final File logDump = teamcityDataDir.resolve("build.log").toFile();
-    build.downloadBuildLog(logDump);
-    final String logData = new String(Files.readAllBytes(logDump.toPath()), StandardCharsets.UTF_8);
-    LOG.info(teamCityContainers.getAgentContainer().getLogs());
+      final File logDump = teamcityDataDir.resolve("build.log").toFile();
+      build.downloadBuildLog(logDump);
+      final String logData =
+          new String(Files.readAllBytes(logDump.toPath()), StandardCharsets.UTF_8);
+      LOG.info(teamCityContainers.getAgentContainer().getLogs());
 
-    assertThat(build.getStatus()).withFailMessage(() -> logData).isEqualTo(BuildStatus.SUCCESS);
+      assertThat(build.getStatus()).withFailMessage(() -> logData).isEqualTo(BuildStatus.SUCCESS);
 
-    final SpaceHomeApi spaceHomeApi = new SpaceHomeApi(client);
-    final SpaceHome spaceHome = spaceHomeApi.getByName(SPACE_NAME);
-    final BuildInformationApi buildInfoApi = BuildInformationApi.create(client, spaceHome);
-    final List<OctopusPackageVersionBuildInformationMappedResource> items =
-        buildInfoApi.getByQuery(emptyMap());
+      final SpaceHomeApi spaceHomeApi = new SpaceHomeApi(client);
+      final SpaceHome spaceHome = spaceHomeApi.getByName(SPACE_NAME);
+      final BuildInformationApi buildInfoApi = BuildInformationApi.create(client, spaceHome);
+      final List<OctopusPackageVersionBuildInformationMappedResource> items =
+          buildInfoApi.getByQuery(emptyMap());
 
-    assertThat(items.size()).isEqualTo(1);
-    assertThat(items.get(0).getPackageId()).isEqualTo("mypackage.noreally");
+      assertThat(items.size()).isEqualTo(1);
+      assertThat(items.get(0).getPackageId()).isEqualTo("mypackage.noreally");
+    } finally {
+      // Turns out, some files get written to this directory by TC (as the tcuser) - and they need
+      // to be destroyed.
+      teamCityContainers
+          .getServerContainer()
+          .execInContainer("rm", "-rf", "/data/teamcity_server/datadir/system/buildserver.tmp");
+      teamCityContainers
+          .getServerContainer()
+          .execInContainer("rm", "-rf", "/data/teamcity_server/datadir/system/artifacts");
+      teamCityContainers
+          .getServerContainer()
+          .execInContainer(
+              "rm", "-rf", "/data/teamcity_server/datadir/system/caches/plugins.unpacked");
+      teamCityContainers
+          .getServerContainer()
+          .execInContainer(
+              "rm", "-rf", "/data/teamcity_server/datadir/system/caches/pluginsDslCache/src");
+      teamCityContainers
+          .getServerContainer()
+          .execInContainer(
+              "rm",
+              "-rf",
+              "/data/teamcity_server/datadir/system/caches/buildsMetadata/metadataDB.tmp");
+    }
   }
 
   private void waitForBuildToFinish(final Build build, final TeamCityInstance tcRestApi)
