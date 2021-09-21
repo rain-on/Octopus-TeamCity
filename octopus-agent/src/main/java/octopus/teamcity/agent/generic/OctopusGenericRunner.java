@@ -37,37 +37,34 @@ import jetbrains.buildServer.agent.BuildRunnerContext;
 import octopus.teamcity.agent.buildinformation.BaseBuildVcsData;
 import octopus.teamcity.agent.buildinformation.BuildVcsData;
 import octopus.teamcity.agent.buildinformation.OctopusBuildInformationBuildProcess;
+import octopus.teamcity.agent.createrelease.OctopusCreateReleaseBuildProcess;
 import octopus.teamcity.agent.pushpackage.FileSelector;
 import octopus.teamcity.agent.pushpackage.OctopusPushPackageBuildProcess;
 import octopus.teamcity.common.OctopusConstants;
 import octopus.teamcity.common.commonstep.CommonStepUserData;
-import org.jetbrains.annotations.NotNull;
 
 public class OctopusGenericRunner implements AgentBuildRunner {
 
   private static final String ACTIVITY_NAME = "OctopusDeploy";
 
-  @NotNull
   @Override
   public AgentBuildRunnerInfo getRunnerInfo() {
     return new AgentBuildRunnerInfo() {
-      @NotNull
       @Override
       public String getType() {
         return OctopusConstants.GENERIC_RUNNER_TYPE;
       }
 
       @Override
-      public boolean canRun(@NotNull final BuildAgentConfiguration buildAgentConfiguration) {
+      public boolean canRun(final BuildAgentConfiguration buildAgentConfiguration) {
         return true;
       }
     };
   }
 
-  @NotNull
   @Override
   public BuildProcess createBuildProcess(
-      @NotNull final AgentRunningBuild runningBuild, @NotNull final BuildRunnerContext context)
+      final AgentRunningBuild runningBuild, final BuildRunnerContext context)
       throws RunBuildException {
 
     final BuildProgressLogger logger = runningBuild.getBuildLogger();
@@ -110,7 +107,8 @@ public class OctopusGenericRunner implements AgentBuildRunner {
         final PushPackageUploader pushPackageUploader = PushPackageUploader.create(client);
         final FileSelector fileSelector = new FileSelector(context.getWorkingDirectory().toPath());
         return new OctopusPushPackageBuildProcess(pushPackageUploader, fileSelector, context);
-
+      case ("create-release"):
+        return new OctopusCreateReleaseBuildProcess(context);
       default:
         throw new RunBuildException("Unknown build step type " + stepType);
     }
