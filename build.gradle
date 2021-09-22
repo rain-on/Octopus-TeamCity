@@ -21,15 +21,6 @@ ext {
   build_timestamp_format = "yyyyMMddHHmm"
 }
 
-def buildAliases = ['dev': [
-    //'spotlessApply',
-    'build',
-    'checkLicenses',
-    'javadoc'
-  ]]
-
-
-
 allprojects {
   apply plugin: 'java-library'
   apply plugin: 'java'
@@ -57,12 +48,12 @@ allprojects {
   version = rootProject.version
 
   task sourcesJar(type: Jar, dependsOn: classes) {
-    classifier = 'sources'
+    archiveClassifier.set('sources')
     from sourceSets.main.allSource
   }
 
   task javadocJar(type: Jar, dependsOn: javadoc) {
-    classifier = 'javadoc'
+    archiveClassifier.set("javadoc")
     from javadoc.destinationDir
   }
 
@@ -155,7 +146,7 @@ apply plugin: "distribution"
 
 
 distZip {
-  archiveName = "Octopus.TeamCity." + rootProject.version + ".zip"
+  archiveFileName = "Octopus.TeamCity." + rootProject.version + ".zip"
 }
 
 distributions {
