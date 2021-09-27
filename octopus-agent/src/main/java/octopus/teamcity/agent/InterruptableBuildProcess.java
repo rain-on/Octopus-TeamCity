@@ -15,12 +15,21 @@
 
 package octopus.teamcity.agent;
 
+import static octopus.teamcity.agent.logging.BuildLogAppender.BUILD_LOG_APPENDER_NAME;
+
+import com.octopus.sdk.logging.SdkLogAppenderHelper;
+
+import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 
 import jetbrains.buildServer.RunBuildException;
 import jetbrains.buildServer.agent.BuildFinishedStatus;
 import jetbrains.buildServer.agent.BuildProcess;
+import jetbrains.buildServer.agent.BuildRunnerContext;
+import octopus.teamcity.agent.logging.BuildLogAppender;
+import octopus.teamcity.common.commonstep.CommonStepPropertyNames;
+import org.apache.logging.log4j.Level;
 
 public abstract class InterruptableBuildProcess implements BuildProcess {
 
@@ -28,10 +37,27 @@ public abstract class InterruptableBuildProcess implements BuildProcess {
   private final CompletableFuture<BuildFinishedStatus> uploadFinishedFuture =
       new CompletableFuture<>();
 
-  public InterruptableBuildProcess() {}
+  private final BuildRunnerContext context;
+
+  public InterruptableBuildProcess(BuildRunnerContext context) {
+    this.context = context;
+  }
 
   protected void complete(final BuildFinishedStatus status) {
     uploadFinishedFuture.complete(status);
+  }
+
+  public abstract void doStart() throws RunBuildException;
+
+  @Override
+  public void start() throws RunBuildException {
+    try (final SdkLogAppenderHelper ignored =
+        SdkLogAppenderHelper.registerLogAppender(
+            BuildLogAppender.createAppender(
+                BUILD_LOG_APPENDER_NAME, context.getBuild().getBuildLogger()),
+            isVerboseLogging(context.getRunnerParameters()))) {
+      doStart();
+    }
   }
 
   @Override
@@ -50,7 +76,7 @@ public abstract class InterruptableBuildProcess implements BuildProcess {
   }
 
   @Override
-  public BuildFinishedStatus waitFor() throws RunBuildException {
+  public BuildFinishedStatus waitFor() {
     try {
       return uploadFinishedFuture.get();
     } catch (final InterruptedException e) {
@@ -58,5 +84,13 @@ public abstract class InterruptableBuildProcess implements BuildProcess {
     } catch (final ExecutionException e) {
       return BuildFinishedStatus.FINISHED_FAILED;
     }
+  }
+
+  private Level isVerboseLogging(final Map<String, String> runnerParameters) {
+    if (runnerParameters != null
+        && Boolean.parseBoolean(runnerParameters.get(CommonStepPropertyNames.VERBOSE_LOGGING))) {
+      return Level.DEBUG;
+    }
+    return Level.INFO;
   }
 }
