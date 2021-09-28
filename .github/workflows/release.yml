@@ -70,4 +70,5 @@ jobs:
           space: "Integrations"
           project: "TeamCity Plugin"
           package_version: ${{ steps.create-package.outputs.version }}
+          release_number: ${{ steps.create-package.outputs.version }}
           release_notes: ${{steps.fetch-release-notes.outputs.release-notes }}
