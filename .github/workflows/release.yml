@@ -52,14 +52,12 @@ jobs:
         id: fetch-release-nodes
         run: |
           if ["${{github.event_name}}" = "release"]; then
-             RELEASE_NOTES=`jq '.release.body' ${{ github.event_path }}
+             RELEASE_NOTES=`jq '.release.body' ${{ github.event_path }}`
              echo "::set-output name=release-notes::$RELEASE_NOTES"
           else
-             RELEASE_URL=$GITHUB_API_URL/repos/$GITHUB_REPOSITORY/releases/tags/"${{inputs
-          .release-tag}}
+             RELEASE_URL=$GITHUB_API_URL/repos/$GITHUB_REPOSITORY/releases/tags/"${{inputs.release-tag}}
              echo $RELEASE_URL
-             RELEASE_NOTES=curl -H "Accept: application/vnd.github.v3+json" $RELEASE_URL | jq '
-          .body'
+             RELEASE_NOTES=`curl -H "Accept: application/vnd.github.v3+json" $RELEASE_URL | jq '.body'`
              echo "::set-output name=release-notes::$RELEASE_NOTES"
           fi
 
