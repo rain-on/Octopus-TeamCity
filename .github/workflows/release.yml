@@ -58,7 +58,7 @@ jobs:
              RELEASE_URL=$GITHUB_API_URL/repos/$GITHUB_REPOSITORY/releases/tags/${{inputs.release-tag}}
              echo $RELEASE_URL
              RELEASE_NOTES=`curl -s -H "Accept: application/vnd.github.v3+json" $RELEASE_URL |\
-          jq --raw-putput '.body'`
+          jq --raw-output '.body'`
              echo "::set-output name=release-notes::$RELEASE_NOTES"
           fi
 
