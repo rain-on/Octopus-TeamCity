@@ -51,10 +51,13 @@ jobs:
       - name: Fetch Release Notes
         id: fetch-release-notes
         run: |
+          echo ${{github.event_name}}
           if [[ "${{github.event_name}}" = "release" ]]; then
+             echo "Extracting notes from event"
              RELEASE_NOTES=`jq --raw-output '.release.body' ${{ github.event_path }}`
              echo "::set-output name=release-notes::$RELEASE_NOTES"
           else
+             echo "Fetching release notes from github rest api"
              RELEASE_URL=$GITHUB_API_URL/repos/$GITHUB_REPOSITORY/releases/tags/${{inputs.release-tag}}
              echo $RELEASE_URL
              RELEASE_NOTES=`curl -s -H "Accept: application/vnd.github.v3+json" $RELEASE_URL | jq --raw-output '.body'`
