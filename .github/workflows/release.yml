@@ -35,7 +35,40 @@ jobs:
           echo "::set-output name=package-created::$PACKAGE_NAME"
           VERSION=`./gradlew properties | grep ^version | awk '{print $2;}'`
           echo "::set-output name=version::$VERSION"
-      - name: Output test stuff
+
+      - name: Install Octopus CLI 🐙
+        uses: OctopusDeploy/install-octopus-cli-action@v1.1.7
+
+      - name: Push a package to Octopus Deploy 🐙
+        uses: OctopusDeploy/push-package-action@v1.1.1
+        with:
+          overwrite_mode: IgnoreIfExists
+          api_key: ${{ secrets.OCTOPUS_APIKEY }}
+          packages: "${{ steps.create-package.outputs.package-created }}"
+          server: ${{ secrets.OCTOPUS_SERVER }}
+          space: "Integrations"
+
+      - name: Fetch Release Notes
+        id: fetch-release-nodes
         run: |
-          echo ${{ steps.create-package.outputs.package-created }}
-          echo ${{ steps.create-package.outputs.version }}
+          if ["${{github.event_name}}" = "release"]; then
+             RELEASE_NOTES=`jq '.release.body' ${{ github.event_path }}
+             echo "::set-output name=release-notes::$RELEASE_NOTES"
+          else
+             RELEASE_URL=$GITHUB_API_URL/repos/$GITHUB_REPOSITORY/releases/tags/"${{inputs
+          .release-tag}}
+             echo $RELEASE_URL
+             RELEASE_NOTES=curl -H "Accept: application/vnd.github.v3+json" $RELEASE_URL | jq '
+          .body'
+             echo "::set-output name=release-notes::$RELEASE_NOTES"
+          fi
+
+      - name: Create a release in Octopus Deploy 🐙
+        uses: OctopusDeploy/create-release-action@v1.1.1
+        with:
+          api_key: ${{ secrets.OCTOPUS_APIKEY }}
+          server: ${{ secrets.OCTOPUS_SERVER }}
+          space: "Integrations"
+          project: "TeamCity Plugin"
+          package_version: ${{ steps.create-package.outputs.version }}
+          release_notes: ${{steps.fetch-release-notes.outputs.release-notes }}
