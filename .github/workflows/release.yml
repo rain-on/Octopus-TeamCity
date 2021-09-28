@@ -51,7 +51,7 @@ jobs:
       - name: Fetch Release Notes
         id: fetch-release-notes
         run: |
-          echo "::debug::${{github.event_name""
+          echo "::debug::${{github.event_name}}"
           if [[ "${{github.event_name}}" = "release" ]]; then
              RELEASE_NOTES=`jq --raw-output '.release.body' ${{ github.event_path }}`
              echo "::set-output name=release-notes::$RELEASE_NOTES"
