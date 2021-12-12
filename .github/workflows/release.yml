@@ -45,4 +45,4 @@ jobs:
           project: "TeamCity Plugin"
           package_version: ${{ steps.create-package.outputs.version }}
           release_number: ${{ steps.create-package.outputs.version }}
-          release_notes: ${{ format('\"{0}\"', steps.fetch-release-notes.outputs.release-notes) }}
+          release_notes: ${{ format('"{0}"', steps.fetch-release-notes.outputs.release-notes) }}
