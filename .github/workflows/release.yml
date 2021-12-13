@@ -25,12 +25,12 @@ jobs:
           echo "::debug::${{github.event_name}}"
           OUTPUT_FILE="release_notes.txt"
           if [[ "${{github.event_name}}" = "release" ]]; then
-           jq --raw-output '.release.body' ${{ github.event_path }} | tr '\r\n' ' ' > $OUTPUT_FILE
+           jq --raw-output '.release.body' ${{ github.event_path }} | tr '\r' '  ' > $OUTPUT_FILE
           else
              RELEASE_URL=$GITHUB_API_URL/repos/$GITHUB_REPOSITORY/releases/tags/${{github.event.inputs.release-tag}}
              echo $RELEASE_URL
              echo "::debug::Fetching relesae from $RELEASE_URL"
-             curl -s -H "Accept: application/vnd.github.v3+json" $RELEASE_URL | jq --raw-output '.body' | tr '\r\n' ' ' > $OUTPUT_FILE
+             curl -s -H "Accept: application/vnd.github.v3+json" $RELEASE_URL | jq --raw-output '.body' | tr '\r' '  ' > $OUTPUT_FILE
           fi
           echo "::set-output name=release-note-file::$OUTPUT_FILE"
 
