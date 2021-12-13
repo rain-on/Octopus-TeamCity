@@ -42,4 +42,4 @@ jobs:
           project: "TeamCity Plugin"
           package_version: ${{ steps.create-package.outputs.version }}
           release_number: ${{ steps.create-package.outputs.version }}
-          release_note_file: ${{ steps.fetch-release-notes.outputs.release-note-file }}
+          release_notes_file: ${{ steps.fetch-release-notes.outputs.release-note-file }}
