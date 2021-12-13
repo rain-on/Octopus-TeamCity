@@ -30,7 +30,7 @@ jobs:
              RELEASE_URL=$GITHUB_API_URL/repos/$GITHUB_REPOSITORY/releases/tags/${{github.event.inputs.release-tag}}
              echo $RELEASE_URL
              echo "::debug::Fetching relesae from $RELEASE_URL"
-             curl -s -H "Accept: application/vnd.github.v3+json" $RELEASE_URL | jq --raw-output '.body' | sed s#\r\n#  # > $OUTPUT_FILE
+             curl -s -H "Accept: application/vnd.github.v3+json" $RELEASE_URL | jq --raw-output '.body' | sed s#\\r\\n#  #g > $OUTPUT_FILE
           fi
           echo "::set-output name=release-note-file::$OUTPUT_FILE"
 
