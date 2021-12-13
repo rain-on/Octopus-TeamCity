@@ -23,7 +23,7 @@ jobs:
         id: fetch-release-notes
         run: |
           echo "::debug::${{github.event_name}}"
-          OUTPUT_FILE="./build/release_notes.txt"
+          OUTPUT_FILE="release_notes.txt"
           if [[ "${{github.event_name}}" = "release" ]]; then
            jq --raw-output '.release.body' ${{ github.event_path }} > $OUTPUT_FILE
           else
