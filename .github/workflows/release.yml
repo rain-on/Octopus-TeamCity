@@ -36,7 +36,7 @@ jobs:
 
       - name: Dump the outputfile
         run: |
-           cat ${{ steps.fetch-release-notes.outputs.release-note-file }
+           cat ${{ steps.fetch-release-notes.outputs.release-note-file }}
 
       - name: Create a release in Octopus Deploy 🐙
         uses: OctopusDeploy/create-release-action@v1.1.1
